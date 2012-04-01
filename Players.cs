@@ -23,7 +23,7 @@ namespace MarioPort
 
       public const int MAX_SPEED     = 2;
 
-        var
+//        var
       public bool Blinking;
       public bool Growing;
       public bool InPipe;
@@ -36,7 +36,7 @@ namespace MarioPort
 
 //      public
 //        private void InitPlayerFigures;
-//        private void InitPlayer (InitX, InitY: Integer; Name: Byte);
+//        private void InitPlayer (InitX, InitY: Integer; Name: Byte );
 //        private void DrawPlayer;
 //        private void ErasePlayer;
 //        private void DoDemo;
@@ -45,21 +45,7 @@ namespace MarioPort
 
       //// implementation ////
 
-//        {$I SWMAR.$00} {$I SWMAR.$01}
-//        {$I SJMAR.$00} {$I SJMAR.$01}
-//        {$I LWMAR.$00} {$I LWMAR.$01}
-//        {$I LJMAR.$00} {$I LJMAR.$01}
-//        {$I FWMAR.$00} {$I FWMAR.$01}
-//        {$I FJMAR.$00} {$I FJMAR.$01}
-//
-//        {$I SWLUI.$00} {$I SWLUI.$01}
-//        {$I SJLUI.$00} {$I SJLUI.$01}
-//        {$I LWLUI.$00} {$I LWLUI.$01}
-//        {$I LJLUI.$00} {$I LJLUI.$01}
-//        {$I FWLUI.$00} {$I FWLUI.$01}
-//        {$I FJLUI.$00} {$I FJLUI.$01}
-
-//      ??
+      // ??
       private const int Safe = EY1;
       private const int HSafe = H * Safe;
 
@@ -96,7 +82,7 @@ namespace MarioPort
       
       private byte Direction;
       private byte Status;
-      private byte WalkingMode;
+      private byte Walkingmode;
       private byte Counter;
       private byte WalkCount;
       
@@ -115,1015 +101,1030 @@ namespace MarioPort
       private char Below1;
       private char Below2;
 
-
+      
       private void HighMirror (P1, P2: Pointer)
       {
 //        type
-//          PlaneBuffer = array[0..2 * H - 1, 0..W div 4 - 1] of Byte;
+//          PlaneBuffer = array[0..2 * H - 1, 0..W / 4 - 1] of Byte;
 //          PlaneBufferArray = array[0..3] of PlaneBuffer;
 //          PlaneBufferArrayPtr = ^PlaneBufferArray;
 //        var
 //          Source, Dest: PlaneBufferArrayPtr;
-//        private void Swap (Plane1, Plane2: Byte);
+//        private void Swap (Plane1, Plane2: Byte );
 //          var
 //            i, j: Byte;
-//        begin
-//          for j := 0 to 2 * H - 1 do
-//            for i := 0 to W div 4 - 1 do
-//            begin
-//              Dest^[Plane2, j, i] := Source^[Plane1, j, W div 4 - 1 - i];
-//              Dest^[Plane1, j, i] := Source^[Plane2, j, W div 4 - 1 - i];
-//            end;
-//        end;
-//      begin
-//        Source := P1;
-//        Dest := P2;
-//        Swap (0, 3);
-//        Swap (1, 2);
-//      end;
-      }   
+//        {
+//          for j = 0 to 2 * H - 1 do
+//            for i = 0 to W / 4 - 1 do
+//            {
+//              Dest^[Plane2, j, i] = Source^[Plane1, j, W / 4 - 1 - i];
+//              Dest^[Plane1, j, i] = Source^[Plane2, j, W / 4 - 1 - i];
+//            }
+//        }
+//      {
+//        Source = P1;
+//        Dest = P2;
+//        Swap (0, 3 );
+//        Swap (1, 2 );
+//      }
+      }
+
+      // NOTE: I'm guessing that "Mirror" means flip over Y axis
+      
+      private void HighMirror(Image& imageToMirror)
+      {
+         
+      }
 
       public void InitPlayerFigures()
       {
 //      var
 //        Pl, Md, N: Byte;
-//      begin
-//        FillChar (Pictures^, SizeOf (Pictures^), #$FF);
+//      {
+//        FillChar (Pictures^, SizeOf (Pictures^), #$FF );
 //
-//        Move (@SWMar000^, Pictures^ [plMario, mdSmall, 0, dirLeft], SizeOf (PicBuffer));
-//        Move (@SWMar001^, Pictures^ [plMario, mdSmall, 1, dirLeft], SizeOf (PicBuffer));
-//        Move (@SJMar000^, Pictures^ [plMario, mdSmall, 2, dirLeft], SizeOf (PicBuffer));
-//        Move (@SJMar001^, Pictures^ [plMario, mdSmall, 3, dirLeft], SizeOf (PicBuffer));
+//        Move (@SWMar000^, Pictures[plMario, mdSmall, 0, dirLeft], SizeOf (PicBuffer) );
+//        Move (@SWMar001^, Pictures[plMario, mdSmall, 1, dirLeft], SizeOf (PicBuffer) );
+//        Move (@SJMar000^, Pictures[plMario, mdSmall, 2, dirLeft], SizeOf (PicBuffer) );
+//        Move (@SJMar001^, Pictures[plMario, mdSmall, 3, dirLeft], SizeOf (PicBuffer) );
 //
-//        Move (@LWMar000^, Pictures^ [plMario, mdLarge, 0, dirLeft], SizeOf (PicBuffer));
-//        Move (@LWMar001^, Pictures^ [plMario, mdLarge, 1, dirLeft], SizeOf (PicBuffer));
-//        Move (@LJMar000^, Pictures^ [plMario, mdLarge, 2, dirLeft], SizeOf (PicBuffer));
-//        Move (@LJMar001^, Pictures^ [plMario, mdLarge, 3, dirLeft], SizeOf (PicBuffer));
+//        Move (@LWMar000^, Pictures[plMario, mdLarge, 0, dirLeft], SizeOf (PicBuffer) );
+//        Move (@LWMar001^, Pictures[plMario, mdLarge, 1, dirLeft], SizeOf (PicBuffer) );
+//        Move (@LJMar000^, Pictures[plMario, mdLarge, 2, dirLeft], SizeOf (PicBuffer) );
+//        Move (@LJMar001^, Pictures[plMario, mdLarge, 3, dirLeft], SizeOf (PicBuffer) );
 //
-//        Move (@FWMar000^, Pictures^ [plMario, mdFire, 0, dirLeft], SizeOf (PicBuffer));
-//        Move (@FWMar001^, Pictures^ [plMario, mdFire, 1, dirLeft], SizeOf (PicBuffer));
-//        Move (@FJMar000^, Pictures^ [plMario, mdFire, 2, dirLeft], SizeOf (PicBuffer));
-//        Move (@FJMar001^, Pictures^ [plMario, mdFire, 3, dirLeft], SizeOf (PicBuffer));
+//        Move (@FWMar000^, Pictures[plMario, mdFire, 0, dirLeft], SizeOf (PicBuffer) );
+//        Move (@FWMar001^, Pictures[plMario, mdFire, 1, dirLeft], SizeOf (PicBuffer) );
+//        Move (@FJMar000^, Pictures[plMario, mdFire, 2, dirLeft], SizeOf (PicBuffer) );
+//        Move (@FJMar001^, Pictures[plMario, mdFire, 3, dirLeft], SizeOf (PicBuffer) );
 //
 //
-//        Move (@SWLui000^, Pictures^ [plLuigi, mdSmall, 0, dirLeft], SizeOf (PicBuffer));
-//        Move (@SWLui001^, Pictures^ [plLuigi, mdSmall, 1, dirLeft], SizeOf (PicBuffer));
-//        Move (@SJLui000^, Pictures^ [plLuigi, mdSmall, 2, dirLeft], SizeOf (PicBuffer));
-//        Move (@SJLui001^, Pictures^ [plLuigi, mdSmall, 3, dirLeft], SizeOf (PicBuffer));
+//        Move (@SWLui000^, Pictures[plLuigi, mdSmall, 0, dirLeft], SizeOf (PicBuffer) );
+//        Move (@SWLui001^, Pictures[plLuigi, mdSmall, 1, dirLeft], SizeOf (PicBuffer) );
+//        Move (@SJLui000^, Pictures[plLuigi, mdSmall, 2, dirLeft], SizeOf (PicBuffer) );
+//        Move (@SJLui001^, Pictures[plLuigi, mdSmall, 3, dirLeft], SizeOf (PicBuffer) );
 //
-//        Move (@LWLui000^, Pictures^ [plLuigi, mdLarge, 0, dirLeft], SizeOf (PicBuffer));
-//        Move (@LWLui001^, Pictures^ [plLuigi, mdLarge, 1, dirLeft], SizeOf (PicBuffer));
-//        Move (@LJLui000^, Pictures^ [plLuigi, mdLarge, 2, dirLeft], SizeOf (PicBuffer));
-//        Move (@LJLui001^, Pictures^ [plLuigi, mdLarge, 3, dirLeft], SizeOf (PicBuffer));
+//        Move (@LWLui000^, Pictures[plLuigi, mdLarge, 0, dirLeft], SizeOf (PicBuffer) );
+//        Move (@LWLui001^, Pictures[plLuigi, mdLarge, 1, dirLeft], SizeOf (PicBuffer) );
+//        Move (@LJLui000^, Pictures[plLuigi, mdLarge, 2, dirLeft], SizeOf (PicBuffer) );
+//        Move (@LJLui001^, Pictures[plLuigi, mdLarge, 3, dirLeft], SizeOf (PicBuffer) );
 //
-//        Move (@FWLui000^, Pictures^ [plLuigi, mdFire, 0, dirLeft], SizeOf (PicBuffer));
-//        Move (@FWLui001^, Pictures^ [plLuigi, mdFire, 1, dirLeft], SizeOf (PicBuffer));
-//        Move (@FJLui000^, Pictures^ [plLuigi, mdFire, 2, dirLeft], SizeOf (PicBuffer));
-//        Move (@FJLui001^, Pictures^ [plLuigi, mdFire, 3, dirLeft], SizeOf (PicBuffer));
+//        Move (@FWLui000^, Pictures[plLuigi, mdFire, 0, dirLeft], SizeOf (PicBuffer) );
+//        Move (@FWLui001^, Pictures[plLuigi, mdFire, 1, dirLeft], SizeOf (PicBuffer) );
+//        Move (@FJLui000^, Pictures[plLuigi, mdFire, 2, dirLeft], SizeOf (PicBuffer) );
+//        Move (@FJLui001^, Pictures[plLuigi, mdFire, 3, dirLeft], SizeOf (PicBuffer) );
 //
-//        for Pl := plMario to plLuigi do
-//          for Md := mdSmall to mdFire do
-//            for N := 0 to 3 do
-//              HighMirror (@Pictures^ [Pl, Md, N, dirLeft], @Pictures^ [Pl, Md, N, dirRight]);
-//      end;
+//        for Pl = plMario to plLuigi do
+//          for Md = mdSmall to mdFire do
+//            for N = 0 to 3 do
+//              HighMirror (@Pictures[Pl, Md, N, dirLeft], @Pictures[Pl, Md, N, dirRight] );
+//      }
       }
 
       public void InitPlayer (int InitX, int InitY, byte Name)
       {
-//      var
-//        i: Integer;
-//      begin
-//        Player := Name;
-//        X := InitX;
-//        Y := InitY;
-//        OldX := X;
-//        OldY := Y;
-//        XVel := 0;
-//        YVel := 0;
-//        Direction := dirRight;
-//        WalkingMode := 0;
-//        Status := stOnTheGround;
-//        Jumped := False;
-//        Fired := False;
-//        HitEnemy := False;
-//        for i := 0 to MAX_PAGE do
-//          SaveScreen [i]. Visible := False;
-//        PlayerX1 := X;
-//        PlayerX2 := X + W - 1;
-//        PlayerY1 := Y + H;
-//        PlayerY2 := Y + 2 * H - 1;
-//        PlayerXVel := XVel;
-//        PlayerYVel := YVel;
-//        Blinking := False;
-//        Star := False;
-//        Growing := False;
-//        EarthQuake := False;
-//      end;
+         Player = Name;
+         X = InitX;
+         Y = InitY;
+         OldX = X;
+         OldY = Y;
+         XVel = 0;
+         YVel = 0;
+         Direction = dirRight;
+         Walkingmode = 0;
+         Status = stOnTheGround;
+         Jumped = false;
+         Fired = false;
+         HitEnemy = false;
+         
+         for( int i = 0; i < MAX_PAGE; i++ )
+            SaveScreen[i].Visible = false;
+         
+         PlayerX1 = X;
+         PlayerX2 = X + W - 1;
+         PlayerY1 = Y + H;
+         PlayerY2 = Y + 2 * H - 1;
+         PlayerXVel = XVel;
+         PlayerYVel = YVel;
+         Blinking = false;
+         Star = false;
+         Growing = false;
+         EarthQuake = false;
+
       }
       
       private void DrawDemo()
       {
-//      var
-//        i, j: Integer;
-//      begin
-//        with SaveScreen [CurrentPage] do
-//        begin
-//         { GetImage (X, Y, W, 2 * H, Buffer); }
-//          BackGrAddr := PushBackGr (X, Y, W + 4, 2 * H);
-//          XPos := X;
-//          YPos := Y;
-//          Visible := True;
-//        end;
-//        case Demo of
-//          dmDownInToPipe,
-//          dmUpOutOfPipe:
-//            begin
-//              DrawPart (X, Y + DemoY, W, 2 * H, 0, 2 * H - DemoY - 1,
-//                Pictures^ [Player, Data.Mode [Player], WalkingMode, Direction]);
-//            end;
-//          dmUpInToPipe,
-//          dmDownOutOfPipe:
-//            begin
-//              DrawPart (X, Y + DemoY, W, 2 * H, -DemoY, 2 * H,
-//                Pictures^ [Player, Data.Mode [Player], WalkingMode, Direction]);
-//              Redraw (MapX, MapY - 1);
-//              Redraw (MapX + 1, MapY - 1);
-//            end;
-//          dmDead:
-//            begin
-//              DrawImage (X, Y, W, 2 * H,
-//                Pictures^ [Player, Data.Mode [Player], WalkingMode, Direction]);
-//            end;
-//
-//
-//        end;
-//        OldX := X;
-//        OldY := Y;
-//      end;
+         int i, j;
+         
+//         with SaveScreen[CurrentPage] do
+//         GetImage (X, Y, W, 2 * H, Buffer );
+         SaveScreen[CurrentPage].BackGrAddr = PushBackGr (X, Y, W + 4, 2 * H );
+         SaveScreen[CurrentPage].XPos = X;
+         SaveScreen[CurrentPage].YPos = Y;
+         SaveScreen[CurrentPage].Visible = true;
+         
+//         case Demo of
+         switch (Demo)
+         {         
+            case dmDownInToPipe:
+            case dmUpOutOfPipe:
+            {
+               DrawPart( X, Y + DemoY, W, 2 * H, 0, 2 * H - DemoY - 1, Pictures[Player, Data.mode[Player], Walkingmode, Direction] );
+               break;
+            }
+            case dmUpInToPipe:
+            case dmDownOutOfPipe:
+            {
+               DrawPart( X, Y + DemoY, W, 2 * H, -DemoY, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction] );
+               Redraw( MapX, MapY - 1 );
+               Redraw( MapX + 1, MapY - 1 );\
+               break;
+            }
+            case dmDead:
+            {
+               DrawImage( X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction] );
+               break;
+            }
+         }
+         OldX = X;
+         OldY = Y;
       }
       
       public void DrawPlayer()
       {
-//      begin
-//        if Demo <> dmNoDemo then
-//        begin
-//          DrawDemo;
-//          Exit;
-//        end;
-//        if (not Blinking) or (BlinkCounter mod 2 = 0) then
-//        begin
-//          with SaveScreen [CurrentPage] do
-//          begin
-//           { GetImage (X, Y, W, 2 * H, Buffer); }
-//            BackGrAddr := PushBackGr (X, Y, W + 4, 2 * H);
-//            XPos := X;
-//            YPos := Y;
-//            Visible := True;
-//          end;
-//          if (Data.Mode [Player] = mdFire) and keySpace and (FireCounter < 7) then
-//          begin
-//            Inc (FireCounter);
-//            DrawPart (X, Y + 1, W, 2 * H, 0, 20,
-//              Pictures^ [Player, mdFire, 1, Direction]);
-//            DrawPart (X, Y, W, 2 * H, 21, 2 * H,
-//              Pictures^ [Player, mdFire, 0, Direction]);
-//          end
-//          else
-//            if Star or Growing then
-//              RecolorImage (X, Y, W, 2 * H, Pictures^ [Player, Data.Mode [Player],
-//                WalkingMode, Direction],
-//                ((GrowCounter + StarCounter) and 1) shl 4 -
-//                 Byte ((GrowCounter + StarCounter) and $F < 8))
-//            else
-//              DrawImage (X, Y, W, 2 * H, Pictures^ [Player, Data.Mode [Player], WalkingMode,
-//                Direction]);
-//          OldX := X;
-//          OldY := Y;
-//        end;
-//      end;
+         if ( Demo != dmNoDemo )
+         {
+            DrawDemo;
+            return;
+         }
+         if ( (!Blinking) || (BlinkCounter % 2 = 0) )
+         {
+//            with SaveScreen [CurrentPage] do
+//            {
+//               { GetImage (X, Y, W, 2 * H, Buffer ); }
+            SaveScreen[CurrentPage].BackGrAddr = PushBackGr (X, Y, W + 4, 2 * H );
+            SaveScreen[CurrentPage].XPos = X;
+            SaveScreen[CurrentPage].YPos = Y;
+            Visible = true;
+//            }
+            if ( (Data.mode[Player] = mdFire) && keySpace && (FireCounter < 7) )
+            {
+               FireCounter++;
+               DrawPart( X, Y + 1, W, 2 * H, 0, 20, Pictures[Player, mdFire, 1, Direction] );
+               DrawPart( X, Y, W, 2 * H, 21, 2 * H, Pictures[Player, mdFire, 0, Direction] );
+            }
+            else
+               if ( Star || Growing )
+                  RecolorImage (X, Y, W, 2 * H, Pictures[Player, Data.mode[Player],Walkingmode, Direction], ((GrowCounter + StarCounter) && 1) shl 4 -
+                        (byte)((GrowCounter + StarCounter) && $F < 8))
+               else
+                  DrawImage( X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction] );
+            OldX = X;
+            OldY = Y;
+         }
       }
       
       public void ErasePlayer()
       {
-//      begin
-//        with SaveScreen [CurrentPage] do
-//        begin
-//          if not Visible then
-//            Exit;
-//        {  PutImage (XPos, YPos, W, 2 * H, Buffer); }
-//          PopBackGr ({XPos, YPos, W + 4, 2 * H,} BackGrAddr);
-//          Visible := False;
-//        end;
-//      end;
+         if ( !SaveScreen[CurrentPage].Visible )
+            return;
+         
+         PutImage (XPos, YPos, W, 2 * H, Buffer );
+         PopBackGr (XPos, YPos, W + 4, 2 * H, BackGrAddr );
+         Visible = false;
+
       }
 
       public void DoDemo()
       {
-//      begin
-//        Small := 9 * Byte (Data.Mode [Player] in [mdSmall]);
-//        case Demo of
-//          dmDownInToPipe,
-//          dmUpOutOfPipe:
-//            begin
-//              if PipeCode [1] = 'ç' then
-//                if not Passed then
-//                begin
-//                  Passed := TRUE;
-//                  TextCounter := 0;
-//                end;
-//
-//              Inc (DemoCounter1);
-//              if DemoCounter1 mod 3 = 0 then
-//              begin
-//                if Demo = dmDownInToPipe then
-//                begin
-//                  Inc (DemoY);
-//                  if (DemoY > 2 * H - Small) then
-//                  begin
-//                    Inc (DemoCounter2);
-//                    Dec (DemoY);
-//                    if DemoCounter2 > 10 then
-//                      InPipe := True;
-//                  end;
-//                end
-//                else
-//                begin
-//                  Dec (DemoY);
-//                  if (DemoY < 0) then
-//                  begin
-//                    Inc (DemoY);
-//                    Demo := dmNoDemo;
-//                  end;
-//                end;
-//              end;
-//            end;
-//          dmUpInToPipe,
-//          dmDownOutOfPipe:
-//            begin
-//              Inc (DemoCounter1);
-//              if DemoCounter1 mod 3 = 0 then
-//                if Demo = dmDownOutOfPipe then
-//                begin
-//                  Inc (DemoY);
-//                  if DemoY > - Small then
-//                  begin
-//                    Demo := dmNoDemo;
-//                    Dec (DemoY);
-//                  end;
-//                end
-//                else
-//                begin
-//                  Dec (DemoY);
-//                  if (DemoY < -2 * H + Small) then
-//                  begin
-//                    Inc (DemoCounter2);
-//                    Inc (DemoY);
-//                    if DemoCounter2 > 10 then
-//                      InPipe := True;
-//                  end;
-//                end;
-//            end;
-//          dmDead:
-//            begin
-//              Inc (DemoCounter1);
-//              if DemoCounter1 mod 7 = 0 then
-//                Inc (YVel);
-//              Y := Y + YVel;
-//              if Y > NV * H then
-//                GameDone := True;
-//            end;
-//        end;
-//      end;
+         Small = 9 * (byte)(Data.mode[Player] == mdSmalld );
+         switch(Demo)
+         {
+            case dmDownInToPipe:
+            case dmUpOutOfPipe:
+            {
+               if ( PipeCode[1] == 'ç' )
+               {
+                  if ( !Passed )
+                  {
+                     Passed = TRUE;
+                     TextCounter = 0;
+                  }
+               }
+
+               DemoCounter1++;
+               if ( DemoCounter1 % 3 == 0 )
+               {
+                  if ( Demo == dmDownInToPipe )
+                  {
+                     DemoY++;
+                     if ( (DemoY > 2 * H - Small) )
+                     {
+                        DemoCounter2++;
+                        DemoY--;
+                        if DemoCounter2 > 10 )
+                           InPipe = true;
+                     }
+                  }
+                  else
+                  {
+                     DemoY--;
+                     if ( (DemoY < 0) )
+                     {
+                        DemoY++;
+                        Demo = dmNoDemo;
+                     }
+                  }
+               }
+            }
+            case dmUpInToPipe:
+            case dmDownOutOfPipe:
+            {
+               DemoCounter1++;
+               if ( DemoCounter1 % 3 = 0 )
+               {
+                  if ( Demo == dmDownOutOfPipe )
+                  {
+                     DemoY++;
+                     if ( DemoY > - Small )
+                     {
+                        Demo = dmNoDemo;
+                        DemoY--;
+                     }
+                  }
+                  else
+                  {
+                     DemoY--;
+                     if ( (DemoY < -2 * H + Small) )
+                     {
+                        DemoCounter2++;
+                        DemoY++;
+                        if ( DemoCounter2 > 10 )
+                           InPipe = true;
+                     }
+                  }
+               }
+            }
+
+            case dmDead:
+            {
+               DemoCounter1++;
+               if ( DemoCounter1 % 7 == 0 )
+                  YVel++;
+               Y = Y + YVel;
+               if ( Y > NV * H )
+                  GameDone = true;
+            }
+         }
       }
       
       private void StartDemo (int dm)
       {
-//      begin
-//        Demo := dm;
-//        DemoCounter1 := 0;
-//        DemoCounter2 := 0;
-//        DemoX := 0;
-//        DemoY := 0;
-//        Below1 := ' ';
-//        Below2 := ' ';
-//        AtCh1 := ' ';
-//        AtCh2 := ' ';
-//        if dm in [dmDownInToPipe, dmUpInToPipe, dmDownOutOfPipe, dmUpOutOfPipe]
-//        then
-//          StartMusic (PipeMusic);
-//        case dm of
-//          dmUpOutOfPipe:
-//            DemoY := 2 * H - 9 * Byte (Data.Mode [Player] in [mdSmall]);
-//          dmDownOutOfPipe:
-//            begin
-//              DemoY := -2 * H;
-//              Inc (Y, H - 7 * Byte (Data.Mode [Player] in [mdSmall]) - 2);
-//            end;
-//          dmDead:
-//            begin
-//              YVel := -3;
-//              Beep (220);
-//            end;
-//        end;
-//        InPipe := False;
-//      end;
+         Demo = dm;
+         DemoCounter1 = 0;
+         DemoCounter2 = 0;
+         DemoX = 0;
+         DemoY = 0;
+         Below1 = ' ';
+         Below2 = ' ';
+         AtCh1 = ' ';
+         AtCh2 = ' ';
+         
+         if ( dm == dmDownInToPipe || dm == dmUpInToPipe || dm == dmDownOutOfPipe || dm == dmUpOutOfPipe )
+            StartMusic (PipeMusic );
+         
+         switch (dm)
+         {
+            case dmUpOutOfPipe:
+               DemoY = 2 * H - 9 * (byte)(Data.mode[Player] == mdSmall );
+               break;
+            case dmDownOutOfPipe:
+            {
+               DemoY = -2 * H;
+               Y += H - 7 * (byte)(Data.mode[Player] == mdSmall) - 2;
+               break;
+            }
+            case dmDead:
+            {
+              YVel = -3;
+              Beep (220 );
+              break;
+            }
+         }
+         InPipe = false;
       }
       
       private void CheckPipeBelow()
       {
-//      var
-//        Mo: Integer;
-//      begin
-//        if (XVel <> 0) or (YVel <> 0) or (Y mod H <> 0) then
-//          Exit;
-//        Mo := X mod W;
-//        if not (Mo in [4 .. W - 4]) then
-//          Exit;
-//        if (Below1 <> '0') or (Below2 <> '1')
-//          or (not (AtCh1 in ['à' .. 'ç']))   { $E0..$E7: Enter pipe }
-//          or (not (AtCh2 in ['à' .. 'ï'])) then
-//            Exit;
-//        PipeCode [1] := AtCh1;
-//        PipeCode [2] := AtCh2;
-//        StartDemo (dmDownInToPipe);
-//      end;
+         int Mo;
+         if ( (XVel != 0) || (YVel != 0) || (Y % H != 0) )
+            return;
+         Mo = X % W;
+         if ( !(Mo in [4 .. W - 4]) )
+            return;
+         if ( (Below1 != '0') || (Below2 != '1') || (!(AtCh1 in ['à' .. 'ç'])) /* $E0..$E7: Enter pipe */ || (!(AtCh2 in ['à' .. 'ï'])) )
+            return;
+         PipeCode[1] = AtCh1;
+         PipeCode[2] = AtCh2;
+         StartDemo (dmDownInToPipe );
       }
       
       private void CheckPipeAbove (char C1, char C2)
       {
-//      var
-//        Mo: Integer;
-//      begin
-//        Mo := X mod W;
-//        if not (Mo in [4 .. W - 4]) then
-//          Exit;
-//        if (C1 <> '0') or (C2 <> '1') then
-//          Exit;
-//        MapX := X div W;
-//        MapY := Y div H + 1;
-//        if (not (WorldMap^ [MapX, MapY] in ['à' .. 'ç']))   { $E0..$E7: Enter pipe }
-//          or (not (WorldMap^ [MapX + 1, MapY] in ['à' .. 'ï'])) then
-//            Exit;
-//        PipeCode [1] := WorldMap^ [MapX, MapY];
-//        PipeCode [2] := WorldMap^ [MapX + 1, MapY];
-//        StartDemo (dmUpInToPipe);
-//      end;
+         Mo = X % W;
+         if !(Mo in [4 .. W - 4]) )
+            return;
+         if (C1 != '0') || (C2 != '1') )
+            return;
+         MapX = X / W;
+         MapY = Y / H + 1;
+         if ( (!(WorldMap[MapX, MapY] in ['à' .. 'ç'])) /* $E0..$E7: Enter pipe */ || (!(WorldMap[MapX + 1, MapY] in ['à' .. 'ï'])) )
+            return;
+         PipeCode[1] = WorldMap[MapX, MapY];
+         PipeCode[2] = WorldMap[MapX + 1, MapY];
+         StartDemo (dmUpInToPipe );
       }
       
       
-      // !!! CheckFall and CheckJump are inside Check !!!
+      // !!! CheckFall && CheckJump are inside Check !!! *moved
       private void Check()
       {
-//      var
-//        Side, NewX1, NewX2, NewY, Y1, Y2, Y3, Mo: Integer;
-//        NewCh1, NewCh2, NewCh3, Ch: Char;
-//        Small,
-//        Hold1, Hold2, Hold3, Hit: Boolean;
+         int Side, NewX1, NewX2, NewY, Y1, Y2, Y3, Mo;
+         char NewCh1, NewCh2, NewCh3, ch;
+         bool Small, Hold1, Hold2, Hold3, Hit;
+
+         NewCh1 = ' ';
+         NewCh2 = ' ';
+         NewCh3 = ' ';
+
+         Side = (byte)(XVel > 0) * (W - 1);
+         NewX1 = (X + Side) / W;
+         NewX2 = (X + Side + XVel) / W;
+         Small = Data.mode[Player] == mdSmall;
+
+         if ( NewX1 != NewX2 )
+         {
+            Y1 = (Y + HSafe + (4)) / H - Safe;
+            Y2 = (Y + HSafe + H) / H - Safe;
+            Y3 = (Y + HSafe + 2 * H - 1) / H - Safe;
+            NewCh1 = WorldMap[NewX2, Y1];
+            NewCh2 = WorldMap[NewX2, Y2];
+            NewCh3 = WorldMap[NewX2, Y3];
+
+            if ( NewCh3 == '*' )
+               HitCoin (NewX2 * W, Y3 * H, false );
+            
+            if ( NewCh2 == '*' )
+               HitCoin (NewX2 * W, Y2 * H, false ); 
+            else if ( NewCh2 == 'z' )
+               Turbo = true;
+
+
+         	if (!Small && NewCh1 == '*' )
+               HitCoin (NewX2 * W, Y1 * H, false );
+
+            Hold1 = (NewCh1 in CanHoldYou) && (!Small );
+            Hold2 = (NewCh2 in CanHoldYou );
+            Hold3 = (NewCh3 in CanHoldYou );
+
+            if ( Hold1 || Hold2 || Hold3 )
+            {
+               XVel = 0;
+               Walkingmode = 0;
+            }
+         }
+
+         NewX1 = (X + XVel) / W;
+         NewX2 = (X + XVel + W - 1) / W;
+
+         if ( cdEnemy != 0 )
+            CheckJump;
+
+         if ( (Status == stJumping) )
+            NewY = (Y + 1 + (4) + (H - 1 - (4)) * (byte)(Small) + YVel + HSafe) / H - Safe
+         else
+            NewY = (Y + 1 + 2 * H + YVel + HSafe) / H - Safe;
+
+         NewCh1 = WorldMap[NewX1, NewY];
+         NewCh2 = WorldMap[NewX2, NewY];
+         NewCh3 = WorldMap[(X + XVel + W / 2) / W, NewY];
+         Hold1 = (NewCh1 in CanHoldYou + CanStandOn );
+         Hold2 = (NewCh2 in CanHoldYou + CanStandOn );
+         Hold3 = (NewCh3 in CanHoldYou + CanStandOn );
+
+         switch (Status)
+         {
+            case stFalling:
+            {
+              	CheckFall();
+            }
+            case stOnTheGround:
+            {
+               if ( (cdLift == 0) )
+               {
+                  if ( !(Hold1 || Hold2) )
+                  {
+                     Status = stFalling;
+                     if Math.Abs(XVel) < 2 )
+                        Y++;
+                  }
+                  else
+                  {
+                     if (NewCh1 = 'K') || (NewCh2 = 'K') )
+                        CheckFall();
+
+                     else
+                     {
+                        if ( XVel == 0 )
+                        {
+                           Below1 = NewCh1;
+                           Below2 = NewCh2;
+                        	MapX = NewX1;  //Codes for pipes
+                           MapY = NewY - 1;
+                        	AtCh1 = WorldMap[MapX, MapY];
+                        	AtCh2 = WorldMap[MapX + 1, MapY];
+
+                           Mo = (X /* + XVel */) % W;
+                           if (!Hold1) && (Mo in [1 .. 5]) )
+                              XVel--;
+                           if (!Hold2) && (Mo in [W - 5 .. W - 1]) )
+                              XVel++;
+                        }
+                     }
+                
+                     CheckJump;
+                  }
+               }
+               else
+               {
+                  YVel = PlayerYVel;
+                  CheckJump;
+               }
+            }
+
+            case stJumping:
+            {
+               Hold1 = (NewCh1 in CanHoldYou + Hidden );
+               Hold2 = (NewCh2 in CanHoldYou + Hidden );
+               Hold3 = (NewCh3 in CanHoldYou + Hidden );
+
+               Hit = (Hold1 || Hold2 );
+               if ( Hit )
+               {
+                  Mo = (X + XVel) % W;
+                  if ( (Mo in [1 .. 4, W - 4 .. W - 1]) && (!Hold3) )
+                  {
+                     if ( !((NewCh1 in Hidden) && (NewCh2 in Hidden)) )
+                        Hit = false;
+                     if ( (Mo < W / 2) && (!(NewCh2 in Hidden)) )
+                        X -= Mo;
+                     else
+                        if ( (Mo >= W / 2) && (!(NewCh1 in Hidden)) )
+                           X += W - Mo;
+                  }
+               }
+               if ( !Hit )
+               {
+                  if ( newCh1 == '*' )
+                     HitCoin (NewX1 * W, NewY * H, false );
+                  
+                  if ( NewCh1 == '*' )
+                     HitCoin (NewX2 * W, NewY * H, false );
+                
+                  if ( (Counter % (JumpDelay + Byte(HighJump)) = 0) || ((!keyAlt) && (!HitEnemy)) )
+                     YVel++;
+                  if YVel >= 0 )
+                  {
+                     YVel = 0;
+                     Status = stFalling;
+                  }
+               }
+               else
+               {
+//                  Ch = #0;
+                  Ch = (char)0;
+
+                  switch (Mo)
+                  {
+                     case 0..(W / 2 - 1):
+                     {
+                        if NewCh1 in CanHoldYou + Hidden )
+                        {
+                           Ch = NewCh1;
+                           NewX2 = NewX1;
+                        }
+                        else
+                           Ch = NewCh2;
+                     }
+                     case (W / 2)..W - 1:
+                     {
+                        Ch = NewCh2;
+                        if !(Ch in CanHoldYou + Hidden) )
+                        {
+                           Ch = NewCh1;
+                           NewX2 = NewX1;
+                        }
+                     }
+                  }
+             
+                  switch (Ch)
+                  {
+                     case '=':
+                        cdHit = 1;
+                     case '0':
+                     case '1':
+                        if ( keyUp )
+                           CheckPipeAbove (NewCh1, NewCh2 );
+
+                     case '?':
+                     case '$':
+                     case 'J':
+                     case 'K':
+                     {
+                        Mo = 0;
+
+                        switch ( WorldMap[NewX2, NewY - 1] )
+                        {
+                           case 'à'..'â':
+                           {
+                                  WorldMap[NewX2, NewY] = '?';
+                                  Ch = '?';
+                           }
+                           case 'ï':
+                           {
+                                  WorldMap[NewX2, NewY] = 'K';
+                                  Ch = 'K';
+                           }
+                           default:
+                           {
+                              if !Small && (Ch = 'J') )
+                              {
+                                 BreakBlock (NewX2, NewY );
+                                 AddScore (10);
+                                 Mo = 1;
+                              }
+                           }
+                        }
+                        if ( Mo = 0 )
+                        {
+                           BumpBlock (NewX2 * W, NewY * H );
+                           Beep (110 );
+                        }
+
+                        switch (WorldMap[NewX2, NewY - 1])
+                        {
+                           case ' ':
+                           case 'ã'..'ì':
+                           {
+                              if !(Ch in ['J', 'K']) )
+                              {
+                                 HitCoin (NewX2 * W, NewY * H, true );
+                                 if WorldMap[NewX2, NewY - 1] != ' ' )
+                                 {
+                                    WorldMap[NewX2, NewY - 1] = Succ (WorldMap[NewX2, NewY - 1] );
+                                    if WorldMap[NewX2, NewY] = '$' )
+                                    {
+                                       Remove (NewX2 * W, NewY * H, W, H, 2 );
+                                       WorldMap[NewX2, NewY] = '?';
+                                    }
+                                 }
+                              }
+                           }
+                           case 'à':
+                           {
+                              if ( Data.mode[Player] = mdSmall )
+                                 NewEnemy (tpRisingChamp, 0, NewX2, NewY, 0, -1, 2)
+                              else
+                                 NewEnemy (tpRisingFlower, 0, NewX2, NewY, 0, -1, 2 );
+                           }
+                           case 'á': 
+                              NewEnemy (tpRisingLife, 0, NewX2, NewY, 0, -1, 2 );
+                           case 'â': 
+                              NewEnemy (tpRisingStar, 0, NewX2, NewY, 0, -1, 1 );
+                           case '*': 
+                              HitCoin (NewX2 * W, (NewY - 1) * H, false );
+                           case 'í': 
+                              NewEnemy (tpRisingChamp, 1, NewX2, NewY, 0, -1, 2 );
+                        }
+                        HitAbove (NewX2, NewY - 1 );
+                        if Ch = 'K' )
+                        {
+                           Remove (NewX2 * W, NewY * H, W, H, tpNote );
+                           WorldMap[NewX2, NewY] = 'K';
+                        }
+                        else
+                        {
+                           if (Ch != 'J')
+                              if (!(WorldMap[NewX2, NewY - 1] in ['ã'..'ì']))
+                              {
+                                 Remove (NewX2 * W, NewY * H, W, H, 1 );
+                                 WorldMap[NewX2, NewY] = '@';
+                              }
+                        }
+                     }
+                     default:
+                        Beep (30);
+                  }
+                  
+                  if ( (Ch != 'J') || (Data.mode[Player] = mdSmall) )
+                  {
+                     YVel = 0;
+                     Status = stFalling;
+                  }
+                  if ( Ch = 'K' )
+                     YVel = 3;
+               }
+            }
+         }
       }
       
       private void CheckFall()
       {
-//      begin
-//        if not (Hold1 or Hold2) then
-//        begin
-//          Case NewCh1 of
-//            '*': HitCoin(NewX1 * W, NewY * H, False);
-//          end;
-//          Case NewCh2 of
-//            '*': HitCoin(NewX2 * W, NewY * H, False);
-//          end;
-//          if (Counter mod JumpDelay = 0) then
-//            Inc (YVel);
-//          if YVel > MaxYVel then
-//            YVel := MaxYVel;
-//        end
-//        else
-//        begin
-//          if (NewCh1 = '=') or (NewCh2 = '=')
-//          then
-//            cdHit := 1;
-//
-//          Mo := (X + XVel) mod W;
-//          Y := ((Y + YVel + 1 + HSafe) div H - Safe) * H;
-//          YVel := 0;
-//          Status := stOnTheGround;
-//          Jumped := True;
-//
-//          if (NewCh1 = 'K') or (NewCh2 = 'K') then
-//          begin
-//            StartMusic (NoteMusic);
-//            if NewCh1 = 'K' then
-//            begin
-//              BumpBlock (NewX1 * W, NewY * H);
-//              Remove (NewX1 * W, NewY * H, W, H, tpNote);
-//              WorldMap^ [NewX1, NewY] := 'K';
-//            end;
-//            if NewCh2 = 'K' then
-//            begin
-//              BumpBlock (NewX2 * W, NewY * H);
-//              Remove (NewX2 * W, NewY * H, W, H, tpNote);
-//              WorldMap^ [NewX2, NewY] := 'K';
-//            end;
-//            Counter := 0;
-//            Status := stJumping;
-//            Jumped := FALSE;
-//            HighJump := TRUE;
-//            YVel := -5;
-//            HitEnemy := TRUE;
-//          end;
-//
+         if !(Hold1 || Hold2) )
+         {
+            if ( NewCh1 == '*' )
+               HitCoin( NewX1 * W, NewY * H, false );
+            
+            if ( NewCh1 == '*' )
+               HitCoin( NewX2 * W, NewY * H, false );
+               
+            if ( (Counter % JumpDelay = 0) )
+               YVel++;
+            
+            if ( YVel > MaxYVel )
+               YVel = MaxYVel;
+         }
+         else
+         {
+            if ( (NewCh1 == '=') || (NewCh2 == '=') )
+               cdHit = 1;
+
+            Mo = (X + XVel) % W;
+            Y = ((Y + YVel + 1 + HSafe) / H - Safe) * H;
+            YVel = 0;
+            Status = stOnTheGround;
+            Jumped = true;
+
+            if ( (NewCh1 = 'K') || (NewCh2 = 'K') )
+            {
+               StartMusic ( NoteMusic );
+               if ( NewCh1 = 'K' )
+               {
+                  BumpBlock ( NewX1 * W, NewY * H );
+                  Remove ( NewX1 * W, NewY * H, W, H, tpNote );
+                  WorldMap[NewX1, NewY] = 'K';
+               }
+               if ( NewCh2 = 'K' )
+               {
+                  BumpBlock (NewX2 * W, NewY * H );
+                  Remove (NewX2 * W, NewY * H, W, H, tpNote );
+                  WorldMap[NewX2, NewY] = 'K';
+               }
+               Counter = 0;
+               Status = stJumping;
+               Jumped = FALSE;
+               HighJump = TRUE;
+               YVel = -5;
+               HitEnemy = TRUE;
+            }
+         }
+         
+//          TODO
 //          Case Mo of
-//            0 .. W div 2 - 1:
-//              if Hold1 then
-//              begin
-//                Ch := NewCh1;
-//                NewX2 := NewX1;
+//            0 .. W / 2 - 1:
+//              if Hold1 )
+//              {
+//                Ch = NewCh1;
+//                NewX2 = NewX1;
 //              end
 //              else
-//                Ch := NewCh2;
-//            W div 2 .. W:
-//              if Hold2 then
-//                Ch := NewCh2
+//                Ch = NewCh2;
+//            W / 2 .. W:
+//              if Hold2 )
+//                Ch = NewCh2
 //              else
-//              begin
-//                Ch := NewCh1;
-//                NewX2 := NewX1;
-//              end;
-//          end;  { case }
-//        end;
-//      end;
+//              {
+//                Ch = NewCh1;
+//                NewX2 = NewX1;
+//              }
+//          }  { case }
+         }
       }
       
       private void CheckJump()
-      {
-//      begin
-//        if cdEnemy <> 0 then
-//        begin
-//          HitEnemy := True;
-//          Jumped := False;
-//        end;
-//        if not Jumped then
-//          if keyAlt or HitEnemy then
-//          begin
-//            Counter := 0;
-//            Status := stJumping;
-//            HighJump := (Abs (XVel) = 2) or (HitEnemy and keyAlt);
-//            YVel := - JumpVel - 2 * Byte (HitEnemy and keyAlt) - Byte (Turbo);
-//          end;
-//        cdEnemy := 0;
-//      end;
-//
-//      begin  { Check }
-//        NewCh1 := ' ';
-//        NewCh2 := ' ';
-//        NewCh3 := ' ';
-//
-//        Side := Byte (XVel > 0) * (W - 1);
-//        NewX1 := (X + Side) div W;
-//        NewX2 := (X + Side + XVel) div W;
-//        Small := Data.Mode [Player] in [mdSmall];
-//
-//        if NewX1 <> NewX2 then
-//        begin
-//          Y1 := (Y + HSafe + (4)) div H - Safe;
-//          Y2 := (Y + HSafe + H) div H - Safe;
-//          Y3 := (Y + HSafe + 2 * H - 1) div H - Safe;
-//          NewCh1 := WorldMap^ [NewX2, Y1];
-//          NewCh2 := WorldMap^ [NewX2, Y2];
-//          NewCh3 := WorldMap^ [NewX2, Y3];
-//
-//          case NewCh3 of
-//            '*': HitCoin (NewX2 * W, Y3 * H, False);
-//          end;
-//          case NewCh2 of
-//            '*': HitCoin (NewX2 * W, Y2 * H, False);
-//            'z': Turbo := TRUE;
-//          end;
-//          if not Small then
-//          case NewCh1 of
-//            '*': HitCoin (NewX2 * W, Y1 * H, False);
-//          end;
-//
-//          Hold1 := (NewCh1 in CanHoldYou) and (not Small);
-//          Hold2 := (NewCh2 in CanHoldYou);
-//          Hold3 := (NewCh3 in CanHoldYou);
-//
-//          if Hold1 or Hold2 or Hold3 then
-//          begin
-//            XVel := 0;
-//            WalkingMode := 0;
-//          end;
-//        end;
-//
-//        NewX1 := (X + XVel) div W;
-//        NewX2 := (X + XVel + W - 1) div W;
-//
-//        if cdEnemy <> 0 then
-//          CheckJump;
-//
-//        if (Status = stJumping) then
-//          NewY := (Y + 1 + (4) + (H - 1 - (4)) * Byte (Small) + YVel + HSafe) div H - Safe
-//        else
-//          NewY := (Y + 1 + 2 * H + YVel + HSafe) div H - Safe;
-//
-//        NewCh1 := WorldMap^ [NewX1, NewY];
-//        NewCh2 := WorldMap^ [NewX2, NewY];
-//        NewCh3 := WorldMap^ [(X + XVel + W div 2) div W, NewY];
-//        Hold1 := (NewCh1 in CanHoldYou + CanStandOn);
-//        Hold2 := (NewCh2 in CanHoldYou + CanStandOn);
-//        Hold3 := (NewCh3 in CanHoldYou + CanStandOn);
-//
-//        case Status of
-//
-//          stFalling:
-//
-//            begin
-//              CheckFall;
-//            end;
-//
-//          stOnTheGround:
-//            if (cdLift = 0) then
-//            begin
-//              if not (Hold1 or Hold2) then
-//              begin
-//                Status := stFalling;
-//                if Abs (XVel) < 2 then
-//                  Inc (Y);
-//              end
-//              else
-//              if (NewCh1 = 'K') or (NewCh2 = 'K') then
-//                CheckFall
-//              else
-//              begin
-//                if XVel = 0 then
-//                begin
-//                  Below1 := NewCh1;
-//                  Below2 := NewCh2;
-//                  MapX := NewX1;  { Codes for pipes }
-//                  MapY := NewY - 1;
-//                  AtCh1 := WorldMap^ [MapX, MapY];
-//                  AtCh2 := WorldMap^ [MapX + 1, MapY];
-//
-//                  Mo := (X {+ XVel}) mod W;
-//                  if (not Hold1) and (Mo in [1 .. 5]) then
-//                    Dec (XVel);
-//                  if (not Hold2) and (Mo in [W - 5 .. W - 1]) then
-//                    Inc (XVel);
-//                end;
-//
-//
-//                CheckJump;
-//              end;
-//            end
-//            else
-//            begin
-//              YVel := PlayerYVel;
-//              CheckJump;
-//            end;
-//
-//          stJumping:
-//
-//            begin
-//              Hold1 := (NewCh1 in CanHoldYou + Hidden);
-//              Hold2 := (NewCh2 in CanHoldYou + Hidden);
-//              Hold3 := (NewCh3 in CanHoldYou + Hidden);
-//
-//              Hit := (Hold1 or Hold2);
-//              if Hit then
-//              begin
-//                Mo := (X + XVel) mod W;
-//                if (Mo in [1 .. 4, W - 4 .. W - 1]) and (not Hold3) then
-//                begin
-//                  if not ((NewCh1 in Hidden) and (NewCh2 in Hidden)) then
-//                    Hit := False;
-//                  if (Mo < W div 2) and (not (NewCh2 in Hidden)) then
-//                    Dec(X, Mo)
-//                  else
-//                    if (Mo >= W div 2) and (not (NewCh1 in Hidden)) then
-//                      Inc(X, W - Mo);
-//                end;
-//              end;
-//              if not Hit then
-//              begin
-//                case NewCh1 of
-//                  '*': HitCoin (NewX1 * W, NewY * H, False);
-//                end;
-//                case NewCh2 of
-//                  '*': HitCoin (NewX2 * W, NewY * H, False);
-//                end;
-//                if (Counter mod (JumpDelay + Byte(HighJump)) = 0) or
-//                  ((not keyAlt) and (not HitEnemy))
-//                then
-//                  Inc (YVel);
-//                if YVel >= 0 then
-//                begin
-//                  YVel := 0;
-//                  Status := stFalling;
-//                end;
-//              end
-//              else
-//              begin
-//                Ch := #0;
-//                Case Mo of
-//                  0..(W div 2 - 1):
-//                    if NewCh1 in CanHoldYou + Hidden then
-//                    begin
-//                      Ch := NewCh1;
-//                      NewX2 := NewX1;
-//                    end
-//                    else
-//                      Ch := NewCh2;
-//                  (W div 2)..W - 1:
-//                    begin
-//                      Ch := NewCh2;
-//                      if not (Ch in CanHoldYou + Hidden) then
-//                      begin
-//                        Ch := NewCh1;
-//                        NewX2 := NewX1;
-//                      end;
-//                    end;
-//                end;
-//                Case Ch of
-//                  '=': cdHit := 1;
-//                  '0', '1': if keyUp then CheckPipeAbove (NewCh1, NewCh2);
-//
-//                  '?', '$', 'J', 'K':
-//                       begin
-//                         Mo := 0;
-//                         case WorldMap^ [NewX2, NewY - 1] of
-//                           'à'..'â':
-//                                begin
-//                                  WorldMap^ [NewX2, NewY] := '?';
-//                                  Ch := '?';
-//                                end;
-//                           'ï': begin
-//                                  WorldMap^ [NewX2, NewY] := 'K';
-//                                  Ch := 'K';
-//                                end;
-//                           else
-//                             if not Small and (Ch = 'J') then
-//                             begin
-//                               BreakBlock (NewX2, NewY);
-//                               AddScore (10);
-//                               Mo := 1;
-//                             end;
-//                         end; { case }
-//                         if Mo = 0 then
-//                         begin
-//                           BumpBlock (NewX2 * W, NewY * H);
-//                           Beep (110);
-//                         end;
-//                         case WorldMap^ [NewX2, NewY - 1] of
-//                           ' ',
-//                           'ã'..'ì':
-//                                if not (Ch in ['J', 'K']) then
-//                                begin
-//                                  HitCoin (NewX2 * W, NewY * H, True);
-//                                  if WorldMap^ [NewX2, NewY - 1] <> ' ' then
-//                                  begin
-//                                    WorldMap^ [NewX2, NewY - 1] := Succ (WorldMap^ [NewX2, NewY - 1]);
-//                                    if WorldMap^ [NewX2, NewY] = '$' then
-//                                    begin
-//                                      Remove (NewX2 * W, NewY * H, W, H, 2);
-//                                      WorldMap^ [NewX2, NewY] := '?';
-//                                    end;
-//                                  end;
-//                                end;
-//                           'à': if Data.Mode [Player] = mdSmall then
-//                                  NewEnemy (tpRisingChamp, 0, NewX2, NewY, 0, -1, 2)
-//                                else
-//                                  NewEnemy (tpRisingFlower, 0, NewX2, NewY, 0, -1, 2);
-//                           'á': NewEnemy (tpRisingLife, 0, NewX2, NewY, 0, -1, 2);
-//                           'â': NewEnemy (tpRisingStar, 0, NewX2, NewY, 0, -1, 1);
-//                           '*': HitCoin (NewX2 * W, (NewY - 1) * H, False);
-//                           'í': NewEnemy (tpRisingChamp, 1, NewX2, NewY, 0, -1, 2);
-//                         end; { case }
-//                         HitAbove (NewX2, NewY - 1);
-//                         if Ch = 'K' then
-//                         begin
-//                           Remove (NewX2 * W, NewY * H, W, H, tpNote);
-//                           WorldMap^ [NewX2, NewY] := 'K';
-//                         end
-//                         else
-//                           if (Ch <> 'J')
-//                           then
-//                             if (not (WorldMap^ [NewX2, NewY - 1] in ['ã'..'ì'])) then
-//                             begin
-//                               Remove (NewX2 * W, NewY * H, W, H, 1);
-//                               WorldMap^ [NewX2, NewY] := '@';
-//                             end;
-//
-//                       end;
-//
-//                  else
-//                    Beep (30);
-//                end;
-//                if (Ch <> 'J') or (Data.Mode [Player] = mdSmall) then
-//                begin
-//                  YVel := 0;
-//                  Status := stFalling;
-//                end;
-//                if Ch = 'K' then YVel := 3;
-//              end;
-//
-//            end;
-//
-//        end;
-//
-//
-//      end;
+      {  
+         if (cdEnemy != 0)
+         {
+            HitEnemy = true;
+            Jumped = false;
+         }
+         if ( !Jumped )
+         {
+            if (keyAlt || HitEnemy)
+            {
+               Counter = 0;
+               Status = stJumping;
+               HighJump = (Math.Abs(XVel) == 2) || (HitEnemy && keyAlt );
+               YVel = - JumpVel - 2 * (byte)(HitEnemy && keyAlt) - (byte)(Turbo );
+            }
+         }
+         cdEnemy = 0;
       }
       
       public void MovePlayer()
-      {
-//      var
-//        MaxSpeed,
-//        MinSpeed,
-//        OldXVel,
-//        OldXView: Integer;
-//        CheckX: Boolean;
-//        OldDir: Byte;
-//        LastKeyRight,
-//        LastKeyLeft: Boolean;
-//
-//      begin
-//        if InPipe then
-//        begin
-//          if WorldMap^ [MapX, MapY + 1] = '0' then
-//            StartDemo (dmUpOutOfPipe)
-//          else
-//            if WorldMap^ [MapX, MapY - 1] = '0' then
-//              StartDemo (dmDownOutOfPipe);
-//          Exit;
-//        end;
-//
-//        if cdChamp <> 0 then
-//        begin
-//          if Data.Mode [Player] = mdSmall then
-//          begin
-//            Data.Mode [Player] := mdLarge;
-//            Growing := TRUE;
-//            GrowCounter := 0;
-//          end;
-//          StartMusic (GrowMusic);
-//          cdChamp := 0;
-//        end;
-//        if cdLife <> 0 then
-//        begin
-//          cdLife := 0;
-//          AddLife;
-//        end;
-//        if cdFlower <> 0 then
-//        begin
-//          Data.Mode [Player] := mdFire;
-//          Fired := True;
-//          FireCounter := 0;
-//          StartMusic (GrowMusic);
-//          Growing := TRUE;
-//          GrowCounter := 0;
-//          cdFlower := 0;
-//        end;
-//        if (not Blinking) and (not Star) and (not Growing) then
-//        begin
-//          if cdHit <> 0 then
-//          begin
-//            case Data.Mode [Player] of
-//              mdSmall: begin
-//                         BlinkCounter := 0;
-//                         Blinking := True;
-//                         StartDemo (dmDead);
-//                         StartMusic (DeadMusic);
-//                         Exit;
-//                       end;
-//              mdLarge,
-//              mdFire:  begin
-//                         Data.Mode [Player] := mdSmall;
-//                         BlinkCounter := 0;
-//                         Blinking := True;
-//                         StartMusic (HitMusic);
-//                       end;
-//            end;
-//            cdHit := 0;
-//          end
-//        end
-//        else
-//          cdHit := 0;
-//
-//        if Blinking then
-//        begin
-//          Inc (BlinkCounter);
-//          if BlinkCounter >= BlinkTime then
-//            Blinking := False;
-//        end;
-//
-//        if cdStar <> 0 then
-//        begin
-//          StartMusic (StarMusic);
-//          StarCounter := 0;
-//          Star := True;
-//        end;
-//
-//        if Star then
-//        begin
-//          Inc (StarCounter);
-//          if StarCounter >= StarTime then
-//            Star := False;
-//          if StarCounter mod 3 = 0 then
-//            StartGlitter (X, Y + 11 * Byte (Data.Mode [Player] = mdSmall), W,
-//              H + 3 + 11 * Byte (Data.Mode [Player] <> mdSmall));
-//          cdStar := 0;
-//        end;
-//
-//        if Growing then
-//        begin
-//          Inc (GrowCounter);
-//          if GrowCounter > GrowTime then
-//            Growing := False;
-//        end;
-//
-//        Inc (Counter);
-//        if (XVel = 0) and (YVel = 0) then
-//          Counter := 0;
-//        CheckX := (Counter mod Slip = 0);
-//
-//        OldDir := Direction;
-//        OldXVel := XVel;
-//
-//        ReadJoystick;
-//
-//        LastKeyLeft := KeyLeft;
-//        LastKeyRight := KeyRight;
-//
-//        keyLeft := kbLeft or jsLeft;
-//        keyRight := kbRight or jsRight;
-//        keyUp := kbUp or jsUp;
-//        keyDown := kbDown or jsDown;
-//        keyAlt := kbAlt or jsButton1;
-//        keyCtrl := kbCtrl or jsButton2;
-//        keySpace := kbSpace or jsButton2;
-//
-//        if keyRight and (not LastKeyRight) and (Direction = dirLeft) then
-//        begin
-//          OldDir := dirRight;
-//          OldXVel := -XVel;
-//        end;
-//        if keyLeft and (not LastKeyLeft) and (Direction = dirRight) then
-//        begin
-//          OldDir := dirLeft;
-//          OldXVel := -XVel;
-//        end;
-//
-//        if Fired and (not keySpace) then
-//          Fired := False;
-//
-//        if keySpace and (not Fired) and (Data.Mode [Player] = mdFire) then
-//        begin
-//          FireCounter := 0;
-//          NewEnemy (tpFireBall, 0, X div W + Direction, (Y + H) div H,
-//            10 * (-1 + 2 * Direction), 3 + 3 * (Byte (keyDown) - Byte (keyUp)), 2);
-//          Fired := True;
-//        end;
-//
-//        if cdLift <> 0 then
-//        begin
-//          Y := PlayerY1;
-//          XVel := PlayerXVel;
-//          YVel := PlayerYVel;
-//          Status := stOnTheGround;
-//        end;
-//        if cdStopJump <> 0 then
-//        begin
-//          Jumped := TRUE;
-//          cdStopJump := 0;
-//        end;
-//
-//        if Jumped and (not keyAlt) then
-//          Jumped := False;
-//
-//        MaxSpeed := +MAX_SPEED - 1 + Byte (keyCtrl) + Byte (Turbo) + Abs (cdLift * PlayerXVel);
-//        MinSpeed := -MAX_SPEED + 1 - Byte (keyCtrl) - Byte (Turbo) - Abs (cdLift * PlayerXVel);
-//
-//        if keyLeft then
-//        begin
-//          if (XVel > MinSpeed) then
-//          begin
-//            if CheckX or (cdLift <> 0) then
-//              Dec (XVel, 1 + Byte ((cdLift <> 0) and keyCtrl));
-//          end
-//          else
-//            XVel := MinSpeed;
-//          Direction := Byte (XVel > 0);
-//          if X + XVel < 0 then
-//            XVel := - X;
-//        end
-//        else
-//          if (XVel < 0) and CheckX and (cdLift = 0) then
-//            Inc (XVel);
-//
-//        if keyRight then
-//        begin
-//          if (XVel < MaxSpeed) then
-//          begin
-//            if CheckX or (cdLift <> 0) then
-//              Inc (XVel, 1 + Byte ((cdLift <> 0) and keyCtrl));
-//          end
-//          else
-//            XVel := MaxSpeed;
-//          Direction := Byte (XVel >= 0);
-//        end
-//        else
-//          if (XVel > 0) and CheckX and (cdLift = 0) then
-//            Dec (XVel);
-//
-//        if keyLeft and keyRight then
-//        begin
-//          Direction := OldDir;
-//          XVel := OldXVel;
-//        end;
-//
-//        if Y + YVel >= NV * H then
-//        begin
-//          GameDone := True;
-//          StartMusic (DeadMusic);
-//        end;
-//
-//        if Status = stOnTheGround then
-//          HitEnemy := False;
-//
-//        Check;
-//
-//        if (Status = stOnTheGround) and (YVel = 0) then
-//          if (XVel = 0) or ((cdLift <> 0) and (XVel = PlayerXVel)) then
-//          begin
-//            WalkingMode := 0;
-//            WalkCount := 0;
-//          end
-//          else
-//          begin
-//            Inc (WalkCount);
-//            WalkCount := WalkCount and $F;
-//            WalkingMode := Byte (WalkCount < $8);
-//          end
-//        else
-//          if YVel < 0 then
-//            WalkingMode := 2
-//          else
-//            WalkingMode := 3;
-//
-//        if keyDown then
-//          CheckPipeBelow;
-//
-//        Inc (X, XVel);
-//        Inc (Y, YVel);
-//
-//
-//        OldXView := XView;
-//        XView := XView - Word (kbLeftShift) + Word (kbRightShift);
-//        if X + W + SCROLL_AT > XView + 320 then
-//          XView := X + W + SCROLL_AT - 320;
-//        if X < XView + SCROLL_AT then
-//          XView := X - SCROLL_AT;
-//        if XView - OldXView > MAX_SPEED + Byte (Turbo) then
-//          XView := OldXView + MAX_SPEED + Byte (Turbo);
-//        if XView - OldXView < -MAX_SPEED  - Byte (Turbo) then
-//          XView := OldXView - MAX_SPEED  - Byte (Turbo);
-//        if XView < 0 then
-//        begin
-//          XView := 0;
-//          if X < 0 then X := 0;
-//        end;
-//
+      {  
+         int MaxSpeed, MinSpeed, OldXVel, OldXView;
+         bool CheckX;
+         byte OldDir;
+         bool LastKeyRight, LastKeyLeft;
+       
+         if (InPipe)
+         {
+            if ( WorldMap[MapX, MapY + 1] = '0' )
+               StartDemo (dmUpOutOfPipe );
+            else
+               if ( WorldMap[MapX, MapY - 1] = '0' )
+                  StartDemo (dmDownOutOfPipe );
+            return;
+         }
+
+         if (cdChamp != 0)
+         {
+            if Data.mode[Player] = mdSmall )
+            {
+               Data.mode[Player] = mdLarge;
+               Growing = true;
+               GrowCounter = 0;
+            }
+            StartMusic (GrowMusic );
+            cdChamp = 0;
+         }
+         
+         if (cdLife != 0)
+         {
+            cdLife = 0;
+            AddLife( );
+         }
+         if (cdFlower != 0)
+         {
+            Data.mode[Player] = mdFire;
+            Fired = true;
+            FireCounter = 0;
+            StartMusic (GrowMusic );
+            Growing = TRUE;
+            GrowCounter = 0;
+            cdFlower = 0;            
+         }
+
+         if ( (!Blinking) && (!Star) && (!Growing) )
+         {
+            if ( cdHit != 0 )
+
+            switch (Data.mode[Player])
+            {
+               case mdSmall:
+               {
+                  BlinkCounter = 0;
+                  Blinking = true;
+                  StartDemo (dmDead );
+                  StartMusic (DeadMusic );
+                  return;
+               }
+               case mdLarge:
+               case mdFire:
+               {
+                  Data.mode[Player] = mdSmall;
+                  BlinkCounter = 0;
+                  Blinking = true;
+                  StartMusic (HitMusic );
+                  break;
+               }
+               default:
+//                  throw new Exception( );
+                  break;
+            }
+            cdHit = 0;
+         }
+         else
+            cdHit = 0;
+
+         if (Blinking)
+         {
+            BlinkCounter++;
+            if (BlinkConter >= BlinkTime)
+               Blinking = false;
+         }
+
+         if (cdStar != 0)
+         {
+            StartMusic(StarMusic );
+            StarCounter = 0;
+            Star = true;
+         }
+
+         if (Star)
+         {
+            StarCounter++;
+            if ( StarCounter >= StarTime )
+               Star = false;
+            if ( StarCounter % 3 = 0 )
+               StartGlitter (X, Y + 11 * (byte)(Data.mode[Player] = mdSmall), W, H + 3 + 11 * (byte)(Data.mode[Player] != mdSmall) );
+            cdStar = 0;
+         }
+
+         if (Growing)
+         {
+            GrowCounter++;
+            if ( GrowCounter > GrowTime )
+               Growing = false;
+         }
+
+         Counter++;
+         if ( (XVel == 0) && (YVel == 0) )
+            Counter = 0;
+         CheckX = (Counter % Slip == 0 );
+         
+         OldDir = Direction;
+         OldXVel = XVel;
+         
+         ReadJoystick( );
+         
+         LastKeyLeft = KeyLeft;
+         LastKeyRight = KeyRight;
+         
+         keyLeft = kbLeft || jsLeft;
+         keyRight = kbRight || jsRight;
+         keyUp = kbUp || jsUp;
+         keyDown = kbDown || jsDown;
+         keyAlt = kbAlt || jsButton1;
+         keyCtrl = kbCtrl || jsButton2;
+         keySpace = kbSpace || jsButton2;
+
+         if ( keyRight && (!LastKeyRight) && (Direction = dirLeft) )
+         {
+            OldDir = dirRight;
+            OldXVel = -XVel;
+         }
+         if ( keyLeft && (!LastKeyLeft) && (Direction = dirRight) )
+         {
+            OldDir = dirLeft;
+            OldXVel = -XVel;
+         }
+
+
+         if ( Fired && (!keySpace) )
+            Fired = false;
+
+         if ( keySpace && (!Fired) && (Data.mode[Player] = mdFire) )
+         {
+            FireCounter = 0;
+            NewEnemy (tpFireBall, 0, X / W + Direction, (Y + H) / H,
+               10 * (-1 + 2 * Direction), 3 + 3 * ((byte)(keyDown) - (byte)(keyUp)), 2 );
+            Fired = true;
+         }
+
+         if ( cdLift != 0 )
+         {
+            Y = PlayerY1;
+            XVel = PlayerXVel;
+            YVel = PlayerYVel;
+            Status = stOnTheGround;
+         }
+         if ( cdStopJump != 0 )
+         {
+            Jumped = TRUE;
+            cdStopJump = 0;
+         }
+
+         if ( Jumped && (!keyAlt) )
+            Jumped = false;
+
+         MaxSpeed = +MAX_SPEED - 1 + (byte)(keyCtrl) + (byte)(Turbo) + Math.Abs(cdLift * PlayerXVel );
+         MinSpeed = -MAX_SPEED + 1 - (byte)(keyCtrl) - (byte)(Turbo) - Math.Abs(cdLift * PlayerXVel );
+
+         if (keyLeft)
+         {
+            if ( (XVel > MinSpeed) )
+            {
+               if ( CheckX || (cdLift != 0) )
+                  XVel -= 1 + (byte)((cdLift != 0) && keyCtrl );
+            }
+            else
+               XVel = MinSpeed;
+            Direction = (byte)(XVel > 0 );
+            if X + XVel < 0 )
+               XVel = - X;
+         }
+         else
+            if ( (XVel < 0) && CheckX && (cdLift == 0) )
+               XVel++;
+
+         if ( keyRight )
+         {
+            if ( (XVel < MaxSpeed) )
+            {
+               if ( CheckX || (cdLift != 0) )
+                 XVel += 1 + (byte)((cdLift != 0) && keyCtrl );
+            }
+            else
+               XVel = MaxSpeed;
+            Direction = (byte)(XVel >= 0 );
+         }
+         else
+            if ( (XVel > 0) && CheckX && (cdLift == 0) )
+               XVel--;
+
+         if ( keyLeft && keyRight )
+         {
+            Direction = OldDir;
+            XVel = OldXVel;
+         }
+
+         if ( Y + YVel >= NV * H )
+         {
+            GameDone = true;
+            StartMusic (DeadMusic );
+         }
+
+         if ( Status = stOnTheGround )
+            HitEnemy = false;
+
+         Check( );
+
+         if ( (Status == stOnTheGround) && (YVel == 0) )
+         {
+            if ( (XVel == 0) || ((cdLift != 0) && (XVel == PlayerXVel)) )
+            {
+               Walkingmode = 0;
+               WalkCount = 0;
+            }
+            else
+            {
+               WalkCount++;
+               WalkCount = WalkCount & 0xF;
+               Walkingmode = (byte)(WalkCount < 0x8 );
+            }
+         }
+         else
+         {
+            if ( YVel < 0 )
+               Walkingmode = 2
+            else
+               Walkingmode = 3;
+         }
+        
+         if ( keyDown )
+            CheckPipeBelow;
+
+         X += XVel;
+         Y += YVel;
+
+         OldXView = XView;
+         XView = XView - (Word)(kbLeftShift) + (Word)(kbRightShift );
+         if ( X + W + SCROLL_AT > XView + 320 )
+            XView = X + W + SCROLL_AT - 320;
+         if ( X < XView + SCROLL_AT )
+            XView = X - SCROLL_AT;
+         if ( XView - OldXView > MAX_SPEED + (byte)(Turbo) )
+            XView = OldXView + MAX_SPEED + (byte)(Turbo );
+         if ( XView - OldXView < -MAX_SPEED - (byte)(Turbo) )
+            XView = OldXView - MAX_SPEED - (byte)(Turbo );
+         if ( XView < 0 )
+         {
+            XView = 0;
+            if ( X < 0 ) X = 0;
+         }
+
 //        with Options do
-//          if XView > (XSize - NH) * W then
-//            XView := (XSize - NH) * W;
-//        if XView < OldXView then
-//          if (WorldMap^ [XView div W, NV] = #254) then
-//            if (WorldMap^ [(XView div W), Round (PlayerY1 / H)] <> ' ') then
-//              XView := OldXView;
-//        if XView > OldXView then
-//          if (WorldMap^ [((XView - 1) div W + NH), NV] = #255) then
-//            if (WorldMap^ [((XView - 1) div W + NH), Round (PlayerY1 / H)] <> ' ') then
-//              XView := OldXView;
-//        PlayerX1 := X + XVel;
-//        PlayerX2 := PlayerX1 + W - 1;
-//        PlayerY1 := Y;
-//        if Data.Mode [Player] in [mdSmall] then
-//          PlayerY1 := Y + H
-//        else
-//          PlayerY1 := Y;
-//        PlayerY2 := Y + 2 * H - 1;
-//        PlayerXVel := XVel;
-//        PlayerYVel := YVel;
-//
-//        if cdLift <> 0 then
-//        begin
-//          Inc (PlayerYVel, 2 - YVel);
-//          cdLift := 0;
-//        end;
-//      end;
-//
-//      end.
+         if ( XView > (Options.XSize - NH) * W )
+            XView = (Options.XSize - NH) * W;
+         if ( XView < OldXView )
+            if ( (WorldMap[XView / W, NV] = #254) )
+               if ( (WorldMap[(XView / W), Math.Round(PlayerY1 / H, 1)] != ' ') )
+                  XView = OldXView;
+         if ( XView > OldXView )
+            if ( (WorldMap[((XView - 1) / W + NH), NV] = #255) )
+               if ( (WorldMap[((XView - 1) / W + NH), Math.Round(PlayerY1 / H, 1)] != ' ') )
+                  XView = OldXView;
+                  
+         PlayerX1 = X + XVel;
+         PlayerX2 = PlayerX1 + W - 1;
+         PlayerY1 = Y;
+         if ( Data.mode[Player] == mdSmall )
+            PlayerY1 = Y + H
+         else
+            PlayerY1 = Y;
+         PlayerY2 = Y + 2 * H - 1;
+         PlayerXVel = XVel;
+         PlayerYVel = YVel;
+
+         if cdLift != 0 )
+         {
+            PlayerYVel += 2 - YVel;
+            cdLift = 0;
+         }
       }
-   }
-   
-}
+      
+   } // end class Players
+} // end namespace MarioPort
