@@ -1316,7 +1316,7 @@ namespace MarioPort
                case '': NewEnemy (tpVertFireBall, 0, X, (i + 2), 0, 0, 50 + Random (100)); break;
                case '': NewEnemy (tpChibibo, 1, X, i, 1 * Dir, 0, 2);
                case '':
-//               case ' :
+//               case ' ':
                case '': NewEnemy (tpVertPlant, (int)(WorldMap[X, i]) - (int)(''), X, (i + 2), 0, 0, 20 + Random (50)); break;
                case '': NewEnemy (tpRed, 0, X, i, 1 * Dir, 0, 2); break;
                case '':
