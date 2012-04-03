@@ -3,9 +3,9 @@
 
 public class Buffers
 {
-	using CanHoldYou = EnemySymbolType[string, char];
-	using CanStandOn = EnemySymbolType[string, char];
-	using Hidden = HiddenType['$'];
+	List<KeyValuePair<string, char>> CanHoldYou;
+	List<KeyValuePair<string, char>> CanStandOn;
+	char[] Hidden = new char['$'];
 
 	long Timer;
 	int wTimer;
