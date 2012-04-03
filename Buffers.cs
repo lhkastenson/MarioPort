@@ -2,7 +2,7 @@ using System;
 
 namespace MarioPort
 {
-<<<<<<< HEAD
+
 	List<KeyValuePair<string, char>> CanHoldYou;
 	List<KeyValuePair<string, char>> CanStandOn;
 	char[] Hidden = new char['$'];
