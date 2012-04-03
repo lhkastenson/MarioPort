@@ -526,7 +526,7 @@ namespace MarioPort
                   if ( !(Hold1 || Hold2) )
                   {
                      Status = stFalling;
-                     if Math.Abs(XVel) < 2 )
+                     if ( Math.Abs(XVel) < 2 )
                         Y++;
                   }
                   else

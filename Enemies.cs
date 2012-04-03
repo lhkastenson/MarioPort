@@ -135,7 +135,7 @@ namespace MarioPort
 
       private Image[,] EnemyPictures = new Image[MaxEnemies, Right - Left + 1];
 
-      private void Kill (int i)
+      private void Kill(int i)
       {
          EnemyRec enemyRec =  EnemyList[i];
 
@@ -283,7 +283,7 @@ namespace MarioPort
 //          if (i in [6, 7]) )
 //            Mirror (@EnemyPictures [i, Left], @EnemyPictures [i, Right])
 //          else
-//            if not (i in [3]) )
+//            if !(i in [3]) )
 //              Mirror (@EnemyPictures [i, Right], @EnemyPictures [i, Left]);
 //
 //        for i = 0 to 1 do
@@ -328,14 +328,14 @@ namespace MarioPort
                case EnemyType.tpVertFireBall:
                   WorldMap[MapX, MapY - 2] = '';
                case EnemyType.tpVertPlant:
-                  WorldMap[MapX, MapY - 2] = (char) ((int) ('') + SubTp);
+                  WorldMap[MapX, MapY - 2] = (char) ((int)('') + SubTp);
                case EnemyType.tpRed:
                   WorldMap[MapX, MapY] = '';
                case EnemyType.tpKoopa:
                case EnemyType.tpSleepingKoopa:
                case EnemyType.tpWakingKoopa:
                case EnemyType.tpRunningKoopa:
-                  WorldMap[MapX, MapY] = (char) ((int) ('') + SubTp);
+                  WorldMap[MapX, MapY] = (char) ((int)('') + SubTp);
                   break;
                case EnemyType.tpBlockLift:
                   WorldMap[MapX, MapY] = '°';
@@ -344,7 +344,7 @@ namespace MarioPort
                   WorldMap[MapX, MapY] = '±';
                   break;
                default:
-//mdSmall                  throw new Exception();
+//                  throw new Exception();
                   break;
             }
          }
@@ -367,7 +367,7 @@ namespace MarioPort
                   
             for(i = 0; i < NumEnemies; i++)
             {
-               if (EnemyList[(int) (ActiveEnemies[i])].Tp == EnemyType.tpFireBall)
+               if (EnemyList[(int)(ActiveEnemies[i])].Tp == EnemyType.tpFireBall)
                   j++;
             }
                   
@@ -436,166 +436,159 @@ namespace MarioPort
 //      var
 //        i, j, Page: Integer;
 //        Fig: Pointer;
-//      {
-//        Page = CurrentPage;
-//        for i = 1 to NumEnemies do
-//        {
-//          j = (int) (ActiveEnemies[i]);
-//          with EnemyList[j] do
-//          if (XPos + 1 * W < XView)
-//          || (XPos > XView + SCREEN_WIDTH + 0 * W)
-//          || (YPos >= YView + SCREEN_HEIGHT) )
-//            BackGrAddr [Page] = $FFFF
-//          else
-//          {
-//            if Tp in [tpFireBall, tpDyingFireBall] )
-//              { GetImage (XPos, YPos, W / 2, H / 2, BackGround [Page]) }
-//              BackGrAddr [Page] = PushBackGr (XPos, YPos, W, H / 2)
-//            else
-//              { GetImage (XPos, YPos, W, H, BackGround [Page]); }
-//              if Tp in [tpVertPlant, tpDeadVertPlant] )
-//                BackGrAddr [Page] = PushBackGr (XPos, YPos, 24, 20)
-//              else
-//                if Tp in [tpKoopa..tpDeadKoopa] )
-//                  BackGrAddr [Page] = PushBackGr (XPos, YPos - 10, 24, 24)
-//                else
-//                  BackGrAddr [Page] = PushBackGr (XPos, YPos, W + 4, H);
-//
-//          { if (XPos + W >= XView) && (XPos - W <= XView + NH * W) ) }
-//
+
+         int i, j, Page;
+         Pointer Fig;
+
+         Page = CurrentPage;
+//         for i = 1 to NumEnemies do
+         for (i = 0; i < NumEnemies; i++)
+         {
+            j = (int)(ActiveEnemies[i]);
+//            with EnemyList[j] do
+            if ( (XPos + 1 * W < XView) || (XPos > XView + SCREEN_WIDTH + 0 * W) || (YPos >= YView + SCREEN_HEIGHT) )
+               BackGrAddr [Page] = $FFFF
+            else
+            {
+               if Tp in [tpFireBall, tpDyingFireBall] )
+                  BackGrAddr [Page] = PushBackGr (XPos, YPos, W, H / 2)
+               else
+                  if Tp in [tpVertPlant, tpDeadVertPlant] )
+                     BackGrAddr [Page] = PushBackGr (XPos, YPos, 24, 20)
+                  else
+                     if Tp in [tpKoopa..tpDeadKoopa] )
+                        BackGrAddr [Page] = PushBackGr (XPos, YPos - 10, 24, 24)
+                     else
+                        BackGrAddr [Page] = PushBackGr (XPos, YPos, W + 4, H);
+            }
 //            case Tp of
-//              tpChibibo:
-//                DrawImage (XPos, YPos, W, H,
-//                  EnemyPictures [1 + 3 * SubTp, (byte)(DirCounter % 32 < 16)]);
-//              tpFlatChibibo:
-//                DrawImage (XPos, YPos, W, H,
-//                  EnemyPictures [2 + 3 * SubTp, (byte)(DirCounter % 32 < 16)]);
-//              tpDeadChibibo:
-//                UpSideDown (XPos, YPos, W, H, EnemyPictures [1, Left]);
-//              tpRisingChamp:
-//                if YPos != (MapY * H) )
-//                  if SubTp = 0 )
-//                    DrawPart (XPos, YPos, W, H, 0, H - YPos % H - 1, @Champ000^)
-//                  else
-//                    DrawPart (XPos, YPos, W, H, 0, H - YPos % H - 1, @Poison000^);
-//              tpChamp:
-//                if SubTp = 0 )
-//                  DrawImage (XPos, YPos, W, H, @Champ000^)
-//                else
-//                  DrawImage (XPos, YPos, W, H, @Poison000^);
-//              tpRisingLife:
-//                if YPos != (MapY * H) )
-//                  DrawPart (XPos, YPos, W, H, 0, H - YPos % H - 1, @Life000^);
-//              tpLife:
-//                DrawImage (XPos, YPos, W, H, @Life000^);
-//              tpRisingFlower:
-//                if YPos != (MapY * H) )
-//                  DrawPart (XPos, YPos, W, H, 0, H - YPos % H - 1, @Flower000^);
-//              tpFlower:
-//                DrawImage (XPos, YPos, W, H, @Flower000^);
-//              tpRisingStar:
-//                if YPos != (MapY * H) )
-//                  DrawPart (XPos, YPos, W, H, 0, H - YPos % H - 1, @Star000^);
-//              tpStar:
-//                DrawImage (XPos, YPos, W, H, @Star000^);
-//              tpFireBall:
-//                if XPos % 4 < 2 )
-//                  DrawImage (XPos, YPos, 12, H / 2, @Fire000^)
-//                else
-//                  DrawImage (XPos, YPos, 12, H / 2, @Fire001^);
-//              tpVertFish:
-//                if (YVel != 0) || (YPos < NV * H - H) )
-//              {  if Abs (DelayCounter - MoveDelay) <= 1 ) }
-//                  DrawImage (XPos, YPos, W, H,
-//                    EnemyPictures [3, (byte)(PlayerX1 > XPos)]);
-//              tpDeadVertFish:
-//                if (YPos < NV * H - H) || (YVel != 0) )
-//                  UpSideDown (XPos, YPos, W, H,
-//                    EnemyPictures [3, (byte)(PlayerX1 <= XPos)]);
-//              tpVertFireBall:
-//                {
-//                  if Abs (DelayCounter - MoveDelay) <= 1 )
-//                  {
-//                    DrawImage (XPos, YPos, W, H, FireBallList [Random (4)]^);
-//                    NewGlitter (XPos + Random (W), YPos + Random (H),
-//                      57 + Random (7), 14 + Random (20));
-//                    NewStar (XPos + Random (W), YPos + Random (H),
-//                      57 + Random (7), 14 + Random (20));
-//                  }
-//                }
-//              tpVertPlant:
-//                {
-//                  if TimeCounter % 32 < 16
-//                  )
+            switch (Tp)
+            {
+               case tpChibibo:
+                  DrawImage (XPos, YPos, W, H, EnemyPictures [1 + 3 * SubTp, (byte)(DirCounter % 32 < 16)]);
+               case tpFlatChibibo:
+                  DrawImage (XPos, YPos, W, H, EnemyPictures [2 + 3 * SubTp, (byte)(DirCounter % 32 < 16)]);
+               case tpDeadChibibo:
+                  UpSideDown (XPos, YPos, W, H, EnemyPictures [1, Left]);
+               case tpRisingChamp:
+                  if ( YPos != (MapY * H) )
+                     if ( SubTp = 0 )
+                        DrawPart (XPos, YPos, W, H, 0, H - YPos % H - 1, @Champ000^)
+                     else
+                        DrawPart (XPos, YPos, W, H, 0, H - YPos % H - 1, @Poison000^);
+               case tpChamp:
+                  if ( SubTp == 0 )
+                     DrawImage (XPos, YPos, W, H, @Champ000^)
+                  else
+                     DrawImage (XPos, YPos, W, H, @Poison000^);
+               case tpRisingLife:
+                  if ( YPos != (MapY * H) )
+                     DrawPart (XPos, YPos, W, H, 0, H - YPos % H - 1, @Life000^);
+               case tpLife:
+                	DrawImage (XPos, YPos, W, H, @Life000^);
+               case tpRisingFlower:
+                  if ( YPos != (MapY * H) )
+                     DrawPart (XPos, YPos, W, H, 0, H - YPos % H - 1, @Flower000^);
+               case tpFlower:
+                	DrawImage (XPos, YPos, W, H, @Flower000^);
+               case tpRisingStar:
+                  if ( YPos != (MapY * H) )
+                     DrawPart (XPos, YPos, W, H, 0, H - YPos % H - 1, @Star000^);
+               case tpStar:
+                	DrawImage (XPos, YPos, W, H, @Star000^);
+               case tpFireBall:
+                  if ( XPos % 4 < 2 )
+                     DrawImage (XPos, YPos, 12, H / 2, @Fire000^)
+                  else
+                     DrawImage (XPos, YPos, 12, H / 2, @Fire001^);
+               case tpVertFish:
+                  if ( (YVel != 0) || (YPos < NV * H - H) )
+                     DrawImage (XPos, YPos, W, H, EnemyPictures [3, (byte)(PlayerX1 > XPos)]);
+               case tpDeadVertFish:
+                  if ( (YPos < NV * H - H) || (YVel != 0) )
+                     UpSideDown (XPos, YPos, W, H, EnemyPictures [3, (byte)(PlayerX1 <= XPos)]);
+               case tpVertFireBall:
+               {
+                  if ( Math.Abs(DelayCounter - MoveDelay) <= 1 )
+                  {
+                     DrawImage (XPos, YPos, W, H, FireBallList [Random (4)]^);
+                     NewGlitter (XPos + Random (W), YPos + Random (H), 57 + Random (7), 14 + Random (20));
+                     NewStar (XPos + Random (W), YPos + Random (H), 57 + Random (7), 14 + Random (20));
+                  }
+               }
+               case tpVertPlant:
+               {
+                  if ( TimeCounter % 32 < 16 )
+                  {
 //                    case SubTp of
-//                      0,
-//                      1: Fig = @PPlant002;
-//                      else
-//                         Fig = @PPlant000
-//                    end
-//                  else
-//                    case SubTp of
-//                      0,
-//                      1: Fig = @PPlant003;
-//                      else
-//                         Fig = @PPlant001;
-//                    }
-//                  DrawPart (XPos, YPos, 24, 20, 0, (MapY * H) - YPos - 1, Fig^);
-//                }
-//              tpDeadVertPlant:
-//                {
-//                  DelayCounter = 0;
-//                  MoveDelay = 0;
-//                  YVel = 0;
-//                  inc (Status);
-//                  if Status < 12 )
-//                    DrawImage (XPos, YPos, 24, 20, @Hit000^)
-//                  else
-//                    if Status > 14 )
-//                      Tp = tpDying;
-//                }
-//              tpRed:
-//                DrawImage (XPos, YPos, W, H,
-//                  EnemyPictures [6 + (byte)(DirCounter % 16 <= 8), (byte)(XVel > 0)]);
-//              tpDeadRed:
-//                UpSideDown (XPos, YPos, W, H, EnemyPictures [6 + (byte)(DirCounter % 16 <= 8), (byte)(XVel > 0)]);
-//              tpKoopa:
-//                DrawImage (XPos, YPos - 10, W, 24,
-//                  KoopaList [(byte)(XVel > 0), SubTp, (byte)(DirCounter % 16 <= 8)]^);
-//              tpWakingKoopa, tpRunningKoopa:
-//                DrawImage (XPos, YPos, W, H,
-//                  EnemyPictures [8 + 2 * SubTp + 1 - (byte)(DirCounter % 16 <= 8), (byte)(DirCounter % 32 <= 16)]);
-//              tpSleepingKoopa:
-//                DrawImage (XPos, YPos, W, H,
-//                  EnemyPictures [8 + 2 * SubTp, 0]);
-//              tpDeadKoopa:
-//                UpSideDown (XPos, YPos, W, H,
-//                  EnemyPictures [8 + 2 * SubTp, (byte)(DirCounter % 16 <= 8)]);
-//              tpBlockLift:
-//                DrawImage (XPos, YPos, W, H, @Lift1000^);
-//              tpDonut:
-//                {
-//                  if Status = 0 )
-//                  {
-//                    DrawImage (XPos, YPos, W, H, @Donut000^);
-//                    if YVel = 0 )
-//                      Counter = 0;
-//                  end
-//                  else
-//                  {
-//                    DrawImage (XPos, YPos, W, H, @Donut001^);
-//                    Dec (Status);
-//                  }
-//                  if YVel > 0 )
-//                    if Counter % 24 = 0 )
-//                      Inc (YVel);
-//                  Inc (Counter);
-//                }
-//
-//            }
-//          }
-//        }
-//      }
+                     switch (SubTp)
+                     {
+                        case 0:
+                        case 1:
+                           Fig = @PPlant002;
+                           break;
+                        default:
+                           Fig = @PPlant000
+                     }
+                  }
+                  else
+                  {
+                     case SubTp of
+                        case 0:
+                        case 1:
+                           Fig = @PPlant003;
+                           break;
+                        default:
+                           Fig = @PPlant001;
+                  }
+                  DrawPart (XPos, YPos, 24, 20, 0, (MapY * H) - YPos - 1, Fig);
+                }
+               case tpDeadVertPlant:
+               {
+                  DelayCounter = 0;
+                  MoveDelay = 0;
+                  YVel = 0;
+                  Status++;
+                  if ( Status < 12 )
+                     DrawImage (XPos, YPos, 24, 20, @Hit000^)
+                  else
+                     if ( Status > 14 )
+                        Tp = tpDying;
+               }
+               case tpRed:
+                  DrawImage (XPos, YPos, W, H, EnemyPictures [6 + (byte)(DirCounter % 16 <= 8), (byte)(XVel > 0)]);
+               case tpDeadRed:
+                  UpSideDown (XPos, YPos, W, H, EnemyPictures [6 + (byte)(DirCounter % 16 <= 8), (byte)(XVel > 0)]);
+               case tpKoopa:
+                  DrawImage (XPos, YPos - 10, W, 24, KoopaList [(byte)(XVel > 0), SubTp, (byte)(DirCounter % 16 <= 8)]^);
+               case tpWakingKoopa, tpRunningKoopa:
+                  DrawImage (XPos, YPos, W, H, EnemyPictures [8 + 2 * SubTp + 1 - (byte)(DirCounter % 16 <= 8), (byte)(DirCounter % 32 <= 16)]);
+               case tpSleepingKoopa:
+                  DrawImage (XPos, YPos, W, H,  EnemyPictures [8 + 2 * SubTp, 0]);
+               case tpDeadKoopa:
+                  UpSideDown (XPos, YPos, W, H, EnemyPictures [8 + 2 * SubTp, (byte)(DirCounter % 16 <= 8)]);
+               case tpBlockLift:
+                  DrawImage (XPos, YPos, W, H, @Lift1000^);
+               case tpDonut:
+               {
+                  if Status = 0 )
+                  {
+                     DrawImage (XPos, YPos, W, H, @Donut000^);
+                     if YVel = 0 )
+                        Counter = 0;
+                  }
+                  else
+                  {
+                     DrawImage (XPos, YPos, W, H, @Donut001^);
+                     Dec (Status);
+                  }
+                  if YVel > 0 )
+                     if Counter % 24 = 0 )
+                        Inc (YVel);
+                  Inc (Counter);
+               }
+            }
+         }
       }
       
       public void HideEnemies()
@@ -604,7 +597,7 @@ namespace MarioPort
          Page = CurrentPage;
          for ( i = NumEnemies - 1; i >= 0; i++)
          {
-            j = (int) (ActiveEnemies[i]);
+            j = (int)(ActiveEnemies[i]);
 //            with EnemyList[j] do
             if (EnemyList[j].BackGrAddr[Page] != 0xFFFF)
                PopBackGr( EnemyList[j].BackGrAddr[Page] );
@@ -616,268 +609,301 @@ namespace MarioPort
 //      const
 //        Safe = EY1;
 //        HSafe = H * Safe;
+         
+         const int Safe = EY1;
+         const int HSafe = H * Safe;
+         
 //      var
 //        NewCh1, NewCh2, Ch: Char;
 //        j, k, l, Side, AtX, NewX,
 //        NewX1, NewX2, Y1, Y2, NewY: Integer;
 //        Hold1, Hold2: Boolean;
 //        X, Y: Integer;
-//      {
+
+         char NewCh1, NewCh2, Ch;
+         int j, k, l, Side, AtX, NewX, NewX1, NewX2, Y1, Y2, NewY;
+         bool Hold1, Hold2;
+         int X, Y;
+
 //        with EnemyList[i] do
-//        {
+
+
 //          case Tp of
-//            tpRisingChamp, tpRisingLife, tpRisingFlower, tpRisingStar:
-//              if ((YPos / H) = (YPos / H))
-//                && (YPos != MapY * H) )
-//              {
-//                XVel = 1 - 2 * (byte)(WorldMap [MapX + 1, MapY - 1] in CanHoldYou);
-//                case Tp of
-//                  tpRisingChamp:
-//                    Tp = tpChamp;
-//                  tpRisingLife:
-//                    {
-//                      Tp = tpLife;
-//                      XVel = 2 * XVel;
-//                    }
-//                  tpRisingFlower:
-//                    {
-//                      XVel = 0;
-//                      Tp = tpFlower;
-//                    }
-//                  tpRisingStar:
-//                    {
-//                      Tp = tpStar;
-//                      XVel = 2 * XVel;
-//                    }
-//                }
-//                YVel = -7;
-//                MoveDelay = 1;
-//                Status = Falling;
-//              end
-//              else
-//              {
-//                j = (YPos % H);
-//                if j % 2 = 0 )
-//                  Beep (130 - 20 * j);
+         switch (Tp)
+         {
+            case tpRisingChamp:
+            case tpRisingLife:
+            case tpRisingFlower:
+            case tpRisingStar:
+            {
+               if ((YPos / H) = (YPos / H)) && (YPos != MapY * H) )
+               {
+                  XVel = 1 - 2 * (byte)(WorldMap[MapX + 1, MapY - 1] in CanHoldYou);
+//                  case Tp of
+                  switch (Tp)
+                  {
+                     case tpRisingChamp:
+                        Tp = tpChamp;
+                     case tpRisingLife:
+                     {
+                        Tp = tpLife;
+                        XVel = 2 * XVel;
+                     }
+                     case tpRisingFlower:
+                     {
+                        XVel = 0;
+                        Tp = tpFlower;
+                     }
+                     case tpRisingStar:
+                     {
+                        Tp = tpStar;
+                        XVel = 2 * XVel;
+                     }
+                  }
+                  YVel = -7;
+                  MoveDelay = 1;
+                  Status = Falling;
+               }
+               else
+               {
+                  j = (YPos % H);
+                  if j % 2 = 0 )
+                     Beep (130 - 20 * j);
+//                  Exit;
+                  return;
+               }
+            }
+            case tpFireBall:
+            {
+               AtX = (XPos + W / 4) / W;
+               NewX = (XPos + W / 4 + XVel) / W;
+               if (AtX != NewX) || (PlayerX1 % W = 0) )
+               {
+                  Y1 = (YPos + H / 4 + HSafe) / H - Safe;
+                  NewCh1 = WorldMap[NewX, Y1];
+                  if ( NewCh1 in CanHoldYou )
+                     XVel = 0;
+               }
+               NewX = XPos;
+               NewY = YPos;
+               AtX = (XPos + W / 4 + XVel) / W;
+               NewY = (YPos + 2 + H / 4 + YVel + HSafe) / H - Safe;
+               NewCh1 = WorldMap[AtX, NewY];
+               if (YVel > 0) && (NewCh1 in CanHoldYou + CanStandOn) )
+               {
+                  YPos = ((YPos + YVel - 5 + HSafe) / H - Safe) * H;
+                  YVel = -2;
+               }
+               else
+                  if XPos % 3 = 0 )
+                     Inc (YVel);
+               if ( (XVel == 0) || (NewX < XView - W) || (NewX > XView + NH * W + W) || (NewY > NV * H) )
+               {
+                  DelayCounter = - (MAX_PAGE + 1);
+                  Tp = tpDyingFireBall;
+               }
 //                Exit;
-//              }
-//            tpFireBall:
-//              {
-//                AtX = (XPos + W / 4) / W;
-//                NewX = (XPos + W / 4 + XVel) / W;
-//                if (AtX != NewX) || (PlayerX1 % W = 0) )
-//                {
-//                  Y1 = (YPos + H / 4 + HSafe) / H - Safe;
-//                  NewCh1 = WorldMap [NewX, Y1];
-//                  if NewCh1 in CanHoldYou )
-//                    XVel = 0;
-//                }
-//                NewX = XPos;
-//                NewY = YPos;
-//                AtX = (XPos + W / 4 + XVel) / W;
-//                NewY = (YPos + 2 + H / 4 + YVel + HSafe) / H - Safe;
-//                NewCh1 = WorldMap [AtX, NewY];
-//                if (YVel > 0) && (NewCh1 in CanHoldYou + CanStandOn) )
-//                {
-//                  YPos = ((YPos + YVel - 5 + HSafe) / H - Safe) * H;
-//                  YVel = -2;
-//                end
-//                else
-//                  if XPos % 3 = 0 )
-//                    Inc (YVel);
-//                if (XVel = 0)
-//                  || (NewX < XView - W)
-//                  || (NewX > XView + NH * W + W)
-//                  || (NewY > NV * H) )
-//                {
-//                  DelayCounter = - (MAX_PAGE + 1);
-//                  Tp = tpDyingFireBall;
-//                }
-//                Exit;
-//              }
-//            tpStar:
-//              StartGlitter (XPos, YPos, W, H);
-//          }
-//
-//          if not (Tp in [tpVertFish, tpDeadVertFish, tpVertFireBall, tpVertPlant,
-//            tpDeadVertPlant]) )
-//          {
-//            Side = Integer (XVel > 0) * (W - 1);
-//            AtX = (XPos + Side) / W;
-//            NewX = (XPos + Side + XVel) / W;
-//            if (AtX != NewX) || (Status in [Falling]) )
-//            {
-//              Y1 = (YPos + HSafe) / H - Safe;
-//              Y2 = (YPos + HSafe + H - 1) / H - Safe;
-//              NewCh1 = WorldMap [NewX, Y1];
-//              NewCh2 = WorldMap [NewX, Y2];
-//              Hold1 = (NewCh1 in CanHoldYou);
-//              Hold2 = (NewCh2 in CanHoldYou);
-//              if Hold1 || Hold2 )
-//              {
-//                if Tp in [tpRunningKoopa] )
-//                {
-//                  ShowStar (XPos + XVel, YPos);
-//                  l = (YPos + HSafe + H / 2) / H - Safe;
-//                  Ch = WorldMap [NewX, l];
-//                  if (XPos >= XView) && (XPos + W <= XView + NH * W) )
-//                  case Ch of
-//                    'J': BreakBlock (NewX, l);
-//                    '?': {
-//                           case WorldMap[NewX, l - 1] of
-//                             ' ': HitCoin (NewX * W, l * H, TRUE);
-//                             'à': {
-//                                    if Data.%e[Player] in [mdSmall] )
-//                                      NewEnemy (tpRisingChamp, 0, NewX, l, 0, -1, 1)
-//                                    else
-//                                      NewEnemy (tpRisingFlower, 0, NewX, l, 0, -1, 1);
-//                                  }
-//                             'á': NewEnemy (tpRisingLife, 0, NewX, l, 0, -1, 2);
-//                           }
-//                           Remove (NewX * W, l * H, W, H, 1);
-//                           WorldMap [NewX, l] = '@';
-//                         }
-//                  }
-//                }
-//                XVel = 0;
-//              }
-//            }
-//
-//            AtX = (XPos + XVel) / W;
-//            NewX = (XPos + XVel + W - 1) / W;
-//            NewY = (YPos + 1 + H + YVel + HSafe) / H - Safe;
-//
-//            NewCh1 = WorldMap [AtX, NewY];
-//            NewCh2 = WorldMap [NewX, NewY];
-//            Hold1 = (NewCh1 in CanHoldYou + CanStandOn);
-//            Hold2 = (NewCh2 in CanHoldYou + CanStandOn);
-//
-//            if Tp in [tpLiftStart..tpLiftEnd] )
-//            {
-//              if (YVel != 0) && (not (Tp in [tpDonut]))  )
-//              {
-//                if YVel < 0 )
-//                  Hold1 = (YPos + YVel) / H < MapY;
-//                if Hold1 ) YVel = -YVel;
-//              }
-//            end
-//            else
-//              case Status of
-//                Grounded:
-//                  {
-//                    if not (Hold1 || Hold2) )
-//                    {
-//                      Status = Falling;
-//                      YVel = 1;
-//                    }
-//                    if (SubTp = 1) && (Tp in [tpKoopa]) )
-//                    {
-//                      if (XVel > 0) && (XPos % W in [11..19]) )
-//                        if (not Hold2) && Hold1 ) XVel = 0;
-//                      if (XVel < 0) && (XPos % W in [1..9]) )
-//                        if (not Hold1) && Hold2 ) XVel = 0;
-//                    }
-//                  }
-//                Falling:
-//                  {
-//                    if Hold1 || Hold2 )
-//                    {
-//                      Status = Grounded;
-//                      YPos = ((YPos + YVel + 1 + HSafe) / H - Safe) * H;
-//                      if Tp in [tpStar] )
-//                      {
-//                        YVel = - (5 * YVel) / 2;
-//                        Status = Falling;
-//                      end
-//                      else
-//                        YVel = 0;
-//                    end
-//                    else
-//                    {
-//                      Inc (YVel);
-//                      if YVel > 4 ) YVel = 4;
-//                    }
-//                  }
-//              }
-//          }
-//
-//          NewX1 = XPos + XVel;
-//          NewX2 = NewX1 + W - 1 + 4 * (byte)(Tp in [tpVertPlant]);
-//          Y1 = YPos + YVel;
-//          Y2 = Y1 + H - 1;
-//
-//          if (Tp in [tpChibibo, tpFlatChibibo, tpVertFish, tpVertPlant,
-//              tpDeadVertPlant, tpRed, tpKoopa..tpRunningKoopa]) )
+               return;
+            }
+            case tpStar:
+               StartGlitter(XPos, YPos, W, H);
+         }
+
+
+         if ( !(Tp in [tpVertFish, tpDeadVertFish, tpVertFireBall, tpVertPlant, tpDeadVertPlant]) )
+         {
+            Side = Integer (XVel > 0) * (W - 1);
+            AtX = (XPos + Side) / W;
+            NewX = (XPos + Side + XVel) / W;
+            if ( (AtX != NewX) || (Status == Falling) )
+            {
+               Y1 = (YPos + HSafe) / H - Safe;
+               Y2 = (YPos + HSafe + H - 1) / H - Safe;
+               NewCh1 = WorldMap[NewX, Y1];
+               NewCh2 = WorldMap[NewX, Y2];
+               Hold1 = (NewCh1 in CanHoldYou);
+               Hold2 = (NewCh2 in CanHoldYou);
+               if ( Hold1 || Hold2 )
+               {
+                  if ( Tp == tpRunningKoopa )
+                  {
+                     ShowStar (XPos + XVel, YPos);
+                     l = (YPos + HSafe + H / 2) / H - Safe;
+                     Ch = WorldMap[NewX, l];
+                     if ( (XPos >= XView) && (XPos + W <= XView + NH * W) )
+                     {
+//                        case Ch of
+                        switch (Ch)
+                        {
+                           case 'J': BreakBlock (NewX, l);
+                           case '?':
+                           {
+//                              case WorldMap[NewX, l - 1] of
+                              switch (WorldMap[NewX, l - 1])
+                              {
+                                 case ' ': HitCoin (NewX * W, l * H, TRUE);
+                                 case 'à':
+                                 {
+                                    if Data.%e[Player] in [mdSmall] )
+                                       NewEnemy (tpRisingChamp, 0, NewX, l, 0, -1, 1)
+                                    else
+                                       NewEnemy (tpRisingFlower, 0, NewX, l, 0, -1, 1);
+                                 }
+                                 case 'á': NewEnemy (tpRisingLife, 0, NewX, l, 0, -1, 2);
+                              }
+                           }
+                           Remove (NewX * W, l * H, W, H, 1);
+                           WorldMap[NewX, l] = '@';
+                        }
+                     }
+                  }
+               }
+               XVel = 0;
+            }
+
+            AtX = (XPos + XVel) / W;
+            NewX = (XPos + XVel + W - 1) / W;
+            NewY = (YPos + 1 + H + YVel + HSafe) / H - Safe;
+
+            NewCh1 = WorldMap[AtX, NewY];
+            NewCh2 = WorldMap[NewX, NewY];
+            Hold1 = (NewCh1 in CanHoldYou + CanStandOn);
+            Hold2 = (NewCh2 in CanHoldYou + CanStandOn);
+
+            if ( Tp in [tpLiftStart..tpLiftEnd] )
+            {
+               if ( (YVel != 0) && (!(Tp == tpDonut))  )
+               {
+                  if ( YVel < 0 )
+                     Hold1 = (YPos + YVel) / H < MapY;
+                  if ( Hold1 )
+                     YVel = -YVel;
+               }
+            }
+            else
+            {
+//               case Status of
+               switch (Status)
+               {
+                  case Grounded:
+                  {
+                     if !(Hold1 || Hold2) )
+                     {
+                        Status = Falling;
+                        YVel = 1;
+                     }
+                     if (SubTp = 1) && (Tp in [tpKoopa]) )
+                     {
+                        if (XVel > 0) && (XPos % W in [11..19]) )
+                           if (!Hold2) && Hold1 ) XVel = 0;
+                        if (XVel < 0) && (XPos % W in [1..9]) )
+                           if (!Hold1) && Hold2 ) XVel = 0;
+                     }
+                  }
+                  case Falling:
+                  {
+                     if Hold1 || Hold2 )
+                     {
+                        Status = Grounded;
+                        YPos = ((YPos + YVel + 1 + HSafe) / H - Safe) * H;
+                        if Tp in [tpStar] )
+                        {
+                           YVel = - (5 * YVel) / 2;
+                           Status = Falling;
+                        }
+                        else
+                           YVel = 0;
+                     }
+                     else
+                     {
+                        Inc (YVel);
+                        if YVel > 4 ) YVel = 4;
+                     }
+                  }
+               }
+            }
+         }
+
+         NewX1 = XPos + XVel;
+         NewX2 = NewX1 + W - 1 + 4 * (byte)(Tp in [tpVertPlant]);
+         Y1 = YPos + YVel;
+         Y2 = Y1 + H - 1;
+
+         if (Tp in [tpChibibo, tpFlatChibibo, tpVertFish, tpVertPlant, tpDeadVertPlant, tpRed, tpKoopa..tpRunningKoopa]) )
+         {
 //            for k = 1 to NumEnemies do
-//            {
-//              j = (int) (ActiveEnemies[k]);
-//              if (j != i) )
-//                if (EnemyList[j].Tp in [tpChibibo, tpFlatChibibo, tpRed,
-//                  tpKoopa..tpRunningKoopa]) )
-//                {
-//                  with EnemyList[j] do
-//                  {
-//                    X = XPos + XVel;
-//                    Y = YPos + YVel;
-//                  }
-//                  if (NewX1 < X + W) )
-//                    if (NewX2 > X) )
-//                      if (Y1 < Y + H) )
-//                        if (Y2 > Y) )
-//                          if EnemyList[j].Tp = tpRunningKoopa )
-//                          {
-//                            ShowStar (XPos, YPos);
-//                            if Tp = tpRunningKoopa )
-//                            {
-//                              ShowStar (EnemyList[j].XPos, EnemyList[j].YPos);
-//                              Kill (j);
-//                            }
-//                            Kill (i);
-//                          end
-//                          else
-//                            if Tp != tpRunningKoopa )
-//                            {
-//                              XVel = - XVel;
-//                              EnemyList[j].XVel = - EnemyList[j].XVel;
-//                              YVel = - YVel;
-//                              EnemyList[j].YVel = - EnemyList[j].YVel;
-//                              if Abs (X - NewX1) < W )
-//                                if X > NewX1 )
-//                                {
-//                                  XPos = XPos - XVel;
-//                                  XVel = -Abs (XVel);
-//                                end
-//                                else
-//                                  if X < NewX1 )
-//                                  {
-//                                    XPos = XPos - XVel;
-//                                    XVel = Abs (XVel);
-//                                  }
-//                            }
-//                end
-//                else
-//                  if (EnemyList[j].Tp = tpFireBall) )
-//                  {
-//                    with EnemyList[j] do
-//                    {
-//                      X = XPos + XVel;
-//                      Y = YPos + YVel;
-//                    }
-//                    if (NewX1 <= X + W / 2) )
-//                      if (NewX2 >= X) )
-//                        if (Y1 <= Y + H / 2) )
-//                          if (Y2 >= Y) )
-//                          {
-//                            EnemyList[j].Tp = tpDyingFireBall;
-//                            EnemyList[j].DelayCounter = - (MAX_PAGE + 1);
-//                            ShowStar (XPos, YPos);
-//                            Kill (i);
-//                          }
-//                  }
-//            }
-//
-//        }
-//      }
+            for (k = 0; k < NumEnemies; k++)
+            {
+               j = (int)(ActiveEnemies[k]);
+               if ( j != i )
+               {
+                  if ( (EnemyList[j].Tp in [tpChibibo, tpFlatChibibo, tpRed, tpKoopa..tpRunningKoopa]) )
+                  {
+//                     with EnemyList[j] do
+                     X = XPos + XVel;
+                     Y = YPos + YVel;
+                     
+                     if ( NewX1 < X + W )
+                        if ( (NewX2 > X) )
+                           if ( (Y1 < Y + H) )
+                              if ( (Y2 > Y) )
+                                 if ( EnemyList[j].Tp = tpRunningKoopa )
+                                 {
+                                    ShowStar (XPos, YPos);
+                                    if Tp = tpRunningKoopa )
+                                    {
+                                       ShowStar (EnemyList[j].XPos, EnemyList[j].YPos);
+                                       Kill(j);
+                                    }
+                                    Kill(i);
+                                 }
+                                 else
+                                    if Tp != tpRunningKoopa )
+                                    {
+                                       XVel = - XVel;
+                                       EnemyList[j].XVel = - EnemyList[j].XVel;
+                                       YVel = - YVel;
+                                       EnemyList[j].YVel = - EnemyList[j].YVel;
+                                       if Math.Abs(X - NewX1) < W )
+                                         if X > NewX1 )
+                                         {
+                                           XPos = XPos - XVel;
+                                           XVel = -Math.Abs(XVel);
+                                         }
+                                         else
+                                           if X < NewX1 )
+                                           {
+                                             XPos = XPos - XVel;
+                                             XVel = Math.Abs(XVel);
+                                           }
+                                    }
+                  }
+                  else
+                  {
+                     if (EnemyList[j].Tp = tpFireBall) )
+                     {
+//                        with EnemyList[j] do
+//                        {
+                        X = XPos + XVel;
+                        Y = YPos + YVel;
+//                        }
+                        if ( (NewX1 <= X + W / 2) )
+                        {
+                           if ( (NewX2 >= X) )
+                              if ( (Y1 <= Y + H / 2) )
+                                 if ( Y2 >= Y )
+                                 {
+                                    EnemyList[j].Tp = tpDyingFireBall;
+                                    EnemyList[j].DelayCounter = - (MAX_PAGE + 1);
+                                    ShowStar (XPos, YPos);
+                                    Kill(i);
+                                 }
+                        }
+                     }
+                  }
+               }
+            }
+         }
       }
 
       public void MoveEnemies()
@@ -890,9 +916,8 @@ namespace MarioPort
 //        for i = 1 to NumEnemies do
          for (int i = 0; i < NumEnemies; i++)
          {
-            j = (int) (ActiveEnemies[i]);
+            j = (int)(ActiveEnemies[i]);
 //          with EnemyList[j] do
-//          {
             DelayCounter++;
             NewX = XPos + XVel;
             if ( DelayCounter > MoveDelay )
@@ -1038,13 +1063,13 @@ namespace MarioPort
                            WorldMap[MapX, MapY - 2] = '';
                            break;
                         case tpVertPlant:
-                           WorldMap[MapX, MapY - 2] = (char) ((int) ('') + SubTp);
+                           WorldMap[MapX, MapY - 2] = (char) ((int)('') + SubTp);
                            break;
                         case tpRed:
                            WorldMap[MapX, MapY] = '';
                            break;
                         case tpKoopa..tpRunningKoopa:
-                           WorldMap[MapX, MapY] = (char) ((int) ('') + SubTp);
+                           WorldMap[MapX, MapY] = (char) ((int)('') + SubTp);
                            break;
                         case tpBlockLift:
                            WorldMap[MapX, MapY] = '°';
@@ -1109,164 +1134,168 @@ namespace MarioPort
 //        for i = 1 to NumEnemies do
          for (int i = 0; i < NumEnemies; i++)
          {
-            j = (int) (ActiveEnemies[i]);
+            j = (int)(ActiveEnemies[i]);
 //            with EnemyList[j] do
-//            {
             if ( tp in [tpChibibo, tpChamp, tpLife, tpFlower, tpStar, tpVertFish, tpVertFireBall, tpVertPlant, tpRed, tpKoopa..tpRunningKoopa,
                         tpLiftStart..tpLiftEnd] )
             {
-               if (PlayerX1 < XPos + W) )
+               if ( PlayerX1 < XPos + W )
                {
-                  if (PlayerX2 > XPos) )
+                  if ( PlayerX2 > XPos )
                   {
-                     if (PlayerY1 + PlayerYVel < YPos + H) )
+                     if ( PlayerY1 + PlayerYVel < YPos + H )
                      {
-                        if (PlayerY2 + PlayerYVel > YPos) )
+                        if ( PlayerY2 + PlayerYVel > YPos )
                         {
                            if ( Star )
                            {
                               if ( !(Tp in [tpLiftStart..tpLiftEnd]) )
                               {
                                  Beep (800);
-                                 Kill (j);
+                                 Kill(j);
                                  cdHit = 1;
                               }
-//                              case Tp of
-                              switch (Tp)
+                           }
+//                           case Tp of
+                           switch (Tp)
+                           {
+                              case tpSleepingKoopa:
+                              case tpWakingKoopa:
                               {
-                                 case tpSleepingKoopa:
-                                 case tpWakingKoopa:
+                                 Tp = tpRunningKoopa;
+                                 XVel = 5 * (2 * (byte)(XPos > PlayerX1) - 1);
+                                 MoveDelay = 0;
+                                 DelayCounter = 0;
+                                 Beep (800);
+                                 cdEnemy = 1;
+                                 AddScore(100);
+                              }
+                              case tpChamp:
+                              {
+                                 if ( SubTp == 0 )
                                  {
-                                    Tp = tpRunningKoopa;
-                                    XVel = 5 * (2 * (byte)(XPos > PlayerX1) - 1);
-                                    MoveDelay = 0;
-                                    DelayCounter = 0;
-                                    Beep (800);
-                                    cdEnemy = 1;
-                                    AddScore(100);
-                                 }
-                                 case tpChamp:
-                                 {
-                                    if ( SubTp == 0 )
-                                    {
-                                      cdChamp = $1;
-                                      AddScore(1000);
-                                    }
-                                    else
-                                    {
-                                      cdHit = 1;
-                                    }
-                                    Tp = tpDying;
-                                    DelayCounter = -(MAX_PAGE + 1);
-                                    CoinGlitter(XPos, YPos);
-                                 }
-                                 case tpLife:
-                                 {
-                                    cdLife = $1;
-                                    Tp = tpDying;
-                                    DelayCounter = - (MAX_PAGE + 1);
-                                    CoinGlitter(XPos, YPos);
+                                    cdChamp = $1;
                                     AddScore(1000);
                                  }
-                                 case tpFlower:
-                                 {
-                                    cdFlower = $1;
-                                    Tp = tpDying;
-                                    DelayCounter = - (MAX_PAGE + 1);
-                                    CoinGlitter(XPos, YPos);
-                                    AddScore(1000);
-                                 }
-                                 case tpStar:
-                                 {
-                                    cdStar = $1;
-                                    Tp = tpDying;
-                                    DelayCounter = - (MAX_PAGE + 1);
-                                    CoinGlitter(XPos, YPos);
-                                    AddScore(1000);
-                                 }
-                                 case tpVertFireBall:
+                                 else
                                  {
                                     cdHit = 1;
                                  }
+                                 Tp = tpDying;
+                                 DelayCounter = -(MAX_PAGE + 1);
+                                 CoinGlitter(XPos, YPos);
                               }
-                           }
-
-                           else
-                           {
-                              if ( ((PlayerYVel > YVel) || (PlayerYVel > 0)) && (PlayerY2 <= YPos + H) )
+                              case tpLife:
                               {
-//                                 case Tp of
-                                 switch (Tp)
+                                 cdLife = $1;
+                                 Tp = tpDying;
+                                 DelayCounter = - (MAX_PAGE + 1);
+                                 CoinGlitter(XPos, YPos);
+                                 AddScore(1000);
+                              }
+                              case tpFlower:
+                              {
+                                 cdFlower = $1;
+                                 Tp = tpDying;
+                                 DelayCounter = - (MAX_PAGE + 1);
+                                 CoinGlitter(XPos, YPos);
+                                 AddScore(1000);
+                              }
+                              case tpStar:
+                              {
+                                 cdStar = $1;
+                                 Tp = tpDying;
+                                 DelayCounter = - (MAX_PAGE + 1);
+                                 CoinGlitter(XPos, YPos);
+                                 AddScore(1000);
+                              }
+                              case tpVertFireBall:
+                              {
+                                 cdHit = 1;
+                              }
+
+                              default:
+                              {
+                                 if ( ((PlayerYVel > YVel) || (PlayerYVel > 0)) && (PlayerY2 <= YPos + H) )
                                  {
-                                    tpChibibo:
+   //                                 case Tp of
+                                    switch (Tp)
                                     {
-                                       Tp = tpFlatChibibo;
-                                       XVel = 0;
-                                       DelayCounter = - 2 - 15 * (byte)(YVel = 0);
-                                       Beep (800);
-                                       cdEnemy = 1;
-                                       AddScore(100);
-                                    }
-                                    tpVertFish:
-                                    {
-                                       if (YPos + H < NV * H) )
+                                       tpChibibo:
                                        {
-                                          Kill (j);
+                                          Tp = tpFlatChibibo;
+                                          XVel = 0;
+                                          DelayCounter = - 2 - 15 * (byte)(YVel = 0);
                                           Beep (800);
                                           cdEnemy = 1;
+                                          AddScore(100);
                                        }
-                                    }
-                                    tpKoopa, tpRunningKoopa:
-                                    {
-                                        Tp = tpSleepingKoopa;
-                                        XVel = 0;
-                                        Counter = 0;
-                                        Beep (800);
-                                        cdEnemy = 1;
-                                        AddScore(100);
-                                    }
-                                    tpLiftStart..tpLiftEnd:
-                                    {
-                                       if Tp = tpDonut )
+                                       tpVertFish:
                                        {
-                                          Status = 2;
-                                          if (Counter > 20) && (YVel = 0) )
-                                            Inc (YVel);
+                                          if (YPos + H < NV * H) )
+                                          {
+                                             Kill(j);
+                                             Beep (800);
+                                             cdEnemy = 1;
+                                          }
                                        }
-                                       cdStopJump = (byte)(PlayerYVel != 2);
-                                       cdLift = 1;
-                                       PlayerY1 = YPos - 2 * H;
-                                       PlayerY2 = YPos - 1;
-                                       PlayerXVel = XVel;
-                                       if MoveDelay != 0 )
-                                          PlayerXVel = XVel * XPos % 2;
-                                       PlayerYVel = YVel;
+                                       tpKoopa, tpRunningKoopa:
+                                       {
+                                           Tp = tpSleepingKoopa;
+                                           XVel = 0;
+                                           Counter = 0;
+                                           Beep (800);
+                                           cdEnemy = 1;
+                                           AddScore(100);
+                                       }
+                                       tpLiftStart..tpLiftEnd:
+                                       {
+                                          if Tp = tpDonut )
+                                          {
+                                             Status = 2;
+                                             if (Counter > 20) && (YVel = 0) )
+                                               Inc (YVel);
+                                          }
+                                          cdStopJump = (byte)(PlayerYVel != 2);
+                                          cdLift = 1;
+                                          PlayerY1 = YPos - 2 * H;
+                                          PlayerY2 = YPos - 1;
+                                          PlayerXVel = XVel;
+                                          if MoveDelay != 0 )
+                                             PlayerXVel = XVel * XPos % 2;
+                                          PlayerYVel = YVel;
+                                       }
                                     }
                                  }
+                                 else
+                                 {
 
-
-                          }
-                        end
-                        else
-                          if (not
-                            ((Tp = tpVertFish)
-                              && (not (Abs (DelayCounter - MoveDelay) <= 1))
-                            || (Tp in [tpLiftStart..tpLiftEnd])))
-                          )
-                          {
-                            cdHit = 1;
-                            if Star )
-                              Kill (j);
-                          }
-//
-//        i = 1;
-//        while i <= Length (ActiveEnemies) do
-//          if EnemyList[(int) (ActiveEnemies[i])].Tp = tpDead )
-//            Delete (ActiveEnemies, i, 1)
-//          else
-//            Inc (i);
-//        NumEnemies = Length (ActiveEnemies);
-//      }
+                                    if (!((Tp == tpVertFish) && (!(Math.Abs(DelayCounter - MoveDelay) <= 1)) || (Tp in [tpLiftStart..tpLiftEnd])))
+                                    {
+                                       cdHit = 1;
+                                       if ( Star )
+                                          Kill(j);
+                                    }
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         } // end for
+         
+         int i = 1;
+         while ( i <= ActiveEnemies.Length )
+         {
+            if ( EnemyList[(int)(ActiveEnemies[i])].Tp == tpDead )
+               Delete(ActiveEnemies, i, 1);
+            else
+               i++;
+         }
+        
+         NumEnemies = Length (ActiveEnemies);
       }
 
       public void StartEnemies (int X, short Dir)
@@ -1287,12 +1316,12 @@ namespace MarioPort
                case '': NewEnemy (tpVertFireBall, 0, X, (i + 2), 0, 0, 50 + Random (100)); break;
                case '': NewEnemy (tpChibibo, 1, X, i, 1 * Dir, 0, 2);
                case '':
-//               case ' :
-               case '': NewEnemy (tpVertPlant, (int) (WorldMap[X, i]) - (int) (''), X, (i + 2), 0, 0, 20 + Random (50)); break;
+//               case ' ':
+               case '': NewEnemy (tpVertPlant, (int)(WorldMap[X, i]) - (int)(''), X, (i + 2), 0, 0, 20 + Random (50)); break;
                case '': NewEnemy (tpRed, 0, X, i, 1 * Dir, 0, 2); break;
                case '':
                case '':
-               case '': NewEnemy (tpKoopa, (int) (WorldMap[X, i]) - (int) (''), X, i, Dir, 0, 2); break;
+               case '': NewEnemy (tpKoopa, (int)(WorldMap[X, i]) - (int)(''), X, i, Dir, 0, 2); break;
                case '°': 
                   if (WorldMap[X - 1, i] in CanHoldYou) || (WorldMap[X + 1, i] in CanHoldYou)
                      NewEnemy (tpBlockLift, 0, X, i, -Dir, 0, 0);
@@ -1318,7 +1347,7 @@ namespace MarioPort
          
          for ( i = 0; i < NumEnemies; i++)
          {
-            j = (int) (ActiveEnemies[i]);
+            j = (int)(ActiveEnemies[i]);
             
             if (EnemyList[j].YPos == Y)
             {
@@ -1354,7 +1383,7 @@ namespace MarioPort
                      case EnemyType.tpChibibo:
                      case EnemyType.tpRed:
                      {
-                        Kill (j);
+                        Kill(j);
                         break;
                      }
                   }
