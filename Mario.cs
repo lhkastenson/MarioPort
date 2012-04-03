@@ -163,6 +163,16 @@ public class Mario
   
   public void ReadCmdLine()
   {
+	int i, j;
+	string S;
+	for(int i = 0; i < ParamCount; i++)
+	{
+		S = ParamStr(i);
+		while (!string.IsNullOrEmpty(S))
+		{
+			
+		}
+	}
   }
   /**
   procedure ReadCmdLine;

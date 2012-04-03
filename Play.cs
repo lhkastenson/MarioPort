@@ -24,7 +24,7 @@ interface
 
 public class Play
 {
-/**
+/****
 const
     Stat: Boolean = FALSE;
     ShowRetrace: Boolean = FALSE;
