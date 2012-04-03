@@ -24,10 +24,8 @@ interface
 
 public class Play
 {
-}
-
 /**
-  const
+const
     Stat: Boolean = FALSE;
     ShowRetrace: Boolean = FALSE;
 
@@ -38,8 +36,12 @@ implementation
 
   const
     CheatsUsed: Integer = 0;
-
-  function PlayWorld (N1, N2: Char; var Map1; var Opt1; var Opt1b;
+**/
+	public bool PlayWorld(char N1, char N2, Map Map1, Opt Opt1, Opt Opt1b, 
+						  Map Map2, Opt Opt2, Opt Opt2b, byte Player)
+	{
+	/**
+	function PlayWorld (N1, N2: Char; var Map1; var Opt1; var Opt1b;
                       var Map2; var Opt2; var Opt2b; Player: Byte): Boolean;
     var
       i, j, k, x, y: Integer;
@@ -98,7 +100,13 @@ implementation
 
     end;
 
-    procedure FindPipeExit;
+	**/
+	}
+	
+	public void FindPipeExit()
+	{
+	/**
+	procedure FindPipeExit;
       var
         i, j: Integer;
     begin
@@ -118,8 +126,10 @@ implementation
                 Exit;
               end;
     end;
-
-    Label
+	**/
+	}
+	/**
+	Label
       BuildLevel,
       Restart;
 
@@ -131,9 +141,11 @@ implementation
       CountingScore,
       ShowObjects: Boolean;
       OnlyDraw: Boolean;
-
-
-    procedure WriteTotalScore;
+	**/
+	public void WriteTotalScore()
+	{
+	/**
+	procedure WriteTotalScore;
       var
         i: Integer;
         S: String;
@@ -145,8 +157,13 @@ implementation
           S[i] := '0';
       CenterText (120, 'TOTAL SCORE:' + S, 31);
     end;
-
-    procedure ShowTotalBack;
+	**/
+	}
+	
+	public void ShowTotalBack
+	{
+	/**
+	procedure ShowTotalBack;
     begin
       if Passed and CountingScore then
         Beep (4 * 880);
@@ -157,8 +174,12 @@ implementation
       if Passed and CountingScore then
         Beep (0);
     end;
-
-    procedure HideTotalBack;
+	**/
+	}
+	public void HideTotalBack
+	{
+	/**
+	procedure HideTotalBack;
       var
         Page: Integer;
     begin
@@ -167,9 +188,13 @@ implementation
         PopBackGr (TotalBackGrAddr[CurrentPage]);
       TotalBackGrAddr[Page] := 0;
     end;
-
-
-    procedure Pause;
+	**/
+	}
+	
+	public void Pause()
+	{
+	/**
+	procedure Pause;
       type
         StrPtr = ^string;
       var
@@ -350,9 +375,11 @@ implementation
       FadeUp (8);
       Key := #255;
     end;
-
-
-  begin  { PlayWorld }
+	**/
+	}
+	
+	/**
+	begin  { PlayWorld }
     PlayWorld := False;
     Key := #0;
 
@@ -742,4 +769,6 @@ implementation
   end;
 
 end.
-**/
+	**/
+	
+}

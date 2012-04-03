@@ -29,31 +29,21 @@ public class Mario
 		public bool UseJS;
 		public JoyRec JSDat;
 	}
+	public ConfigData ConfigFile = file;
+	public int GameNumber;
+	public int CurPlayer;
+	public int Passed;
+	public bool EndGame;
+	public ConfigData Config;
 	
-}
+#IFDEF DEBUG
+	public void MouseHalt()
+	{
+		//halt
+	}
+#ENDIF
+
 /**
-
-    ConfigFile = file of ConfigData;
-
-  var
-    GameNumber: Integer;
-
-  var
-    CurPlayer: Integer;
-    Passed,
-    EndGame: Boolean;
-    Config: ConfigData;
-
-  {$IFDEF DEBUG}
-  {$F+}
-  procedure MouseHalt;
-  begin
-    Halt (255);
-  end;
-  {$F-}
-
-  var MouseHaltAddr: Pointer;
-  {$ENDIF}
 
   {$I Block.$00}
 
@@ -63,97 +53,88 @@ public class Mario
 
   {$I Start.$00}
   {$I Start.$01}
+**/
 
-  procedure NewData;
-  begin
-    with Data do
-    begin
-      Lives [plMario] := 3;
-      Lives [plLuigi] := 3;
-      Coins [plMario] := 0;
-      Coins [plLuigi] := 0;
-      Score [plMario] := 0;
-      Score [plLuigi] := 0;
-      Progress [plMario] := 0;
-      Progress [plLuigi] := 0;
-      Mode [plMario] := mdSmall;
-      Mode [plLuigi] := mdSmall;
-    end;
-  end;
+	public void NewData
+	{
+		Data[plMario].Lives = 3;
+		Data[plLuigi].Lives = 3;
+		Data[plMario].Coins = 0;
+		Data[plLuigi].Coins = 0;
+		Data[plMario].Score = 0;
+		Data[plLuigi].Score = 0;
+		Data[plMario].Progress = 0;
+		Data[plLuigi].Progress = 0;
+		Data[plMario].Mode = mdSmall;
+		Data[plLuigi].Mode = mdSmall;
+	}
 
-  function GetConfigName: string;
-    var
-      S: string;
-      Len: byte absolute S;
-  begin
-    S := ParamStr (0);
-    S[Len - 2] := 'C';
-    S[Len - 1] := 'F';
-    S[Len - 0] := 'G';
-    GetConfigName := S;
-  end;
-
-  procedure ReadConfig;
-    var
-      i, j: Integer;
-      F: ConfigFile;
-      Name: string;
-  begin
-  {$IFDEF MENU}
-    Assign (F, GetConfigName);
-    Reset (F);
-    Read (F, Config);
-    Close (F);
-    if IOResult <> 0 then
-  {$ENDIF}
-    begin
-      NewData;
-      for i := 0 to MAX_SAVE - 1 do
-        Config.Games[i] := Data;
-      with Config do
-      begin
-        SLine := TRUE;
-        Sound := TRUE;
-        UseJS := FALSE;
-      end;
-      GameNumber := -1;
-    end;
-
-    with Config do
-    begin
-      Play.Stat := SLine;
-      Buffers.BeeperSound := Sound;
-    end;
-
-    Name := ParamStr (0);
-    j := 0;
-    if Length (Name) > 9 then
-      Delete (Name, 1, Length (Name) - 9);
-    for i := 1 to Length (Name) do
-      Inc (j, Ord (UpCase (Name[i])));
-    if j <> 648 then
-      RunError (201);
-  end;
-
-  procedure WriteConfig;
-    var
-      F: ConfigFile;
-  begin
-    with Config do
-    begin
-      SLine := Play.Stat;
-      Sound := Buffers.BeeperSound;
-    end;
-  {$IFDEF MENU}
-    Assign (F, GetConfigName);
-    ReWrite (F);
-    if IOResult = 0 then
-    begin
-      Write (F, Config);
-      Close (F);
-    end;
-  {$ENDIF}
-  end;
+	public string GetConfigName
+	{
+		string S;
+		byte len;
+		S = ParamStr(0);
+		S[Len - 2] = 'C';
+		S[Len - 1] = 'F';
+		S[Len - 0] = 'G';
+		return S;
+	}
+	
+	public void ReadConfig
+	{
+		int i, j;
+		ConfigFile F;
+		string Name;
+#if MENU
+		Assign(F, GetConfigName);
+		Reset(F);
+		Read(F, Config);
+		Close(F);
+		if IOResult != 0 
+#endif
+		{
+			NewData();
+			for (int i = 0; i < MAX_SAVE - 1; i++)
+				Config.Games[i] = Data;
+			Config.SLine = true;
+			Config.Sound = true;
+			Config.UseJS = false;
+			GameNumber = -1;
+		}
+		Config.Play.Stat = SLine;
+		Config.Buffers.BeeperSound = Sound;
+		Name = ParamStr(0);
+		j = 0;
+		if (Name.Length() > 9)
+			Name = Name.Remove(1, Name.Length() - 9);
+		for(int i = 0; i < Name.Length(); i++)
+			Inc(j, Ord(Name[i].ToUpper()));
+		if (j != 648)
+			RunError(201);
+	}
+	
+	public void WriteConfig()
+	{
+		ConfigFile F;
+		Config.SLine = Play.Stat;
+		Config.Sound = Buffers.BeeperSound;
+#if MENU
+		Assign(F, GetConfigName());
+		ReWrite(F);
+		if (IOResult = 0)
+		{
+			Write(F, Config); //May need FileIO specific functions
+			Close(F);
+		}
+#endif
+	}
+	
+	public void CalibrateJoystick
+	{
+	// TODO if we implement joystick
+	}
+}
+/**
 
   procedure CalibrateJoystick;
   begin
@@ -178,6 +159,12 @@ public class Mario
     Key := #0;
   end;
 
+  **/
+  
+  public void ReadCmdLine()
+  {
+  }
+  /**
   procedure ReadCmdLine;
     var
       i, j: Integer;
@@ -204,7 +191,13 @@ public class Mario
       end;
     end;
   end;
+**/
 
+public void Demo()
+{
+}
+
+/**
   procedure Demo;
   begin
     NewData;
@@ -215,7 +208,11 @@ public class Mario
       @Level_6b^, @Options_6b^, @Options_6b^, plMario);
     StopMacro;
   end;
+**/
 
+public void Intro()
+{
+	/**
   procedure Intro;
     var
       P, i, j, k, l, wd, ht, xp: Integer;
@@ -240,7 +237,12 @@ public class Mario
       NumOptions: Integer;
       Page: Byte;
 
-    procedure Up;
+	**/
+	//nested procedures
+	void Up()
+	{
+	/**
+	procedure Up;
     begin
       if Selected = 1 then
       begin
@@ -252,8 +254,12 @@ public class Mario
       else
         Dec (Selected);
     end;
-
-    procedure Down;
+	**/
+	}
+	void Down()
+	{
+	/**
+	procedure Down;
     begin
       if Selected = NumOptions then
       begin
@@ -265,8 +271,10 @@ public class Mario
       else
         Inc (Selected);
     end;
-
-  begin
+	**/
+	}
+/**
+	begin
     Page := CurrentPage;
     Status := ST_NONE;
     TestVGAMode := FALSE;
@@ -571,9 +579,11 @@ public class Mario
       Data := Config.Games[GameNumber];
     Data.NumPlayers := NextNumPlayers;
   end;  { Intro }
-
-
-  procedure ShowPlayerName (Player: Byte);
+**/
+	void ShowPlayerName()
+	{
+	/**
+	procedure ShowPlayerName (Player: Byte);
     var
       iW, iH, i: Integer;
   begin
@@ -606,8 +616,10 @@ public class Mario
     ClearPalette;
     ClearVGAMem;
   end;
-
-begin  { Mario }
+	**/
+	}
+/**
+	begin  { Mario }
   InitKeyBoard;
   Data.NumPlayers := 1;
   ReadConfig;
@@ -733,5 +745,5 @@ begin  { Mario }
 {$ENDIF}
   WriteConfig;
 end.
-
 **/
+}
