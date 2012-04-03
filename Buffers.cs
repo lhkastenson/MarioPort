@@ -3,6 +3,29 @@
 
 public class Buffers
 {
+	using CanHoldYou = EnemySymbolType[string, char];
+	using CanStandOn = EnemySymbolType[string, char];
+	using Hidden = HiddenType['$'];
+
+	long Timer;
+	int wTimer;
+	byte bTimer;
+
+/**
+  uses
+    Crt,
+    VGA256;
+
+  const
+    CanHoldYou    = [#0..#13, '0'..'Z'];
+    CanStandOn    = [#14..#16, 'a'..'f'];
+    Hidden        = ['$'];
+
+  var
+    Timer: LongInt absolute $0000:$046C;
+    wTimer: Word absolute $0000:$046C;
+    bTimer: Byte absolute $0000:$046C;
+**/
 	public const int W = 20;
 	public const int H = 14;
 	public const int NH = 16;
@@ -28,13 +51,15 @@ public class Buffers
 	
 	public const string[] PLAYERNAME = new string [PLMARIO, PLLUIGI];
 	
-	public record GameData;
-	public int[] numPlayers = new int [PLMARIO, PLLUIGI];
-	public int[] progress = new int [PLMARIO, PLLUIGI];
-	public int[] lives = new int[PLMARIO, PLLUIGI];
-	public int[] coins = new int [PLMARIO, PLLUIGI];
-	public long[] score = new long [PLMARIO, PLLUIGI];
-	public byte[] mode = new byte [PLMARIO, PLLUIGI];
+	struct GameData
+	{
+		public int[] numPlayers = new int [PLMARIO, PLLUIGI];
+		public int[] progress = new int [PLMARIO, PLLUIGI];
+		public int[] lives = new int[PLMARIO, PLLUIGI];
+		public int[] coins = new int [PLMARIO, PLLUIGI];
+		public long[] score = new long [PLMARIO, PLLUIGI];
+		public byte[] mode = new byte [PLMARIO, PLLUIGI];
+	}
 	
 	public byte Player;
 	public data GameData;
