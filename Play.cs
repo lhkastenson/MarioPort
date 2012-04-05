@@ -24,87 +24,76 @@ interface
 
 public class Play
 {
-/****
-const
-    Stat: Boolean = FALSE;
-    ShowRetrace: Boolean = FALSE;
+	public const bool Stat = false;
+	public const bool ShowRetrace = false;
+	
+	public bool PlayWorld(char N1, char N2, Map Map1, Opt Opt1, Opt Opt1b,
+						  Map Map2, Opt Opt2, Opt Opt2b, byte Player);
+	public const int CheatsUsed = 0;
 
-  function PlayWorld (N1, N2: Char; var Map1; var Opt1; var Opt1b;
-    var Map2; var Opt2; var Opt2b; Player: Byte): Boolean;
-
-implementation
-
-  const
-    CheatsUsed: Integer = 0;
-**/
 	public bool PlayWorld(char N1, char N2, Map Map1, Opt Opt1, Opt Opt1b, 
 						  Map Map2, Opt Opt2, Opt Opt2b, byte Player)
 	{
-	/**
-	function PlayWorld (N1, N2: Char; var Map1; var Opt1; var Opt1b;
-                      var Map2; var Opt2; var Opt2b; Player: Byte): Boolean;
-    var
-      i, j, k, x, y: Integer;
-
-    procedure MoveScreen;
-      var
-        Scroll: Integer;
-        N1, N2: Integer;
-        i, j, OldX, NewX, Page: Integer;
-
-    begin
-      Page := CurrentPage;
-
-      Scroll := XView - LastXView [Page];
-
-      if not EarthQuake then
-        SetView (XView, YView)
-      else
-      begin
-        Inc (EarthQuakeCounter);
-        if EarthQuakeCounter > 0 then
-          EarthQuake := False;
-        SetView (XView, YView + Random (2) - Random (2));
-      end;
-
-      if Scroll < 0 then
-        StartEnemies ((XView div W) - StartEnemiesAt, 1)
-      else
-        if Scroll > 0 then
-          StartEnemies ((XView div W) + NH + StartEnemiesAt, - 1);
-
-      With Options do
-      begin
-        i := Horizon;
-        Horizon := i + GetYOffset - YBASE;
-        DrawBackGr (FALSE);
-        Horizon := i;
-      end;
-
-      if Scroll > 0 then
-        for j := LastXView [Page] to XView do
-        begin
-          i := j - W - W;
-          if i >= 0 then
-            PutPixel (i, 0, 0);
-          i := W - j mod W - 1;
-          Redraw (j div W + NH + 1, i);
-        end;
-
-      if Scroll < 0 then
-        for j := LastXView [Page] downto XView do
-        begin
-          i := W - j mod W - 1;
-          Redraw (j div W - 1, i);
-        end;
-
-    end;
-
-	**/
+		int i, j, k, x, y;
+		
+		void MoveScreen()
+		{
+			int Scroll;
+			int N1, N2;
+			int i, j, OldX, NewX, Page;
+			Random random = new Random();
+			int randomNumber;
+			Page = CurrentPage;
+			Scroll = XView - LastXView[Page];
+			if (!EarthQuake)
+				SetView(XView, YView);
+			else
+			{
+				EarthQuakeCounter++;
+				if (EarthQuakeCounter > 0)
+					EarthQuake = false;
+				int Rand1 = randomNumber.Next(0, 2);
+				int Rand2 = randomNumber.Next(0, 2);
+				SetView (XView, YView + Rand1 - Rand2;				
+			}
+			if (Scroll < 0)
+				StartEnemies ((XView / W) - StartEnemiesAt, 1);
+			else if (Scroll > 0)
+				StartEnemies((XView / W) + NH + StartEnemiesAt(), -1);
+			
+			// Need to find out what else is in "Options"
+			i = Options.Horizon;
+			Options.Horizon = i + GetYOffset() - YBASE;
+			DrawBackGr(false);
+			Options.Horizon = i;
+			
+			if (Scroll > 0)
+				for (int j = LastXView[Page]; j < XView; j++)
+				{
+					i = j - W - W;
+					if (i >= 0)
+						PutPixel(i, 0, 0);
+					i = W - j % W - 1;
+					Redraw (j / W + NH + 1, i);
+				}
+				
+				if (Scroll < 0)
+					for (int j = LastXView[Page]; j > XView; j--);
+					{
+						i = W - j % W - 1;
+						Redraw(j / W - 1, i);
+					}
+		}
+		
 	}
 	
 	public void FindPipeExit()
 	{
+		int i, j;
+		for (int i = 0; i < Options.XSize - 1; i++)
+			for (int j = 0; j < NH; j++)
+				if (i != MapX || k != MapY)
+					if (WorldMap*[i,j]) //need to figure out how to do this.
 	/**
 	procedure FindPipeExit;
       var

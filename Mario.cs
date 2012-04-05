@@ -170,474 +170,445 @@ public class Mario
 		S = ParamStr(i);
 		while (!string.IsNullOrEmpty(S))
 		{
-			
+			if (S.Length >= 2 && (S[l] == '/' || S[l] == '-'))
+			{
+				switch(S[2])
+				{
+					case 'S':
+						Play.Stat = true;
+						break;
+					case 'Q':
+						BeeperOff();
+						break;
+					case 'J':
+						CalibrateJoystick();
+						break;
+					default:
+						break;
+				}
+				Delete(S, 1, 2);
+			}
+			else
+				Delete(S, 1, 1);
 		}
 	}
   }
-  /**
-  procedure ReadCmdLine;
-    var
-      i, j: Integer;
-      S: String;
-  begin
-    for i := 1 to ParamCount do
-    begin
-      S := ParamStr (i);
-      while S <> '' do
-      begin
-        if (Length (S) >= 2) and (S[1] in ['/', '-'])
-        then
-        begin
-          case UpCase (S[2]) of
-            'S': Play.Stat := TRUE;
-            'Q': BeeperOff;
-            'J': CalibrateJoystick;
 
-          end;
-          Delete (S, 1, 2);
-        end
-        else
-          Delete (S, 1, 1);
-      end;
-    end;
-  end;
-**/
-
-public void Demo()
-{
-}
-
-/**
-  procedure Demo;
-  begin
-    NewData;
-    Turbo := FALSE;
-    Data.Progress [plMario] := 5;
-    PlayMacro;
-    PlayWorld (' ', ' ', @Level_6a^, @Options_6a^, @Options_6a^,
-      @Level_6b^, @Options_6b^, @Options_6b^, plMario);
-    StopMacro;
-  end;
-**/
-
-public void Intro()
-{
-	/**
-  procedure Intro;
-    var
-      P, i, j, k, l, wd, ht, xp: Integer;
-      NextNumPlayers,
-      Selected: Integer;
-      IntroDone,
-      TestVGAMode,
-      Update: Boolean;
-      Counter: Integer;
-      MacroKey: Char;
-      Status,
-      OldStatus,
-      LastStatus: (ST_NONE,
-                   ST_MENU,
-                   ST_START,
-                   ST_LOAD,
-                   ST_ERASE,
-                   ST_OPTIONS,
-                   ST_NUMPLAYERS);
-      Menu: array[1..5] of string[40];
-      BG: array[0..MAX_PAGE, 1..5] of Word;
-      NumOptions: Integer;
-      Page: Byte;
-
-	**/
-	//nested procedures
-	void Up()
+	public void Demo()
 	{
-	/**
-	procedure Up;
-    begin
-      if Selected = 1 then
-      begin
-        if Status = ST_MENU then
-          Selected := NumOptions
-        else
-          MacroKey := kbEsc;
-      end
-      else
-        Dec (Selected);
-    end;
-	**/
+		NewData();
+		TurboType Turbo = false;
+		Data.Progress[plMario] = 5;
+		PlayMacro();
+		PlayWorld(' ', ' ', @Level_6a*, @Options_6a*, @Options_6a*,
+				  @Level_6b*, @Options_6b*, @Options_6b*, plMario);
+		StopMacro();
 	}
-	void Down()
+	public void Intro()
 	{
-	/**
-	procedure Down;
-    begin
-      if Selected = NumOptions then
-      begin
-        if Status = ST_MENU then
-          Selected := 1
-        else
-          MacroKey := kbEsc;
-      end
-      else
-        Inc (Selected);
-    end;
-	**/
+		int, P, i, j, k l, wd, ht, xp;
+		int NextNumPlayers, Selected;
+		bool IntroDone, TestVGAMode, Update;
+		int Counter;
+		char MacroKey;
+		public enum Statuses
+		{
+			ST_NONE,
+			ST_MENU,
+			ST_START,
+			ST_LOAD,
+			ST_ERASE,
+			ST_OPTIONS,
+			ST_NUMPLAYERS
+		}
+		Statuses Status, OldStatus, LastStatus;
+		string[] Menu = new String[5];
+		uint[,] BG = new uint[MAX_PAGE, 4];
+		int NumOptions;
+		//nested procedures
+		void Up()
+		{
+			if (Selected = 1)
+			{
+				if (Status = ST_MENU)
+					Selected = NumOptions;
+				else
+					MacroKey = kbEsc;
+			}
+			else
+				Selected--;
+		}
+		
+		void Down()
+		{
+			if (Selected = NumOptions)
+			{
+				if (Status = ST_MENU)
+					Selected = 1;
+				else
+					MacroKey = kbEsc
+			}
+			else
+				Selected++;
+		}
+		Page = CurrentPage;
+		Status = ST_NONE;
+		TestVGAMode = false;
+		GameNumber = -1;
+		NextNumPlayers = Data.NumPlayers;
+		
+		do //until IntroDone and (not TestVGAMode);
+		{
+			if (TestVGAMode)
+				InitVGA;
+			TestVGAMode = false;
+			IntroDone = false;
+			NewData();
+			
+			PlayWorld(#0, #0, @Intro*, @Options_0*, @Options_0*,
+					  @Intro_0*, @Options_0*, @Options_0*, plMario);
+			InitBackGr(3,);
+			
+			OutPalette($A0, 35, 45, 50);
+			OutPalette($A1, 45, 55, 60);
+			
+			OutPalette($EF, 30, 40, 30);
+			OutPalette($18, 10, 15, 25);
+			
+			OutPalette($8D, 28, 38, 50);
+			OutPalette($8F, 40, 50, 63);
+			
+			for (int i = 1; i < 50; i++)
+				BlinkPalette();
+				
+			for (int p = 0; p < MAX_PAGE; p++)
+			{
+				for (int i = 1; i = 0; i--)
+					for (int j = 1; j = 0; j--)
+						for (int k = 1; k = 0; k--)
+						{
+							DrawImage (38 + i + j, 29 + i + k, 108, 28, @Intro000^);
+							DrawImage (159 + i + j, 29 + i + k, 24, 28, @Intro001^);
+							DrawImage (198 + i + j, 29 + i + k, 84, 28, @Intro002^);
+						}
+				DrawBackGrMap (10 * H + 6, 11 * H - 1, 54, $A0);
+				DrawBackGrMap (10 * H + 6, 11 * H - 1, 55, $A1);
+				DrawBackGrMap (10 * H + 6, 11 * H - 1, 53, $A1);
+				for (int i = 0; i < NH - 1; i++)
+					for (int j = 0; j < NV -1; j++)
+						if ((i == 0 || i == NH - 1) || (j == 0 || j == NV - 1))
+							DrawImage (i * W, j * H, W, H, @Block000*);
+				DrawPlayer();
+				ShowPage();
+			}
+			UnlockPal();
+			Key = #0;
+			FadeUp (64);
+			ResetStack();
+			
+			FillChar (BG, BG.Size(), 0);
+			FillChar (Menu, Menu.Size(), 0);
+			SetFont (0, Bold + Shadow);
+			
+			if (Status != ST_OPTIONS)
+			{
+				OldStatus = ST_NONE;
+				LastStatus = ST_NONE;
+				Status = ST_MENU;
+				Selected = 1;
+			}
+			UpDate = true;
+			Counter = 1;
+			
+			do //until IntroDone or (Counter = WAIT_BEFORE_DEMO);
+			{
+				if (UpDate || Status != OldStatus)
+				{
+					if (Status != OldStatus)
+						Selected = 1;
+					switch (Status)
+					{
+						case ST_MENU:
+							Menu[1] = "START";
+							Menu[2] = "OPTIONS";
+							Menu[3] = "END";
+							Menu[4] = "";
+							Menu[5] = "";
+							NumOptions = 3;
+							LastStatus = ST_MENU;
+							break;
+						case ST_OPTIONS:
+							if (BeeperSound)
+								Menu[1] = "SOUND ON ";
+							else
+								Menu[1] = "SOUND OFF";
+							if (Play.Stat)
+								Menu[2] = "STATUSLINE OFF";
+							else
+								Menu[2] = "STATUSLINE OFF";
+							Menu[3] = "";
+							Menu[4] = "";
+							Menu[5] = "";
+							NumOptions = 2;
+							LastStautus = ST_MENU;
+							break;
+						case ST_START:
+							Menu[1] = "NO SAVE";
+							Menu[2] = "GAME SELECT";
+							Menu[3] = "ERASE";
+							Menu[4] = "";
+							Menu[5] = "";
+							NumOptions = 3;
+							LastStatus = ST_MENU;
+							break;
+						case ST_NUMPLAYERS:
+							Menu[1] = "ONE PLAYER";
+							Menu[2] = "TWO PLAYERS";
+							Menu[3] = "";
+							Menu[4] = "";
+							Menu[5] = "";
+							NumOptions = 3;
+							LastStatus = ST_MENU;
+							break;
+						case ST_LOAD, ST_ERASE:
+							Menu[1] = "GAME #1 '#7' ";
+							Menu[2] = "Game #2 '#7' ";
+							Menu[3] = "Game #3 '#7' ";
+							Menu[4] = "";
+							Menu[5] = "";
+							for (int i = 0; i < 3; i++)
+								if (Config.Games.Progress[plMario] = 0 &&
+									Config.Game.Progress[plLuigi] = 0)
+									Menu[i] = Menu[i] + "EMPTY";
+								else
+								{
+									j = Config.Games.Progress[plMario];
+									k = byte(Progress[CurPlayer] >= NUM_LEV);
+									if (k > 0)
+										j -= NUM_LEV;
+									if (Config.Games.Progress[plLuigi] > j)
+									{
+										j = Config.Games.Progress[plLuigi];
+										Config.Games.Progress[plMario] = j;
+									}
+									Menu[i] = Menu[i] + "LEVEL " + Chr(j + 
+											  Ord('0' + 1) + " ";
+									if (k = 0)
+										Menu[i] = Menu[i] + #7" "
+									else
+										Menu[i] = Menu[i] + "* ";
+									Menu[i] = Menu[i] + Chr (NumPlayers + 
+											  Ord ('0')) + 'P';
+								}
+								NumOptions = 3;
+								LastStatus = ST_START;
+							break;
+						default:
+							break;
+					}
+					wd = 0;
+					xp = 0;
+					for (int i = 0; i < 5; i++)
+					{
+						//j = TextWidth(Menu[i]);
+						if (j > wd)
+						{
+							wd = j;
+							//xp = CenterX(Menu[i]) / 4 * 4;
+						}
+						ht = 8;
+					}
+					OldStatus = Status;
+					Update = false;
+				}
+				MacroKey = #0
+				switch (Key)
+				{
+					case kbEsc:
+						if (Status = ST_MENU)
+						{
+							IntroDone = true;
+							QuitGame = true;
+						}
+						else
+							Status = LastStatus;
+						break;
+					case kbUpArrow:
+						Up();
+						break;
+					case kbDownArrow:
+						Down();
+						break;
+					case kbSP, kbEnter:
+						switch (Status)
+						{
+							case ST_MENU:
+								switch(Selected)
+								{
+									case 1:
+										Status = ST_START;
+										break;
+									case 2:
+										Status = ST_OPTIONS;
+										break;
+									case 3:
+										IntroDone = true;
+										QuitGame = true;
+										break;
+								}
+								break;
+							case ST_START
+								switch (Selected)
+								{
+									case 1:
+										Status = ST_NUMPLAYERS;
+										break;
+									case 2:
+										Status = ST_LOAD;
+										break;
+									case 3:
+										Status = ST_ERASE;
+										break;
+								}
+								break;
+							case ST_OPTIONS
+								switch (Selected)
+								{
+									case 1:
+										if (BeeperSound)
+											BeeperOff();
+										else
+											BeeperOn();
+										break;
+									case 2:
+										Play.Stat = !Play.Stat;
+										break;
+								}
+								break;
+							case ST_NUMPLAYERS:
+								switch (Selected)
+								{
+									case 1:
+										NextNumPlayers = 1;
+										IntroDone = true;
+										break;
+									case 2:
+										NextNumPlayers = 2;
+										IntroDone = true;
+										break
+								}
+								break;
+							case ST_LOAD:
+								GameNumber = Selected - 1;
+								Config.Games[GameNumber].NumPlayers = 1;
+								if (Config.Games[GameNumber].Progress[plMario] = 0 &&
+									Config.Games[GameNumber].Progress[plLuigi] = 0)
+									Status = ST_NUMPLAYERS;
+								else
+								{
+									IntroDone = true;
+									NextNumPlayers = ConfigGames[GameNumber].NumPlayers;
+								}
+								break;
+							case ST_ERASE:
+								NewData();
+								Config.Games[Selected - 1] = Data;
+								Config.Games[Selected - 1].NumPlayers = 1;
+								GameNumber = -1;
+								break;
+							case default:
+								break;
+						}
+				}
+				if (Key != #0)
+				{
+					Counter = 0;
+					Key = MacroKey;
+					Update = true;
+				}
+				
+				for (int k = 0; k < 5; k++)
+				{
+					if (BG[Page, k] != 0)
+						PopBackGr (BG[Page, k]);
+				}
+				
+				for (int k = 0; k < 5; k++)
+				{
+					if (Menu[k] != "")
+					{
+						i = xp;
+						j = 56 + 14 * k;
+						BG[Page, k] = PuashBackGr (50, j, 220, ht);
+						if (k = Selected)
+							WriteText ( i - 12, j, #16, 5);
+						l = 15;
+						if (Menu[k].Length() > 19 && Menu[k][10] = '*')
+						//l := 14 + (Counter and 1);
+							l = 14 + (Counter & l)
+						SetPalette (14, 63, 61, 31);
+						WriteText (i + 8, j, Menu[k], l);
+					}
+				}
+				ShowPage();
+				BlinkPalette();
+				ResetStack();
+				
+				Counter++;
+			} while (IntroDone || Counter = WAIT_BEFORE_DEMO)
+			
+			FadeDown (64);
+			
+			if (!IntroDone)
+				Demo();
+		} while (IntroDone && !TestVGAMode)
+		
+		if (Game != -1)
+			Data = Config.Games[GameNumber];
+		Data.NumPlayers = NextNumPlayers;
 	}
-/**
-	begin
-    Page := CurrentPage;
-    Status := ST_NONE;
-    TestVGAMode := FALSE;
-    GameNumber := -1;
-    NextNumPlayers := Data.NumPlayers;
-
-    repeat
-      if TestVGAMode then
-        InitVGA;
-      TestVGAMode := FALSE;
-      IntroDone := FALSE;
-      NewData;
-
-      PlayWorld (#0, #0, @Intro_0^, @Options_0^, @Options_0^,
-        @Intro_0^, @Options_0^, @Options_0^, plMario);
-      InitBackGr (3, 0);
-
-      OutPalette ($A0, 35, 45, 50);
-      OutPalette ($A1, 45, 55, 60);
-
-      OutPalette ($EF, 30, 40, 30);
-      OutPalette ($18, 10, 15, 25);
-
-      OutPalette ($8D, 28, 38, 50);
-      OutPalette ($8F, 40, 50, 63);
-
-      for i := 1 to 50 do
-        BlinkPalette;
-
-      for P := 0 to MAX_PAGE do
-      begin
-        for i := 1 downto 0 do
-          for j := 1 downto 0 do
-            for k := 1 downto 0 do
-            begin
-              DrawImage (38 + i + j, 29 + i + k, 108, 28, @Intro000^);
-              DrawImage (159 + i + j, 29 + i + k, 24, 28, @Intro001^);
-              DrawImage (198 + i + j, 29 + i + k, 84, 28, @Intro002^);
-            end;
-
-        DrawBackGrMap (10 * H + 6, 11 * H - 1, 54, $A0);
-        DrawBackGrMap (10 * H + 6, 11 * H - 1, 55, $A1);
-        DrawBackGrMap (10 * H + 6, 11 * H - 1, 53, $A1);
-        for i := 0 to NH - 1 do
-          for j := 0 to NV - 1 do
-            if (i in [0, NH - 1]) or (j in [0, NV - 1]) then
-              DrawImage (i * W, j * H, W, H, @Block000^);
-        DrawPlayer;
-        ShowPage;
-      end;
-      UnlockPal;
-      Key := #0;
-      FadeUp (64);
-      ResetStack;
-
-      FillChar (BG, SizeOf (BG), 0);
-      FillChar (Menu, SizeOf (Menu), 0);
-      SetFont (0, Bold + Shadow);
-
-      if Status <> ST_OPTIONS then
-      begin
-        OldStatus := ST_NONE;
-        LastStatus := ST_NONE;
-        Status := ST_MENU;
-        Selected := 1;
-      end;
-      UpDate := TRUE;
-
-      Counter := 1;
-      repeat
-
-        if UpDate or (Status <> OldStatus) then
-        begin
-          if (Status <> OldStatus) then
-            Selected := 1;
-          case Status of
-            ST_MENU:
-              begin
-                 Menu[1] := 'START';
-                 Menu[2] := 'OPTIONS';
-                 Menu[3] := 'END';
-                 Menu[4] := '';
-                 Menu[5] := '';
-                 NumOptions := 3;
-                 LastStatus := ST_MENU;
-               end;
-            ST_OPTIONS:
-              begin
-                 if BeeperSound then
-                   Menu[1] := 'SOUND ON '
-                 else
-                   Menu[1] := 'SOUND OFF';
-                 if Play.Stat then
-                   Menu[2] := 'STATUSLINE ON '
-                 else
-                   Menu[2] := 'STATUSLINE OFF';
-                 Menu[3] := '';
-                 Menu[4] := '';
-                 Menu[5] := '';
-                 NumOptions := 2;
-                 LastStatus := ST_MENU;
-              end;
-            ST_START:
-              begin
-                 Menu[1] := 'NO SAVE';
-                 Menu[2] := 'GAME SELECT';
-                 Menu[3] := 'ERASE';
-                 Menu[4] := '';
-                 Menu[5] := '';
-                 NumOptions := 3;
-                 LastStatus := ST_MENU;
-               end;
-            ST_NUMPLAYERS:
-              begin
-                 Menu[1] := 'ONE PLAYER';
-                 Menu[2] := 'TWO PLAYERS';
-                 Menu[3] := '';
-                 Menu[4] := '';
-                 Menu[5] := '';
-                 if (Status <> OldStatus) then
-                   Selected := Data.NumPlayers;
-                 NumOptions := 2;
-                 LastStatus := ST_START;
-               end;
-            ST_LOAD,
-            ST_ERASE:
-              begin
-                 Menu[1] := 'GAME #1 '#7' ';
-                 Menu[2] := 'GAME #2 '#7' ';
-                 Menu[3] := 'GAME #3 '#7' ';
-                 Menu[4] := '';
-                 Menu[5] := '';
-                 for i := 1 to 3 do
-                   with Config.Games[i - 1] do
-                     if (Progress[plMario] = 0) and (Progress[plLuigi] = 0) then
-                       Menu[i] := Menu[i] + 'EMPTY'
-                     else
-                     begin
-                       j := Progress[plMario];
-                       k := Byte (Progress [CurPlayer] >= NUM_LEV);
-                       if k > 0 then
-                         Dec (j, NUM_LEV);
-                       if Progress[plLuigi] > j then
-                       begin
-                         j := Progress[plLuigi];
-                         Progress[plMario] := j;
-                       end;
-                       Menu[i] := Menu[i] +
-                         'LEVEL ' + Chr (j + Ord ('0') + 1) + ' ';
-                       if k = 0 then
-                         Menu[i] := Menu[i] + #7' '
-                       else
-                         Menu[i] := Menu[i] + '* ';
-                       Menu[i] := Menu[i] +
-                         Chr (NumPlayers + Ord ('0')) + 'P';
-                     end;
-                 NumOptions := 3;
-                 LastStatus := ST_START;
-               end;
-
-
-          end;
-          wd := 0;
-          xp := 0;
-          for i := 1 to 5 do
-          begin
-            j := TextWidth (Menu[i]);
-            if j > wd then
-            begin
-              wd := j;
-              xp := CenterX (Menu[i]) div 4 * 4;
-            end;
-            ht := 8;
-          end;
-          OldStatus := Status;
-          Update := FALSE;
-        end;
-
-        MacroKey := #0;
-        case Key of
-          kbEsc:
-            if Status = ST_MENU then
-            begin
-              IntroDone := TRUE;
-              QuitGame := TRUE;
-            end
-            else
-              Status := LastStatus;
-          kbUpArrow:
-            Up;
-          kbDownArrow:
-            Down;
-          kbSP,
-          kbEnter:
-            case Status of
-
-              ST_MENU:
-                case Selected of
-                  1: Status := ST_START;
-                  2: Status := ST_OPTIONS;
-                  3: begin
-                       IntroDone := TRUE;
-                       QuitGame := TRUE;
-                     end;
-                end;
-
-              ST_START:
-                case Selected of
-                  1: Status := ST_NUMPLAYERS;
-                  2: Status := ST_LOAD;
-                  3: Status := ST_ERASE;
-                end;
-
-              ST_OPTIONS:
-                case Selected of
-                  1: if BeeperSound then
-                       BeeperOff
-                     else
-                       BeeperOn;
-                  2: Play.Stat := not Play.Stat;
-                end;
-
-              ST_NUMPLAYERS:
-                case Selected of
-                  1: begin
-                       NextNumPlayers := 1;
-                       IntroDone := TRUE;
-                     end;
-                  2: begin
-                       NextNumPlayers := 2;
-                       IntroDone := TRUE;
-                     end;
-                end;
-
-              ST_LOAD:
-                begin
-                  GameNumber := Selected - 1;
-                  Config.Games[GameNumber].NumPlayers := 1;
-                  with Config.Games[GameNumber] do
-                    if (Progress[plMario] = 0) and (Progress[plLuigi] = 0) then
-                      Status := ST_NUMPLAYERS
-                    else
-                    begin
-                      IntroDone := TRUE;
-                      NextNumPlayers := Config.Games[GameNumber].NumPlayers;
-                    end;
-                end;
-
-              ST_ERASE:
-                begin
-                  NewData;
-                  Config.Games[Selected - 1] := Data;
-                  Config.Games[Selected - 1].NumPlayers := 1;
-                  GameNumber := -1;
-                end;
-
-            end;
-        end;
-        if Key <> #0 then
-        begin
-          Counter := 0;
-          Key := MacroKey;
-          Update := TRUE;
-        end;
-
-        for k := 1 to 5 do
-        begin
-          if BG[Page, k] <> 0 then
-            PopBackGr (BG[Page, k]);
-        end;
-
-        for k := 1 to 5 do
-        begin
-          if Menu[k] <> '' then
-          begin
-            i := xp;
-            j := 56 + 14 * k;
-            BG[Page, k] := PushBackGr (50, j, 220, ht);
-            if k = Selected then
-              WriteText (i - 12, j, #16, 5);
-            l := 15;
-            if (Length (Menu[k]) > 19) and (Menu[k][19] = '*') then
-              l := 14 + (Counter and 1);
-            SetPalette (14, 63, 61, 31);
-            WriteText (i + 8, j, Menu[k], l);
-          end;
-        end;
-
-        ShowPage;
-        BlinkPalette;
-        ResetStack;
-
-        Inc (Counter);
-      until IntroDone or (Counter = WAIT_BEFORE_DEMO);
-      FadeDown (64);
-
-      if not IntroDone then
-        Demo;
-    until IntroDone and (not TestVGAMode);
-
-    if GameNumber <> -1 then
-      Data := Config.Games[GameNumber];
-    Data.NumPlayers := NextNumPlayers;
-  end;  { Intro }
-**/
-	void ShowPlayerName()
+	
+	void ShowPlayerName(byte Player)
 	{
-	/**
-	procedure ShowPlayerName (Player: Byte);
-    var
-      iW, iH, i: Integer;
-  begin
-    ClearPalette;
-    LockPal;
-    ClearVGAMem;
-    SetView (0, 0);
-    iH := 13;
-    for i := 0 to MAX_PAGE do
-    begin
-      case Player of
-        plMario:
-          begin
-            iW := 116;
-            DrawImage (160 - iW div 2, 85 - iH div 2, iW, iH, @Start000^);
-          end;
-        plLuigi:
-          begin
-            iW := 108;
-            DrawImage (160 - iW div 2, 85 - iH div 2, iW, iH, @Start001^);
-          end;
-      end;
-      ShowPage;
-    end;
-    NewPalette (P256^);
-    UnLockPal;
-    Palettes.ReadPalette (Palette);
-    for i := 1 to 100 do
-      ShowPage;
-    ClearPalette;
-    ClearVGAMem;
-  end;
-	**/
+		int iW, iH, i;
+		ClearPalette();
+		LockPal();
+		ClearVGAMem;
+		SetView (0,0);
+		ih = 13;
+		for (int i = 0; i < MAX_PAGE; i++)
+		{
+			switch (Player)
+			{
+				case plMario:
+					iW = 116;
+					DrawImage (160 - iW / 2, 85 - iH / 2, iW, iH, @Start000*);
+					break;
+				case plLuigi:
+					iW = 108;
+					DrawImage (160 - iW / 2, 85 - iH / 2, iW, iH, @Start001*);
+					break;
+			}
+			ShowPage;
+		}
+		NewPalette (P256*);
+		UnLockPal();
+		Palettes.ReadPalettes (Palette);
+		for (int i = 0; i < 100; i++)
+			ShowPage();
+		ClearPalette();
+		ClearVGAMem();
 	}
+	InitKeyBoard();
+	Data.NumPlayers = 1;
+	ReadConfig();
+	ReadCmdLine();
+	
+	jr = Config.JSDat;
+	jsEnabled = jsDetected() && Config.UseJS();
+
+#if //asm stuff :(
 /**
-	begin  { Mario }
-  InitKeyBoard;
-  Data.NumPlayers := 1;
-  ReadConfig;
-  ReadCmdLine;
-
-  jr := Config.JSDat;
-  jsEnabled := jsDetected and Config.UseJS;
-
 {$IFDEF DEBUG}
   MouseHaltAddr := @MouseHalt;
   asm
@@ -652,108 +623,125 @@ public void Intro()
     @End:
   end;
 {$ENDIF}
-
-  if not DetectVga then
-  begin
-    System.WriteLn ('VGA graphics adapter required');
-    Halt (1)
-  end;
-
-  ResetKeyBoard;
-
-  if not InGraphicsMode then
-    InitVGA;
-
-{$IFDEF MENU}
-  repeat
-{$ENDIF}
-
-    ClearVGAMem;
-
-    InitPlayerFigures;
-    InitEnemyFigures;
-
-    EndGame := FALSE;
-  {$IFDEF MENU}
-    Intro;
-  {$ENDIF}
-
-    Randomize;
-
-    with Data do
-    begin
-      if NumPlayers = 2 then
-        if Progress [plMario] > Progress [plLuigi] then
-          Progress [plLuigi] := Progress [plMario]
-        else
-          Progress [plMario] := Progress [plLuigi];
-
-      Lives [plMario] := 3;
-      Lives [plLuigi] := 3;
-      Coins [plMario] := 0;
-      Coins [plLuigi] := 0;
-      Score [plMario] := 0;
-      Score [plLuigi] := 0;
-      Mode [plMario] := mdSmall;
-      Mode [plLuigi] := mdSmall;
-    end;
-
-    repeat
-      if Data.NumPlayers = 1 then
-        Data.Lives [plLuigi] := 0;
-      for CurPlayer := plMario to Data.NumPlayers - 1 do
-      begin
-        if not (EndGame or QuitGame) then
-          if Data.Lives [CurPlayer] >= 1 then
-          begin
-            with Data do
-            begin
-              Turbo := (Progress [CurPlayer] >= NUM_LEV);
-              if Progress [CurPlayer] > LAST_LEV then
-                Progress [CurPlayer] := NUM_LEV;
-            end;
-         {$IFDEF MENU}
-            ShowPlayerName (CurPlayer);
-         {$ENDIF}
-            case Data.Progress [CurPlayer] mod NUM_LEV of
-              0: Passed := PlayWorld ('x', '1', @Level_1a^, @Options_1a^, @Opt_1a^,
-                   @Level_1b^, @Options_1b^, @Options_1b^, CurPlayer);
-              1: Passed := PlayWorld ('x', '2', @Level_2a^, @Options_2a^, @Opt_2a^,
-                   @Level_2b^, @Options_2b^, @Options_2b^, CurPlayer);
-              2: Passed := PlayWorld ('x', '3', @Level_3a^, @Options_3a^, @Opt_3a^,
-                   @Level_3b^, @Options_3b^, @Options_3b^, CurPlayer);
-              3: Passed := PlayWorld ('x', '4', @Level_5a^, @Options_5a^, @Opt_5a^,
-                   @Level_5b^, @Options_5b^, @Options_5b^, CurPlayer);
-              4: Passed := PlayWorld ('x', '5', @Level_6a^, @Options_6a^, @Opt_6a^,
-                   @Level_6b^, @Options_6b^, @Options_6b^, CurPlayer);
-              5: Passed := PlayWorld ('x', '6', @Level_4a^, @Options_4a^, @Opt_4a^,
-                   @Level_4b^, @Options_4b^, @Options_4b^, CurPlayer);
-              else
-                EndGame := TRUE;
-            end;
-
-            if Passed then
-              Inc (Data.Progress [CurPlayer]);
-            if QuitGame then
-            begin
-              EndGame := TRUE;
-            {$IFDEF MENU}
-              QuitGame := FALSE;
-            {$ENDIF}
-            end;
-          end;
-
-      end;
-    until EndGame or QuitGame or
-      (Data.Lives [plMario] + Data.Lives [plLuigi] = 0);
-
-    if GameNumber <> -1 then
-      Config.Games[GameNumber] := Data;
-
-{$IFDEF MENU}
-  until QuitGame;
-{$ENDIF}
-  WriteConfig;
-end.
 **/
+#endif
+
+	if (!DetectVga)
+	{
+		System.out.WriteLine("VGA graphics adapter required");
+		//halt (1);
+	}
+	
+	ResetKeyBoard();
+	
+	if (!InGraphicsMode)
+		InitVGA();
+	
+#if DEBUG
+	do
+	{
+#endif
+		ClearVGAMem();
+		
+		InitPlayerFigures();
+		InitEnemyFigures();
+		
+		EndGame = false;
+#if MENU
+		Intro();
+#endif
+		Randomize();
+		
+		if (Data.NumPlayers = 2)
+			if (Data.Progress[plMario] > Data.Progress[plLuigi])
+				Data.Progress[plLuigi] = Data.Progress[plMario]
+			else
+				Data.Progress[plMario] = Data.Progress[plLuigi];
+				
+		Data.Lives[plMario] = 3;
+		Data.Lives[plLuigi] = 3;
+		Data.Coins[plMario] = 0;
+		Data.CoinsplLuigi] = 0;
+		Data.Score[plMario] = 0;
+		Data.Score[plLuigi] = 0;
+		Data.Mode[plMario] = mdSmall;
+		Data.Mode[plLuigi] = mdSmall;
+		
+		do //until EndGame or QuitGame 
+		{
+			if (Data.NumPlayers = 1)
+				Data.Lives[plLuigi] = 0;
+			for (CurPlayer = plMario; Curplayer < Data.NumPlayers; Curplayer++)
+			{
+				if (!(EndGame || QuitGame))
+					if (Data.Lives[CurPlayer] >= 1)
+					{
+						Turbo = (Data.Progress[CurPlayer >= NUM_LEV);
+						if (Data.Progress[CurPlayer] > LAST_LEV)
+							Data.Progress[CurPlayer] = NUM_LEV;
+#if MENU
+						ShowPlayerName (CurPlayer);
+#endif
+						switch (Data.Progress[CurPlayer] % NUM_LEV)
+						{
+							case 0:
+								Passed = PlayWorld ('x', '1', @Level_1a*, 
+										 @Options_1a*, @Opt_1a*,
+										 @Level_1b*, @Options_1b*, 
+										 @Options_1b*, CurPlayer);
+								break;
+							case 1:
+								Passed = PlayWorld ('x', '2', @Level_2a*,
+										 @Options_2a*, @Opt_2a*,
+										 @Level_2b*, @Options_2b*, 
+										 @Options_2b*, CurPlayer);
+								break;
+							case 2:
+								Passed = PlayWorld ('x', '3', @Level_3a*, 
+										 @Options_3a*, @Opt_3a*,
+										 @Level_3b*, @Options_3b*, 
+										 @Options_3b*, CurPlayer);
+								break;
+							case 3:
+								Passed = PlayWorld ('x', '4', @Level_5a*, 
+										 @Options_5a*, @Opt_5a*,
+										 @Level_5b*, @Options_5b*, 
+										 @Options_5b*, CurPlayer);
+								break;
+							case 4:
+								Passed = PlayWorld ('x', '5', @Level_6a*, 
+										 @Options_6a*, @Opt_6a*,
+										 @Level_6b*, @Options_6b*, 
+										 @Options_6b*, CurPlayer);
+								break;
+							case 5:
+								Passed = PlayWorld ('x', '6', @Level_4a*, 
+									     @Options_4a*, @Opt_4a*,
+										 @Level_4b*, @Options_4b*, 
+										 @Options_4b*, CurPlayer);
+								break;
+							case default:
+								EndGame = true;
+								break;
+						}
+						if (Passed)
+							Data.Progress[CurPlayer]++;
+						if (QuitGame)
+						{
+							EndGame = true;
+#if MENU
+							QuitGame = false;
+#endif
+						}
+					}
+			}
+		} while (EndGame || QuitGame || (Data.Lives[plMario] + 
+				 Data.Lives[plLuigi] = 0)
+		
+		if (GameNumber != -1)
+			Config.Games[GameNumber] = Data;
+#if MENU
+	} while (QuitGame)
+#endif
+	WriteConfig();
 }
