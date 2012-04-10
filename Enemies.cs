@@ -1,11 +1,12 @@
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 using System.Drawing;
-
 using MarioPort;
+﻿using Resources = MarioPort.Properties.Resources;
 
 /*
  * 
@@ -238,8 +239,14 @@ namespace MarioPort
           PlaneBufferArrayPtr = PlaneBufferArray;
         var
           Source, Dest: PlaneBufferArrayPtr;
+      }*/
+      
+      private void Mirror20x24(ref Bitmap from, ref Bitmap to)
+      {
+         
       }
-        
+      
+      /*
       private void Swap (byte Plane1, byte Plane2)
       {
              var
@@ -261,45 +268,40 @@ namespace MarioPort
 
       public void InitEnemyFigures()
       {
-//      var
-//        i, j: Integer;
-//      {
-//        if MemAvail < SizeOf (EnemyList) )
-//        {
-//          System.WriteLn ('Not enough memory');
-//          Halt;
-//        }
-//        GetMem (Enemy, SizeOf (EnemyList));
-//
-//        Move (@Chibibo000, EnemyPictures[1, Right], SizeOf (ImageBuffer));
-//        Move (@Chibibo001, EnemyPictures[2, Right], SizeOf (ImageBuffer));
-//
-//        Move (@Chibibo002, EnemyPictures[4, Right], SizeOf (ImageBuffer));
-//        Move (@Chibibo003, EnemyPictures[5, Right], SizeOf (ImageBuffer));
-//
-//        Move (@Fish001, EnemyPictures[3, Left], SizeOf (ImageBuffer));
-//        Mirror (@EnemyPictures[3, Left], @EnemyPictures[3, Right]);
-//
-//        Move (@Red000, EnemyPictures[6, Left], SizeOf (ImageBuffer));
-//        Move (@Red001, EnemyPictures[7, Left], SizeOf (ImageBuffer));
-//
-//        Move (@GrKp000, EnemyPictures[8, Right], SizeOf (ImageBuffer));
-//        Move (@GrKp001, EnemyPictures[9, Right], SizeOf (ImageBuffer));
-//
-//        Move (@RdKp000, EnemyPictures[10, Right], SizeOf (ImageBuffer));
-//        Move (@RdKp001, EnemyPictures[11, Right], SizeOf (ImageBuffer));
-//
-//        for i = 1 to MaxEnemies do
-//          if (i in [6, 7]) )
-//            Mirror (@EnemyPictures[i, Left], @EnemyPictures[i, Right])
-//          else
-//            if !(i in [3]) )
-//              Mirror (@EnemyPictures[i, Right], @EnemyPictures[i, Left]);
-//
-//        for i = 0 to 1 do
-//          for j = kGreen to kRed do
-//            Mirror20x24 (@KoopaList [Left, j, i], @KoopaList [Right, j, i]);
-//      }
+         EnemyPictures[1, Right] = Resources.CHIBIBO_000;
+         EnemyPictures[2, Right] = Resources.CHIBIBO_001;
+
+         EnemyPictures[4, Right] = Resources.CHIBIBO_002;
+         EnemyPictures[5, Right] = Resources.CHIBIBO_003;
+
+         EnemyPictures[3, Left] = Resources.FISH_001;
+         Mirror(EnemyPictures[3, Left], EnemyPictures[3, Right]);
+
+         EnemyPictures[6, Left] = Resources.RED_000;
+         EnemyPictures[7, Left] = Resources.RED_001;
+
+         EnemyPictures[8, Right] = Resources.GRKP_000;
+         EnemyPictures[9, Right] = Resources.GRKP_001;
+
+         EnemyPictures[10, Right] = Resources.RDKP_000;
+         EnemyPictures[11, Right] = Resources.RDKP_001;
+
+         for( int i = 0; i < MaxEnemies; i++ )
+         {
+            if ( i == 6 || i == 7 )
+               Mirror(EnemyPictures[i, Left], @EnemyPictures[i, Right]);
+            else
+               if ( i != 3 )
+                  Mirror(EnemyPictures[i, Left], @EnemyPictures[i, Right]);
+         }
+         
+         for( int i = 0; i <= 1; i++ )
+         {
+            for( int j = kGreen; j <= kRed; j++ )
+            {
+               Mirror20x24(KoopaList[Left, j, i], KoopaList[Right, j, i]);
+            }
+         }
       }
 
       public void ClearEnemies()
@@ -685,7 +687,7 @@ namespace MarioPort
             case EnemyType.tpRisingFlower:
             case EnemyType.tpRisingStar:
             {
-               if ( ((YPos / H) = (YPos / H)) && (YPos != MapY * H) )
+               if ( ((YPos / H) == (YPos / H)) && (YPos != MapY * H) )
                {
                   XVel = 1 - 2 * (byte)(WorldMap[MapX + 1, MapY - 1] in CanHoldYou);
 //                  case Tp of
@@ -725,6 +727,7 @@ namespace MarioPort
 //                  Exit;
                   return;
                }
+               break;
             }
             case EnemyType.tpFireBall:
             {
@@ -849,7 +852,7 @@ namespace MarioPort
                {
                   case Grounded:
                   {
-                     if !(Hold1 || Hold2) )
+                     if ( !(Hold1 || Hold2) )
                      {
                         Status = Falling;
                         YVel = 1;

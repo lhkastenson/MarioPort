@@ -1,3 +1,13 @@
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using System.Drawing;
+using MarioPort;
+﻿using Resources = MarioPort.Properties.Resources;
+
 /*
  *
  */
@@ -102,8 +112,8 @@ namespace MarioPort
       private char Below2;
 
       
-      private void HighMirror (P1, P2: Pointer)
-      {
+//      private void HighMirror (P1, P2: Pointer)
+//      {
 //        type
 //          PlaneBuffer = array[0..2 * H - 1, 0..W / 4 - 1] of Byte;
 //          PlaneBufferArray = array[0..3] of PlaneBuffer;
@@ -127,58 +137,53 @@ namespace MarioPort
 //        Swap (0, 3 );
 //        Swap (1, 2 );
 //      }
-      }
+//      }
 
       // NOTE: I'm guessing that "Mirror" means flip over Y axis
       
-      private void HighMirror(Image& imageToMirror)
+      private void HighMirror(Bitmap from, ref Bitmap to)
       {
          
       }
 
       public void InitPlayerFigures()
       {
-//      var
-//        Pl, Md, N: Byte;
-//      {
-//        FillChar (Pictures^, SizeOf (Pictures^), #$FF );
-//
-//        Move (@SWMar000^, Pictures[plMario, mdSmall, 0, dirLeft], SizeOf (PicBuffer) );
-//        Move (@SWMar001^, Pictures[plMario, mdSmall, 1, dirLeft], SizeOf (PicBuffer) );
-//        Move (@SJMar000^, Pictures[plMario, mdSmall, 2, dirLeft], SizeOf (PicBuffer) );
-//        Move (@SJMar001^, Pictures[plMario, mdSmall, 3, dirLeft], SizeOf (PicBuffer) );
-//
-//        Move (@LWMar000^, Pictures[plMario, mdLarge, 0, dirLeft], SizeOf (PicBuffer) );
-//        Move (@LWMar001^, Pictures[plMario, mdLarge, 1, dirLeft], SizeOf (PicBuffer) );
-//        Move (@LJMar000^, Pictures[plMario, mdLarge, 2, dirLeft], SizeOf (PicBuffer) );
-//        Move (@LJMar001^, Pictures[plMario, mdLarge, 3, dirLeft], SizeOf (PicBuffer) );
-//
-//        Move (@FWMar000^, Pictures[plMario, mdFire, 0, dirLeft], SizeOf (PicBuffer) );
-//        Move (@FWMar001^, Pictures[plMario, mdFire, 1, dirLeft], SizeOf (PicBuffer) );
-//        Move (@FJMar000^, Pictures[plMario, mdFire, 2, dirLeft], SizeOf (PicBuffer) );
-//        Move (@FJMar001^, Pictures[plMario, mdFire, 3, dirLeft], SizeOf (PicBuffer) );
-//
-//
-//        Move (@SWLui000^, Pictures[plLuigi, mdSmall, 0, dirLeft], SizeOf (PicBuffer) );
-//        Move (@SWLui001^, Pictures[plLuigi, mdSmall, 1, dirLeft], SizeOf (PicBuffer) );
-//        Move (@SJLui000^, Pictures[plLuigi, mdSmall, 2, dirLeft], SizeOf (PicBuffer) );
-//        Move (@SJLui001^, Pictures[plLuigi, mdSmall, 3, dirLeft], SizeOf (PicBuffer) );
-//
-//        Move (@LWLui000^, Pictures[plLuigi, mdLarge, 0, dirLeft], SizeOf (PicBuffer) );
-//        Move (@LWLui001^, Pictures[plLuigi, mdLarge, 1, dirLeft], SizeOf (PicBuffer) );
-//        Move (@LJLui000^, Pictures[plLuigi, mdLarge, 2, dirLeft], SizeOf (PicBuffer) );
-//        Move (@LJLui001^, Pictures[plLuigi, mdLarge, 3, dirLeft], SizeOf (PicBuffer) );
-//
-//        Move (@FWLui000^, Pictures[plLuigi, mdFire, 0, dirLeft], SizeOf (PicBuffer) );
-//        Move (@FWLui001^, Pictures[plLuigi, mdFire, 1, dirLeft], SizeOf (PicBuffer) );
-//        Move (@FJLui000^, Pictures[plLuigi, mdFire, 2, dirLeft], SizeOf (PicBuffer) );
-//        Move (@FJLui001^, Pictures[plLuigi, mdFire, 3, dirLeft], SizeOf (PicBuffer) );
-//
-//        for Pl = plMario to plLuigi do
-//          for Md = mdSmall to mdFire do
-//            for N = 0 to 3 do
-//              HighMirror (@Pictures[Pl, Md, N, dirLeft], @Pictures[Pl, Md, N, dirRight] );
-//      }
+         Pictures[plMario, mdSmall, 0, dirLeft] = Resources.SWMAR_000;
+         Pictures[plMario, mdSmall, 1, dirLeft] = Resources.SWMAR_001;
+         Pictures[plMario, mdSmall, 2, dirLeft] = Resources.SJMAR_000;
+         Pictures[plMario, mdSmall, 3, dirLeft] = Resources.SJMAR_001;
+
+         Pictures[plMario, mdLarge, 0, dirLeft] = Resources.LWMAR_000;
+         Pictures[plMario, mdLarge, 1, dirLeft] = Resources.LWMAR_001;
+         Pictures[plMario, mdLarge, 2, dirLeft] = Resources.LJMAR_000;
+         Pictures[plMario, mdLarge, 3, dirLeft] = Resources.LJMAR_001;
+         
+         Pictures[plMario, mdFire, 0, dirLeft] = Resources.FWMAR_000;
+         Pictures[plMario, mdFire, 1, dirLeft] = Resources.FWMAR_001;
+         Pictures[plMario, mdFire, 2, dirLeft] = Resources.FJMAR_000;
+         Pictures[plMario, mdFire, 3, dirLeft] = Resources.FJMAR_001;
+         
+         Pictures[plLuigi, mdSmall, 0, dirLeft] = Resources.SWLUI_000;
+         Pictures[plLuigi, mdSmall, 1, dirLeft] = Resources.SWLUI_001;
+         Pictures[plLuigi, mdSmall, 2, dirLeft] = Resources.SJLUI_000;
+         Pictures[plLuigi, mdSmall, 3, dirLeft] = Resources.SJLUI_001;
+         
+         Pictures[plLuigi, mdLarge, 0, dirLeft] = Resources.LWLUI_000;
+         Pictures[plLuigi, mdLarge, 1, dirLeft] = Resources.LWLUI_001;
+         Pictures[plLuigi, mdLarge, 2, dirLeft] = Resources.LJLUI_000;
+         Pictures[plLuigi, mdLarge, 3, dirLeft] = Resources.LJLUI_001;
+         
+         Pictures[plLuigi, mdFire, 0, dirLeft] = Resources.FWLUI_000;
+         Pictures[plLuigi, mdFire, 1, dirLeft] = Resources.FWLUI_001;
+         Pictures[plLuigi, mdFire, 2, dirLeft] = Resources.FJLUI_000;
+         Pictures[plLuigi, mdFire, 3, dirLeft] = Resources.FJLUI_001;
+         
+         for ( int Pl = plMario; Pl <= plLuigi; Pl++ )
+         {
+            for ( int Md = mdSmall; Md <= mdFire; Md++ )
+               for ( int N = 0; N <= 3; N++ )
+                  HighMirror ( Pictures[Pl, Md, N, dirLeft], ref Pictures[Pl, Md, N, dirRight] );
+         }
       }
 
       public void InitPlayer (int InitX, int InitY, byte Name)
@@ -238,7 +243,7 @@ namespace MarioPort
             {
                DrawPart( X, Y + DemoY, W, 2 * H, -DemoY, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction] );
                Redraw( MapX, MapY - 1 );
-               Redraw( MapX + 1, MapY - 1 );\
+               Redraw( MapX + 1, MapY - 1 );
                break;
             }
             case dmDead:
@@ -258,7 +263,7 @@ namespace MarioPort
             DrawDemo;
             return;
          }
-         if ( (!Blinking) || (BlinkCounter % 2 = 0) )
+         if ( !Blinking || (BlinkCounter % 2 == 0) )
          {
 //            with SaveScreen [CurrentPage] do
 //            {
@@ -276,8 +281,8 @@ namespace MarioPort
             }
             else
                if ( Star || Growing )
-                  RecolorImage (X, Y, W, 2 * H, Pictures[Player, Data.mode[Player],Walkingmode, Direction], ((GrowCounter + StarCounter) && 1) shl 4 -
-                        (byte)((GrowCounter + StarCounter) && $F < 8))
+                  RecolorImage (X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction], ((GrowCounter + StarCounter) && 1) >> 4 -
+                        (byte)((GrowCounter + StarCounter) && 0xF < 8))
                else
                   DrawImage( X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction] );
             OldX = X;
@@ -293,7 +298,6 @@ namespace MarioPort
          PutImage (XPos, YPos, W, 2 * H, Buffer );
          PopBackGr (XPos, YPos, W + 4, 2 * H, BackGrAddr );
          Visible = false;
-
       }
 
       public void DoDemo()
@@ -337,6 +341,7 @@ namespace MarioPort
                      }
                   }
                }
+               break;
             }
             case dmUpInToPipe:
             case dmDownOutOfPipe:
@@ -365,6 +370,7 @@ namespace MarioPort
                      }
                   }
                }
+               break;
             }
 
             case dmDead:
@@ -375,6 +381,7 @@ namespace MarioPort
                Y = Y + YVel;
                if ( Y > NV * H )
                   GameDone = true;
+               break;
             }
          }
       }
@@ -421,7 +428,8 @@ namespace MarioPort
          if ( (XVel != 0) || (YVel != 0) || (Y % H != 0) )
             return;
          Mo = X % W;
-         if ( !(Mo in [4 .. W - 4]) )
+//         if ( !(Mo in [4 .. W - 4]) )
+         if ( Mo >= 4 && Mo <= W - 4 )
             return;
          if ( (Below1 != '0') || (Below2 != '1') || (!(AtCh1 in ['à' .. 'ç'])) /* $E0..$E7: Enter pipe */ || (!(AtCh2 in ['à' .. 'ï'])) )
             return;
