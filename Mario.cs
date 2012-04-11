@@ -553,13 +553,13 @@ public class Mario
 				ResetStack();
 				
 				Counter++;
-			} while (IntroDone || Counter = WAIT_BEFORE_DEMO)
+			} while (!IntroDone && Counter != WAIT_BEFORE_DEMO)
 			
 			FadeDown (64);
 			
 			if (!IntroDone)
 				Demo();
-		} while (IntroDone && !TestVGAMode)
+		} while (!IntroDone || TestVGAMode)
 		
 		if (Game != -1)
 			Data = Config.Games[GameNumber];
