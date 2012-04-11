@@ -19,8 +19,8 @@ namespace MarioPort
       public const int N1 = 3;
       public const int N2 = 13;
 
-      public ImageBuffer[,] FigList = new ImageBuffer[N1, N2];
-      public ImageBuffer[] Bricks = new ImageBuffer[4];
+      public Bitmap[,] FigList = new Bitmap[N1, N2];
+      public Bitmap[] Bricks = new Bitmap[4];
       public byte Sky;
 
 //        private void ReColor (P1, P2: Pointer; C: Byte);
@@ -39,7 +39,7 @@ namespace MarioPort
       //// implementation ////
 
       // !! Convert is inside of ConvertGrass
-      private void ConvertGrass(Bitmap * P0, Bitmap * P1, Bitmap * P2)
+      private void ConvertGrass(ref Bitmap P0, ref Bitmap P1, ref Bitmap P2)
       {
 //      var
 //        i, j: Integer;
@@ -274,8 +274,8 @@ namespace MarioPort
             }
             case 2:
             {
-               i = Options.GroundColor1;
-               j = Options.GroundColor2;
+               int i = Options.GroundColor1;
+               int j = Options.GroundColor2;
                
                // TODO
 //               Recolor2 (@Green000, FigList[N,  1], i, j);
@@ -317,14 +317,14 @@ namespace MarioPort
             }
          }
 
-         Mirror (FigList[N,  1], FigList[N,  3]);
-         Rotate (FigList[N,  4], FigList[N,  6]);
-         Rotate (FigList[N,  1], FigList[N,  9]);
-         Rotate (FigList[N,  2], FigList[N,  8]);
-         Rotate (FigList[N,  3], FigList[N,  7]);
-         Mirror (FigList[N, 10], FigList[N, 11]);
-         Rotate (FigList[N, 11], FigList[N, 12]);
-         Mirror (FigList[N, 12], FigList[N, 13]);
+         Mirror (ref FigList[N,  1], ref FigList[N,  3]);
+         Rotate (ref FigList[N,  4], ref FigList[N,  6]);
+         Rotate (ref FigList[N,  1], ref FigList[N,  9]);
+         Rotate (ref FigList[N,  2], ref FigList[N,  8]);
+         Rotate (ref FigList[N,  3], ref FigList[N,  7]);
+         Mirror (ref FigList[N, 10], ref FigList[N, 11]);
+         Rotate (ref FigList[N, 11], ref FigList[N, 12]);
+         Mirror (ref FigList[N, 12], ref FigList[N, 13]);
       }
       
       private void SetSkyPalette()
@@ -530,7 +530,7 @@ namespace MarioPort
             if ( Ch != (char)0 )
             {
                if ( Ch == '%' && Options.Design == 4 )
-                  DrawSky(XPos, YPos, W, H / 2)
+                  DrawSky(XPos, YPos, W, H / 2);
                else
                   DrawSky(XPos, YPos, W, H);
             }
@@ -544,43 +544,43 @@ namespace MarioPort
             
             switch (Ch)
             {
-               case 1:
-               case 2:
-               case 3:
-               case 4:
-               case 5:
-               case 6:
-               case 7:
-               case 8:
-               case 9:
-               case 10:
-               case 11:
-               case 12:
-               case 13:
-               case 14:
-               case 15:
-               case 16:
-               case 17:
-               case 18:
-               case 19:
-               case 20:
-               case 21:
-               case 22:
-               case 23:
-               case 24:
-               case 25:
-               case 26:
+               case (char)1:
+               case (char)2:
+               case (char)3:
+               case (char)4:
+               case (char)5:
+               case (char)6:
+               case (char)7:
+               case (char)8:
+               case (char)9:
+               case (char)10:
+               case (char)11:
+               case (char)12:
+               case (char)13:
+               case (char)14:
+               case (char)15:
+               case (char)16:
+               case (char)17:
+               case (char)18:
+               case (char)19:
+               case (char)20:
+               case (char)21:
+               case (char)22:
+               case (char)23:
+               case (char)24:
+               case (char)25:
+               case (char)26:
                {
                   if ( Ch > (char)13 )
                   {
 //                     Ch = Chr ((int)(Ch) - 13)
-                     Ch -= 13;
+                     Ch -= (char)13;
                   }
                   else
                   {
-                     if ( WorldMap[X - 1, Y] in [#14..#26] )
+                     if ( WorldMap[X - 1, Y] >= 14 && WorldMap[X - 1, Y] <= 26 )
                      {
-                        if ( Ch in [#1, (char)4, (char)7] )
+                        if ( Ch == 1 || Ch == (char)4 || Ch == (char)7 )
                         {
                            Fig = FigList[1, (int)(WorldMap[X - 1, Y]) - 13];
                            PutImage(XPos, YPos, W, H, Fig);
@@ -588,9 +588,9 @@ namespace MarioPort
                      }
                      else
                      {
-                        if ( WorldMap[X + 1, Y] in [#14..#26] )
+                        if ( WorldMap[X + 1, Y] >= 14 && WorldMap[X + 1, Y] <= 26 )
                         {
-                           if ( Ch in [#3, (char)6, (char)9] )
+                           if ( Ch == 3 || Ch == (char)6 || Ch == (char)9 )
                            {
                               Fig = FigList[1, (int)(WorldMap[X + 1, Y]) - 13];
                               PutImage(XPos, YPos, W, H, Fig);
@@ -601,30 +601,30 @@ namespace MarioPort
                   break;
                }
                case '?':
-                  Fig = Quest000;
+                  Fig = Resources.QUEST_000;
                   break;
                case '@':
-                  Fig = Quest001;
+                  Fig = Resources.QUEST_001;
                   break;
                case 'A':
                {
                   L = WorldMap[X - 1, Y] = 'A';
                   R = WorldMap[X + 1, Y] = 'A';
-                  if ( Odd (X + Y) )
+                  if ( (X + Y) % 2 == 1 )
                   {
-                     RS = True;
-                     LS = False;
+                     RS = true;
+                     LS = false;
                   }
                   else
                   {
-                     LS = True;
-                     RS = False;
+                     LS = true;
+                     RS = false;
                   }
                   if (LS && R)
                      Fig = Bricks[1];
                   else
                   {
-                     if (RS && L) )
+                     if (RS && L)
                         Fig = Bricks[2];
                      else
                         Fig = Bricks[0];
@@ -634,13 +634,13 @@ namespace MarioPort
 
 
                case 'I': 
-                  Fig = Block000;
+                  Fig = Resources.BLOCK_000;
                   break;
                case 'J':
-                  Fig = Block001;
+                  Fig = Resources.BLOCK_001;
                   break;
                case 'K':
-                  Fig = Note000;
+                  Fig = Resources.NOTE_000;
                   break;
 
                case 'X':
@@ -652,9 +652,9 @@ namespace MarioPort
                   break;
                case '=':
                {
-                  Fig = Pin000;
-                  if ( WorldMap[X, Y + 1] in CanHoldYou )
-                     DrawImage(XPos, YPos, W, H, Fig)
+                  Fig = Resources.PIN_000;
+                  if ( WorldMap[X, Y + 1] /*in CanHoldYou*/ )
+                     DrawImage(XPos, YPos, W, H, Fig);
                   else
                      UpSideDown(XPos, YPos, W, H, Fig);
 //                  Fig = null;
@@ -681,7 +681,7 @@ namespace MarioPort
                case 'þ':
                {
                   if ( WorldMap[X, Y - 1] == 'þ' )
-                     Fig = Exit001
+                     Fig = Exit001;
                   else
                      Fig = Exit000;
                   break;
@@ -703,15 +703,15 @@ namespace MarioPort
                   }
                   if ( (X == 0) || (WorldMap[X - 1, Y] == Ch) )
                   {
-                     if ( WorldMap[X + 1, Y] = Ch )
-                       Fig = Grass2000
+                     if (WorldMap[X + 1, Y] = Ch)
+                        Fig = Grass2000;
                      else
-                       Fig = Grass3000;
+                        Fig = Grass3000;
                   }
                   else
                   {
                      if ( WorldMap[X + 1, Y] == Ch )
-                        Fig = Grass1000
+                        Fig = Grass1000;
                      else
                         Fig = Grass3000;
                   }
@@ -725,7 +725,7 @@ namespace MarioPort
                      case 1:
                      {
                         if ( WorldMap[X, Y - 1] != Ch )
-                           Fig = Fence001
+                           Fig = Fence001;
                         else
                            Fig = Fence000;
                         break;
@@ -733,7 +733,7 @@ namespace MarioPort
                      case 2:
                      {
                         if ( WorldMap[X, Y - 1] != Ch )
-                           Fig = SmResources.TREE_000
+                           Fig = SmResources.TREE_000;
                         else
                            Fig = SmTree001;
                      }
@@ -907,7 +907,7 @@ namespace MarioPort
                }
             }
             
-            if ( Fig != Nil )
+            if ( Fig != null )
                DrawImage(XPos, YPos, W, H, Fig);
          }
       }
@@ -1007,7 +1007,7 @@ namespace MarioPort
 //        ConvertGrass (@Palm2000, Palm2001, Palm2002);
 //        ConvertGrass (@PALM3_000, Palm3001, Palm3002);
 //
-//        Recolor (@Block001, Block001, Options.BrickColor);
+//        Recolor (@Block001, Resources.BLOCK_001, Options.BrickColor);
 //        Recolor (@Wood000, Wood000, Options.WoodColor);
 //        Recolor (@XBlock000, XBlock000, Options.XBlockColor);
 //

@@ -273,18 +273,18 @@ namespace MarioPort
             SaveScreen[CurrentPage].YPos = Y;
             Visible = true;
 //            }
-            if ( (Data.mode[Player] = mdFire) && keySpace && (FireCounter < 7) )
+            if ((Data.mode[Player] = mdFire) && keySpace && (FireCounter < 7))
             {
                FireCounter++;
-               DrawPart( X, Y + 1, W, 2 * H, 0, 20, Pictures[Player, mdFire, 1, Direction] );
-               DrawPart( X, Y, W, 2 * H, 21, 2 * H, Pictures[Player, mdFire, 0, Direction] );
+               DrawPart(X, Y + 1, W, 2 * H, 0, 20, Pictures[Player, mdFire, 1, Direction]);
+               DrawPart(X, Y, W, 2 * H, 21, 2 * H, Pictures[Player, mdFire, 0, Direction]);
             }
             else
-               if ( Star || Growing )
-                  RecolorImage (X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction], ((GrowCounter + StarCounter) && 1) >> 4 -
-                        (byte)((GrowCounter + StarCounter) && 0xF < 8))
+               if (Star || Growing)
+                  RecolorImage(X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction], ((GrowCounter + StarCounter) && 1) >> 4 -
+                        (byte)((GrowCounter + StarCounter) && 0xF < 8));
                else
-                  DrawImage( X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction] );
+                  DrawImage(X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction]);
             OldX = X;
             OldY = Y;
          }
@@ -327,7 +327,7 @@ namespace MarioPort
                      {
                         DemoCounter2++;
                         DemoY--;
-                        if DemoCounter2 > 10 )
+                        if ( DemoCounter2 > 10 )
                            InPipe = true;
                      }
                   }
@@ -431,7 +431,7 @@ namespace MarioPort
 //         if ( !(Mo in [4 .. W - 4]) )
          if ( Mo >= 4 && Mo <= W - 4 )
             return;
-         if ( (Below1 != '0') || (Below2 != '1') || (!(AtCh1 in ['à' .. 'ç'])) /* $E0..$E7: Enter pipe */ || (!(AtCh2 in ['à' .. 'ï'])) )
+         if ( (Below1 != '0') || (Below2 != '1') || (!(AtCh1 >= 'à' && AtCh1 <= 'ç')) /* $E0..$E7: Enter pipe */ || (!(AtCh2 >= 'à' && AtCh2 <= 'ï')) )
             return;
          PipeCode[1] = AtCh1;
          PipeCode[2] = AtCh2;
@@ -441,13 +441,13 @@ namespace MarioPort
       private void CheckPipeAbove (char C1, char C2)
       {
          Mo = X % W;
-         if !(Mo in [4 .. W - 4]) )
+         if ( !(Mo >= 4 && Mo <= W - 4) )
             return;
-         if (C1 != '0') || (C2 != '1') )
+         if ( (C1 != '0') || (C2 != '1') )
             return;
          MapX = X / W;
          MapY = Y / H + 1;
-         if ( (!(WorldMap[MapX, MapY] in ['à' .. 'ç'])) /* $E0..$E7: Enter pipe */ || (!(WorldMap[MapX + 1, MapY] in ['à' .. 'ï'])) )
+         if ( (!(WorldMap[MapX, MapY] >= 'à' && WorldMap[MapX, MapY] <= 'ç')) /* $E0..$E7: Enter pipe */ || (!(WorldMap[MapX + 1, MapY] >= 'à' && WorldMap[MapX + 1, MapY] <= 'ï')) )
             return;
          PipeCode[1] = WorldMap[MapX, MapY];
          PipeCode[2] = WorldMap[MapX + 1, MapY];
@@ -492,9 +492,9 @@ namespace MarioPort
          	if (!Small && NewCh1 == '*' )
                HitCoin (NewX2 * W, Y1 * H, false );
 
-            Hold1 = (NewCh1 in CanHoldYou) && (!Small );
-            Hold2 = (NewCh2 in CanHoldYou );
-            Hold3 = (NewCh3 in CanHoldYou );
+            Hold1 = (NewCh1 /*in CanHoldYou*/) && (!Small );
+            Hold2 = (NewCh2 /*in CanHoldYou*/);
+            Hold3 = (NewCh3 /*in CanHoldYou*/);
 
             if ( Hold1 || Hold2 || Hold3 )
             {
@@ -510,16 +510,16 @@ namespace MarioPort
             CheckJump;
 
          if ( (Status == stJumping) )
-            NewY = (Y + 1 + (4) + (H - 1 - (4)) * (byte)(Small) + YVel + HSafe) / H - Safe
+            NewY = (Y + 1 + (4) + (H - 1 - (4)) * (byte)(Small) + YVel + HSafe) / H - Safe;
          else
             NewY = (Y + 1 + 2 * H + YVel + HSafe) / H - Safe;
 
          NewCh1 = WorldMap[NewX1, NewY];
          NewCh2 = WorldMap[NewX2, NewY];
          NewCh3 = WorldMap[(X + XVel + W / 2) / W, NewY];
-         Hold1 = (NewCh1 in CanHoldYou + CanStandOn );
-         Hold2 = (NewCh2 in CanHoldYou + CanStandOn );
-         Hold3 = (NewCh3 in CanHoldYou + CanStandOn );
+         Hold1 = (NewCh1 == 0 /*in CanHoldYou + CanStandOn*/ );
+         Hold2 = (NewCh2 == 0 /*in CanHoldYou + CanStandOn*/ );
+         Hold3 = (NewCh3 == 0 /*in CanHoldYou + CanStandOn*/ );
 
          switch (Status)
          {
@@ -539,9 +539,8 @@ namespace MarioPort
                   }
                   else
                   {
-                     if (NewCh1 = 'K') || (NewCh2 = 'K') )
+                     if  ( (NewCh1 == 'K') || (NewCh2 == 'K') )
                         CheckFall();
-
                      else
                      {
                         if ( XVel == 0 )
@@ -554,9 +553,9 @@ namespace MarioPort
                         	AtCh2 = WorldMap[MapX + 1, MapY];
 
                            Mo = (X /* + XVel */) % W;
-                           if (!Hold1) && (Mo in [1 .. 5]) )
+                           if ( (!Hold1) && (Mo >= 1 && Mo <= 5) )
                               XVel--;
-                           if (!Hold2) && (Mo in [W - 5 .. W - 1]) )
+                           if ( (!Hold2) && (Mo >= W - 5 && Mo <= W - 1) )
                               XVel++;
                         }
                      }
@@ -573,22 +572,22 @@ namespace MarioPort
 
             case stJumping:
             {
-               Hold1 = (NewCh1 in CanHoldYou + Hidden );
-               Hold2 = (NewCh2 in CanHoldYou + Hidden );
-               Hold3 = (NewCh3 in CanHoldYou + Hidden );
+               Hold1 = (NewCh1 /*in CanHoldYou + Hidden*/ );
+               Hold2 = (NewCh2 /*in CanHoldYou + Hidden*/ );
+               Hold3 = (NewCh3 /*in CanHoldYou + Hidden*/ );
 
                Hit = (Hold1 || Hold2 );
                if ( Hit )
                {
                   Mo = (X + XVel) % W;
-                  if ( (Mo in [1 .. 4, W - 4 .. W - 1]) && (!Hold3) )
+                  if ( (Mo >= 1 && Mo <= 4 && Mo >= W - 4 && Mo <= W - 1) && (!Hold3) )
                   {
-                     if ( !((NewCh1 in Hidden) && (NewCh2 in Hidden)) )
+                     if ( !((NewCh1 /*in Hidden*/) && (NewCh2 /*in Hidden*/)) )
                         Hit = false;
-                     if ( (Mo < W / 2) && (!(NewCh2 in Hidden)) )
+                     if ( (Mo < W / 2) && (!(NewCh2 /*in Hidden*/)) )
                         X -= Mo;
                      else
-                        if ( (Mo >= W / 2) && (!(NewCh1 in Hidden)) )
+                        if ( (Mo >= W / 2) && (!(NewCh1 /*in Hidden*/)) )
                            X += W - Mo;
                   }
                }
@@ -602,7 +601,7 @@ namespace MarioPort
                 
                   if ( (Counter % (JumpDelay + Byte(HighJump)) = 0) || ((!keyAlt) && (!HitEnemy)) )
                      YVel++;
-                  if YVel >= 0 )
+                  if ( YVel >= 0 )
                   {
                      YVel = 0;
                      Status = stFalling;
@@ -613,28 +612,28 @@ namespace MarioPort
 //                  Ch = #0;
                   Ch = (char)0;
 
-                  switch (Mo)
+                  //switch (Mo)
+                  //{
+                  if (Mo >= 0 && Mo <= (W / 2 - 1))
                   {
-                     case 0..(W / 2 - 1):
+                     if ( NewCh1 /*in CanHoldYou + Hidden*/ )
                      {
-                        if NewCh1 in CanHoldYou + Hidden )
-                        {
-                           Ch = NewCh1;
-                           NewX2 = NewX1;
-                        }
-                        else
-                           Ch = NewCh2;
+                        Ch = NewCh1;
+                        NewX2 = NewX1;
                      }
-                     case (W / 2)..W - 1:
-                     {
+                     else
                         Ch = NewCh2;
-                        if !(Ch in CanHoldYou + Hidden) )
-                        {
-                           Ch = NewCh1;
-                           NewX2 = NewX1;
-                        }
+                  }
+                  else if (Mo >= (W / 2) && Mo <= W - 1)
+                  {
+                     Ch = NewCh2;
+                     if ( !(Ch /*in CanHoldYou + Hidden*/) )
+                     {
+                        Ch = NewCh1;
+                        NewX2 = NewX1;
                      }
                   }
+                  //}
              
                   switch (Ch)
                   {
@@ -652,71 +651,126 @@ namespace MarioPort
                      {
                         Mo = 0;
 
-                        switch ( WorldMap[NewX2, NewY - 1] )
+                        //switch ( WorldMap[NewX2, NewY - 1] )
+                        //{
+                        //   case 'à'..'â':
+                        //   {
+                        //          WorldMap[NewX2, NewY] = '?';
+                        //          Ch = '?';
+                        //   }
+                        //   case 'ï':
+                        //   {
+                        //          WorldMap[NewX2, NewY] = 'K';
+                        //          Ch = 'K';
+                        //   }
+                        //   default:
+                        //   {
+                        //      if ( !Small && (Ch == 'J') )
+                        //      {
+                        //         BreakBlock (NewX2, NewY );
+                        //         AddScore (10);
+                        //         Mo = 1;
+                        //      }
+                        //   }
+                        //}
+                        if ( WorldMap[NewX2, NewY - 1] >= 'à' && WorldMap[NewX2, NewY - 1] <= 'â' )
                         {
-                           case 'à'..'â':
+                           WorldMap[NewX2, NewY] = '?';
+                           Ch = '?';
+                        }
+                        else if ( WorldMap[NewX2, NewY - 1] == 'ï' )
+                        {
+                           WorldMap[NewX2, NewY] = 'K';
+                           Ch = 'K';
+                        }
+                        else
+                        {
+                           if ( !Small && (Ch == 'J') )
                            {
-                                  WorldMap[NewX2, NewY] = '?';
-                                  Ch = '?';
-                           }
-                           case 'ï':
-                           {
-                                  WorldMap[NewX2, NewY] = 'K';
-                                  Ch = 'K';
-                           }
-                           default:
-                           {
-                              if !Small && (Ch = 'J') )
-                              {
-                                 BreakBlock (NewX2, NewY );
-                                 AddScore (10);
-                                 Mo = 1;
-                              }
+                              BreakBlock (NewX2, NewY );
+                              AddScore (10);
+                              Mo = 1;
                            }
                         }
-                        if ( Mo = 0 )
+
+                        if ( Mo == 0 )
                         {
                            BumpBlock (NewX2 * W, NewY * H );
                            Beep (110 );
                         }
 
-                        switch (WorldMap[NewX2, NewY - 1])
+                        //switch (WorldMap[NewX2, NewY - 1])
+                        //{
+                        //   case ' ':
+                        //   case 'ã'://TODO..'ì':
+                        //   {
+                        //      if ( !(Ch == 'J' || Ch == 'K') )
+                        //      {
+                        //         HitCoin (NewX2 * W, NewY * H, true );
+                        //         if ( WorldMap[NewX2, NewY - 1] != ' ' )
+                        //         {
+                        //            WorldMap[NewX2, NewY - 1] = Succ (WorldMap[NewX2, NewY - 1] );
+                        //            if ( WorldMap[NewX2, NewY] = '$' )
+                        //            {
+                        //               Remove (NewX2 * W, NewY * H, W, H, 2 );
+                        //               WorldMap[NewX2, NewY] = '?';
+                        //            }
+                        //         }
+                        //      }
+                        //   }
+                        //   case 'à':
+                        //   {
+                        //      if ( Data.mode[Player] = mdSmall )
+                        //         NewEnemy (tpRisingChamp, 0, NewX2, NewY, 0, -1, 2);
+                        //      else
+                        //         NewEnemy (tpRisingFlower, 0, NewX2, NewY, 0, -1, 2 );
+                        //   }
+                        //   case 'á': 
+                        //      NewEnemy (tpRisingLife, 0, NewX2, NewY, 0, -1, 2 );
+                        //   case 'â': 
+                        //      NewEnemy (tpRisingStar, 0, NewX2, NewY, 0, -1, 1 );
+                        //   case '*': 
+                        //      HitCoin (NewX2 * W, (NewY - 1) * H, false );
+                        //   case 'í': 
+                        //      NewEnemy (tpRisingChamp, 1, NewX2, NewY, 0, -1, 2 );
+                        //}
+                        //
+                        if (WorldMap[NewX2, NewY - 1] >= 'ã' && WorldMap[NewX2, NewY - 1] <= 'ì')
                         {
-                           case ' ':
-                           case 'ã'..'ì':
+                           if ( !(Ch == 'J' || Ch == 'K') )
                            {
-                              if !(Ch in ['J', 'K']) )
+                              HitCoin (NewX2 * W, NewY * H, true );
+                              if ( WorldMap[NewX2, NewY - 1] != ' ' )
                               {
-                                 HitCoin (NewX2 * W, NewY * H, true );
-                                 if WorldMap[NewX2, NewY - 1] != ' ' )
+                                 WorldMap[NewX2, NewY - 1] = Succ (WorldMap[NewX2, NewY - 1] );
+                                 if ( WorldMap[NewX2, NewY] = '$' )
                                  {
-                                    WorldMap[NewX2, NewY - 1] = Succ (WorldMap[NewX2, NewY - 1] );
-                                    if WorldMap[NewX2, NewY] = '$' )
-                                    {
-                                       Remove (NewX2 * W, NewY * H, W, H, 2 );
-                                       WorldMap[NewX2, NewY] = '?';
-                                    }
+                                    Remove (NewX2 * W, NewY * H, W, H, 2 );
+                                    WorldMap[NewX2, NewY] = '?';
                                  }
                               }
                            }
-                           case 'à':
-                           {
-                              if ( Data.mode[Player] = mdSmall )
-                                 NewEnemy (tpRisingChamp, 0, NewX2, NewY, 0, -1, 2)
-                              else
-                                 NewEnemy (tpRisingFlower, 0, NewX2, NewY, 0, -1, 2 );
-                           }
-                           case 'á': 
-                              NewEnemy (tpRisingLife, 0, NewX2, NewY, 0, -1, 2 );
-                           case 'â': 
-                              NewEnemy (tpRisingStar, 0, NewX2, NewY, 0, -1, 1 );
-                           case '*': 
-                              HitCoin (NewX2 * W, (NewY - 1) * H, false );
-                           case 'í': 
-                              NewEnemy (tpRisingChamp, 1, NewX2, NewY, 0, -1, 2 );
                         }
+                        else if (WorldMap[NewX2, NewY - 1] == 'à')
+                        {
+                           if ( Data.mode[Player] = mdSmall )
+                              NewEnemy (tpRisingChamp, 0, NewX2, NewY, 0, -1, 2);
+                           else
+                              NewEnemy (tpRisingFlower, 0, NewX2, NewY, 0, -1, 2 );
+                        }
+                        else if (WorldMap[NewX2, NewY - 1] == 'á')
+                           NewEnemy (tpRisingLife, 0, NewX2, NewY, 0, -1, 2 );
+                        else if (WorldMap[NewX2, NewY - 1] == 'â')
+                           NewEnemy (tpRisingStar, 0, NewX2, NewY, 0, -1, 1 );
+                        else if (WorldMap[NewX2, NewY - 1] == '*') 
+                           HitCoin (NewX2 * W, (NewY - 1) * H, false );
+                        else if (WorldMap[NewX2, NewY - 1] == 'í') 
+                           NewEnemy (tpRisingChamp, 1, NewX2, NewY, 0, -1, 2 );
+
+
+
                         HitAbove (NewX2, NewY - 1 );
-                        if Ch = 'K' )
+                        if ( Ch == 'K' )
                         {
                            Remove (NewX2 * W, NewY * H, W, H, tpNote );
                            WorldMap[NewX2, NewY] = 'K';
@@ -724,7 +778,7 @@ namespace MarioPort
                         else
                         {
                            if (Ch != 'J')
-                              if (!(WorldMap[NewX2, NewY - 1] in ['ã'..'ì']))
+                              if (!(WorldMap[NewX2, NewY - 1] >= 'ã' && WorldMap[NewX2, NewY - 1] <= 'ì'))
                               {
                                  Remove (NewX2 * W, NewY * H, W, H, 1 );
                                  WorldMap[NewX2, NewY] = '@';
@@ -749,7 +803,7 @@ namespace MarioPort
       
       private void CheckFall()
       {
-         if !(Hold1 || Hold2) )
+         if ( !(Hold1 || Hold2) )
          {
             if ( NewCh1 == '*' )
                HitCoin( NewX1 * W, NewY * H, false );
@@ -817,7 +871,7 @@ namespace MarioPort
 //                NewX2 = NewX1;
 //              }
 //          }  { case }
-         }
+         
       }
       
       private void CheckJump()
@@ -859,7 +913,7 @@ namespace MarioPort
 
          if (cdChamp != 0)
          {
-            if Data.mode[Player] = mdSmall )
+            if ( Data.mode[Player] == mdSmall )
             {
                Data.mode[Player] = mdLarge;
                Growing = true;
@@ -1021,7 +1075,7 @@ namespace MarioPort
             else
                XVel = MinSpeed;
             Direction = (byte)(XVel > 0 );
-            if X + XVel < 0 )
+            if ( X + XVel < 0 )
                XVel = - X;
          }
          else
@@ -1077,7 +1131,7 @@ namespace MarioPort
          else
          {
             if ( YVel < 0 )
-               Walkingmode = 2
+               Walkingmode = 2;
             else
                Walkingmode = 3;
          }
@@ -1108,26 +1162,26 @@ namespace MarioPort
          if ( XView > (Options.XSize - NH) * W )
             XView = (Options.XSize - NH) * W;
          if ( XView < OldXView )
-            if ( (WorldMap[XView / W, NV] = #254) )
+            if ( (WorldMap[XView / W, NV] == 254) )
                if ( (WorldMap[(XView / W), Math.Round(PlayerY1 / H, 1)] != ' ') )
                   XView = OldXView;
          if ( XView > OldXView )
-            if ( (WorldMap[((XView - 1) / W + NH), NV] = #255) )
+            if ( (WorldMap[((XView - 1) / W + NH), NV] == 255) )
                if ( (WorldMap[((XView - 1) / W + NH), Math.Round(PlayerY1 / H, 1)] != ' ') )
                   XView = OldXView;
                   
          PlayerX1 = X + XVel;
          PlayerX2 = PlayerX1 + W - 1;
          PlayerY1 = Y;
-         if ( Data.mode[Player] == mdSmall )
-            PlayerY1 = Y + H
+         if (Data.mode[Player] == mdSmall)
+            PlayerY1 = Y + H;
          else
             PlayerY1 = Y;
          PlayerY2 = Y + 2 * H - 1;
          PlayerXVel = XVel;
          PlayerYVel = YVel;
 
-         if cdLift != 0 )
+         if ( cdLift != 0 )
          {
             PlayerYVel += 2 - YVel;
             cdLift = 0;

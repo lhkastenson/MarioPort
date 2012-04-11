@@ -128,6 +128,7 @@ namespace MarioPort
          public byte DirCounter;
          
          public uint[] BackGrAddr = new uint[Game.MAX_PAGE + 1];
+         public EnemyRec(bool go)
       }
 
 //          EnemyListPtr = EnemyList;
