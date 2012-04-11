@@ -15,6 +15,8 @@
     Crt,
     Dos;
 **/
+namespace MarioPort
+{
 public class Mario
 {
 	public const int NUM_LEV = 6;
@@ -25,23 +27,23 @@ public class Mario
 	{
 		public bool Sound;
 		public bool SLine;
-		public GameData[] Games = new GameData[MAX_SAVE-1]
+		public buffers.GameData[] Games = new buffers.GameData[MAX_SAVE-1];
 		public bool UseJS;
-		public JoyRec JSDat;
+		//public JoyRec JSDat;
 	}
-	public ConfigData ConfigFile = file;
+	public ConfigData ConfigFile = "file";
 	public int GameNumber;
 	public int CurPlayer;
 	public int Passed;
 	public bool EndGame;
 	public ConfigData Config;
 	
-#IFDEF DEBUG
+#if (DEBUG)
 	public void MouseHalt()
 	{
 		//halt
 	}
-#ENDIF
+#endif
 
 /**
 
@@ -55,32 +57,28 @@ public class Mario
   {$I Start.$01}
 **/
 
-	public void NewData
+	public void NewData()
 	{
-		Data[plMario].Lives = 3;
-		Data[plLuigi].Lives = 3;
-		Data[plMario].Coins = 0;
-		Data[plLuigi].Coins = 0;
-		Data[plMario].Score = 0;
-		Data[plLuigi].Score = 0;
-		Data[plMario].Progress = 0;
-		Data[plLuigi].Progress = 0;
-		Data[plMario].Mode = mdSmall;
-		Data[plLuigi].Mode = mdSmall;
-	}
+      buffers.data.lives = new int[] {3, 3};
+      buffers.data.coins = new int[] {0, 0};
+      buffers.data.score = new long[] {0, 0};
+      buffers.data.progress = new int {0, 0};
+      buffers.data.mode = new byte[] {buffers.mdSmall, buffers.mdSmall};
 
-	public string GetConfigName
+   }
+
+	public string GetConfigName()
 	{
 		string S;
 		byte len;
 		S = ParamStr(0);
-		S[Len - 2] = 'C';
-		S[Len - 1] = 'F';
-		S[Len - 0] = 'G';
+		S[len - 2] = 'C';
+		S[len - 1] = 'F';
+		S[len - 0] = 'G';
 		return S;
 	}
 	
-	public void ReadConfig
+	public void ReadConfig()
 	{
 		int i, j;
 		ConfigFile F;
@@ -101,7 +99,7 @@ public class Mario
 			Config.UseJS = false;
 			GameNumber = -1;
 		}
-		Config.Play.Stat = SLine;
+		Config.Play.Stat = buffers.SLine;
 		Config.Buffers.BeeperSound = Sound;
 		Name = ParamStr(0);
 		j = 0;
@@ -744,4 +742,5 @@ public class Mario
 	} while (QuitGame)
 #endif
 	WriteConfig();
+}
 }
