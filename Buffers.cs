@@ -15,7 +15,7 @@ namespace MarioPort
 //      string[,] CanHoldYou = new string[13 - 0, (int)('Z' - '0')];// {/* #0..#13, '0'..'Z' */};
 //   	string[,] CanStandOn = new string[16 - 14, 'f' - 'a'];// {/* #14..#16, 'a'..'f' */}
 //   	char[] Hidden = {'$'};
-      char Hidden = '$';
+      public const char Hidden = '$';
       
       public bool CanHoldYou(char ch)
       {

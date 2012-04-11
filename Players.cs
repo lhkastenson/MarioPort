@@ -273,7 +273,7 @@ namespace MarioPort
             SaveScreen[CurrentPage].YPos = Y;
             Visible = true;
 //            }
-            if ((Data.mode[Player] = mdFire) && keySpace && (FireCounter < 7))
+            if ((Data.mode[Player] == mdFire) && keySpace && (FireCounter < 7))
             {
                FireCounter++;
                DrawPart(X, Y + 1, W, 2 * H, 0, 20, Pictures[Player, mdFire, 1, Direction]);
@@ -302,7 +302,7 @@ namespace MarioPort
 
       public void DoDemo()
       {
-         Small = 9 * (byte)(Data.mode[Player] == mdSmalld );
+         Small = 9 * (byte)(Data.mode[Player] == mdSmall );
          switch(Demo)
          {
             case dmDownInToPipe:
@@ -312,7 +312,7 @@ namespace MarioPort
                {
                   if ( !Passed )
                   {
-                     Passed = TRUE;
+                     Passed = true;
                      TextCounter = 0;
                   }
                }
@@ -347,7 +347,7 @@ namespace MarioPort
             case dmDownOutOfPipe:
             {
                DemoCounter1++;
-               if ( DemoCounter1 % 3 = 0 )
+               if ( DemoCounter1 % 3 == 0 )
                {
                   if ( Demo == dmDownOutOfPipe )
                   {
@@ -399,7 +399,7 @@ namespace MarioPort
          AtCh2 = ' ';
          
          if ( dm == dmDownInToPipe || dm == dmUpInToPipe || dm == dmDownOutOfPipe || dm == dmUpOutOfPipe )
-            StartMusic (PipeMusic );
+            StartMusic (PipeMusic);
          
          switch (dm)
          {
@@ -447,7 +447,8 @@ namespace MarioPort
             return;
          MapX = X / W;
          MapY = Y / H + 1;
-         if ( (!(WorldMap[MapX, MapY] >= 'à' && WorldMap[MapX, MapY] <= 'ç')) /* $E0..$E7: Enter pipe */ || (!(WorldMap[MapX + 1, MapY] >= 'à' && WorldMap[MapX + 1, MapY] <= 'ï')) )
+         if ( (!(WorldMap[MapX, MapY] >= 'à' && WorldMap[MapX, MapY] <= 'ç')) /* $E0..$E7: Enter pipe */ 
+                  || (!(WorldMap[MapX + 1, MapY] >= 'à' && WorldMap[MapX + 1, MapY] <= 'ï')) )
             return;
          PipeCode[1] = WorldMap[MapX, MapY];
          PipeCode[2] = WorldMap[MapX + 1, MapY];
@@ -492,9 +493,9 @@ namespace MarioPort
          	if (!Small && NewCh1 == '*' )
                HitCoin (NewX2 * W, Y1 * H, false );
 
-            Hold1 = (NewCh1 /*in CanHoldYou*/) && (!Small );
-            Hold2 = (NewCh2 /*in CanHoldYou*/);
-            Hold3 = (NewCh3 /*in CanHoldYou*/);
+            Hold1 = ( CanHoldYou(NewCh1) ) && (!Small );
+            Hold2 = ( CanHoldYou(NewCh2) );
+            Hold3 = ( CanHoldYou(NewCh3) );
 
             if ( Hold1 || Hold2 || Hold3 )
             {
@@ -517,9 +518,9 @@ namespace MarioPort
          NewCh1 = WorldMap[NewX1, NewY];
          NewCh2 = WorldMap[NewX2, NewY];
          NewCh3 = WorldMap[(X + XVel + W / 2) / W, NewY];
-         Hold1 = (NewCh1 == 0 /*in CanHoldYou + CanStandOn*/ );
-         Hold2 = (NewCh2 == 0 /*in CanHoldYou + CanStandOn*/ );
-         Hold3 = (NewCh3 == 0 /*in CanHoldYou + CanStandOn*/ );
+         Hold1 = ( CanHoldYou(NewCh1) || CanStandOn(NewCh1)  );
+         Hold2 = ( CanHoldYou(NewCh2) || CanStandOn(NewCh2)  );
+         Hold3 = ( CanHoldYou(NewCh3) || CanStandOn(NewCh3)  );
 
          switch (Status)
          {
@@ -553,9 +554,9 @@ namespace MarioPort
                         	AtCh2 = WorldMap[MapX + 1, MapY];
 
                            Mo = (X /* + XVel */) % W;
-                           if ( (!Hold1) && (Mo >= 1 && Mo <= 5) )
+                           if ( !Hold1 && (Mo >= 1 && Mo <= 5) )
                               XVel--;
-                           if ( (!Hold2) && (Mo >= W - 5 && Mo <= W - 1) )
+                           if ( !Hold2 && (Mo >= W - 5 && Mo <= W - 1) )
                               XVel++;
                         }
                      }
@@ -572,9 +573,9 @@ namespace MarioPort
 
             case stJumping:
             {
-               Hold1 = (NewCh1 /*in CanHoldYou + Hidden*/ );
-               Hold2 = (NewCh2 /*in CanHoldYou + Hidden*/ );
-               Hold3 = (NewCh3 /*in CanHoldYou + Hidden*/ );
+               Hold1 = ( CanHoldYou(NewCh1) || CanStandOn(NewCh1)  );
+               Hold2 = ( CanHoldYou(NewCh2) || CanStandOn(NewCh2)  );
+               Hold3 = ( CanHoldYou(NewCh3) || CanStandOn(NewCh3)  );
 
                Hit = (Hold1 || Hold2 );
                if ( Hit )
@@ -582,12 +583,12 @@ namespace MarioPort
                   Mo = (X + XVel) % W;
                   if ( (Mo >= 1 && Mo <= 4 && Mo >= W - 4 && Mo <= W - 1) && (!Hold3) )
                   {
-                     if ( !((NewCh1 /*in Hidden*/) && (NewCh2 /*in Hidden*/)) )
+                     if ( !(( NewCh1 == Buffers.Hidden ) && ( NewCh2 == Buffers.Hidden )) )
                         Hit = false;
-                     if ( (Mo < W / 2) && (!(NewCh2 /*in Hidden*/)) )
+                     if ( (Mo < W / 2) && (!( NewCh2 == Buffers.Hidden )) )
                         X -= Mo;
                      else
-                        if ( (Mo >= W / 2) && (!(NewCh1 /*in Hidden*/)) )
+                        if ( (Mo >= W / 2) && (!( NewCh1 == Buffers.Hidden )) )
                            X += W - Mo;
                   }
                }
@@ -616,7 +617,7 @@ namespace MarioPort
                   //{
                   if (Mo >= 0 && Mo <= (W / 2 - 1))
                   {
-                     if ( NewCh1 /*in CanHoldYou + Hidden*/ )
+                     if (  CanHoldYou(NewCh1) || CanStandOn(NewCh1)  )
                      {
                         Ch = NewCh1;
                         NewX2 = NewX1;
@@ -627,7 +628,7 @@ namespace MarioPort
                   else if (Mo >= (W / 2) && Mo <= W - 1)
                   {
                      Ch = NewCh2;
-                     if ( !(Ch /*in CanHoldYou + Hidden*/) )
+                     if ( !( CanHoldYou(Ch) || Ch == Buffers.Hidden ) )
                      {
                         Ch = NewCh1;
                         NewX2 = NewX1;
@@ -651,28 +652,6 @@ namespace MarioPort
                      {
                         Mo = 0;
 
-                        //switch ( WorldMap[NewX2, NewY - 1] )
-                        //{
-                        //   case 'à'..'â':
-                        //   {
-                        //          WorldMap[NewX2, NewY] = '?';
-                        //          Ch = '?';
-                        //   }
-                        //   case 'ï':
-                        //   {
-                        //          WorldMap[NewX2, NewY] = 'K';
-                        //          Ch = 'K';
-                        //   }
-                        //   default:
-                        //   {
-                        //      if ( !Small && (Ch == 'J') )
-                        //      {
-                        //         BreakBlock (NewX2, NewY );
-                        //         AddScore (10);
-                        //         Mo = 1;
-                        //      }
-                        //   }
-                        //}
                         if ( WorldMap[NewX2, NewY - 1] >= 'à' && WorldMap[NewX2, NewY - 1] <= 'â' )
                         {
                            WorldMap[NewX2, NewY] = '?';
@@ -699,42 +678,6 @@ namespace MarioPort
                            Beep (110 );
                         }
 
-                        //switch (WorldMap[NewX2, NewY - 1])
-                        //{
-                        //   case ' ':
-                        //   case 'ã'://TODO..'ì':
-                        //   {
-                        //      if ( !(Ch == 'J' || Ch == 'K') )
-                        //      {
-                        //         HitCoin (NewX2 * W, NewY * H, true );
-                        //         if ( WorldMap[NewX2, NewY - 1] != ' ' )
-                        //         {
-                        //            WorldMap[NewX2, NewY - 1] = Succ (WorldMap[NewX2, NewY - 1] );
-                        //            if ( WorldMap[NewX2, NewY] = '$' )
-                        //            {
-                        //               Remove (NewX2 * W, NewY * H, W, H, 2 );
-                        //               WorldMap[NewX2, NewY] = '?';
-                        //            }
-                        //         }
-                        //      }
-                        //   }
-                        //   case 'à':
-                        //   {
-                        //      if ( Data.mode[Player] = mdSmall )
-                        //         NewEnemy (tpRisingChamp, 0, NewX2, NewY, 0, -1, 2);
-                        //      else
-                        //         NewEnemy (tpRisingFlower, 0, NewX2, NewY, 0, -1, 2 );
-                        //   }
-                        //   case 'á': 
-                        //      NewEnemy (tpRisingLife, 0, NewX2, NewY, 0, -1, 2 );
-                        //   case 'â': 
-                        //      NewEnemy (tpRisingStar, 0, NewX2, NewY, 0, -1, 1 );
-                        //   case '*': 
-                        //      HitCoin (NewX2 * W, (NewY - 1) * H, false );
-                        //   case 'í': 
-                        //      NewEnemy (tpRisingChamp, 1, NewX2, NewY, 0, -1, 2 );
-                        //}
-                        //
                         if (WorldMap[NewX2, NewY - 1] >= 'ã' && WorldMap[NewX2, NewY - 1] <= 'ì')
                         {
                            if ( !(Ch == 'J' || Ch == 'K') )
@@ -789,12 +732,12 @@ namespace MarioPort
                         Beep (30);
                   }
                   
-                  if ( (Ch != 'J') || (Data.mode[Player] = mdSmall) )
+                  if ( (Ch != 'J') || (Data.mode[Player] == mdSmall) )
                   {
                      YVel = 0;
                      Status = stFalling;
                   }
-                  if ( Ch = 'K' )
+                  if ( Ch == 'K' )
                      YVel = 3;
                }
             }
@@ -811,7 +754,7 @@ namespace MarioPort
             if ( NewCh1 == '*' )
                HitCoin( NewX2 * W, NewY * H, false );
                
-            if ( (Counter % JumpDelay = 0) )
+            if ( Counter % JumpDelay == 0 )
                YVel++;
             
             if ( YVel > MaxYVel )
@@ -828,16 +771,16 @@ namespace MarioPort
             Status = stOnTheGround;
             Jumped = true;
 
-            if ( (NewCh1 = 'K') || (NewCh2 = 'K') )
+            if ( (NewCh1 == 'K') || (NewCh2 == 'K') )
             {
                StartMusic ( NoteMusic );
-               if ( NewCh1 = 'K' )
+               if ( NewCh1 == 'K' )
                {
                   BumpBlock ( NewX1 * W, NewY * H );
                   Remove ( NewX1 * W, NewY * H, W, H, tpNote );
                   WorldMap[NewX1, NewY] = 'K';
                }
-               if ( NewCh2 = 'K' )
+               if ( NewCh2 == 'K' )
                {
                   BumpBlock (NewX2 * W, NewY * H );
                   Remove (NewX2 * W, NewY * H, W, H, tpNote );
@@ -845,32 +788,33 @@ namespace MarioPort
                }
                Counter = 0;
                Status = stJumping;
-               Jumped = FALSE;
-               HighJump = TRUE;
+               Jumped = false;
+               HighJump = true;
                YVel = -5;
-               HitEnemy = TRUE;
+               HitEnemy = true;
             }
          }
          
-//          TODO
-//          Case Mo of
-//            0 .. W / 2 - 1:
-//              if Hold1 )
-//              {
-//                Ch = NewCh1;
-//                NewX2 = NewX1;
-//              end
-//              else
-//                Ch = NewCh2;
-//            W / 2 .. W:
-//              if Hold2 )
-//                Ch = NewCh2
-//              else
-//              {
-//                Ch = NewCh1;
-//                NewX2 = NewX1;
-//              }
-//          }  { case }
+         if ( Mo >= 0 && Mo <= W / 2 - 1 )
+         {
+            if ( Hold1 )
+            {
+               Ch = NewCh1;
+               NewX2 = NewX1;
+            }
+            else
+               Ch = NewCh2;
+         }
+         else if ( Mo >= W / 2 && Mo <= W )
+         {
+            if ( Hold2 )
+               Ch = NewCh2;
+            else
+            {
+               Ch = NewCh1;
+               NewX2 = NewX1;
+            }
+         }
          
       }
       
@@ -903,10 +847,10 @@ namespace MarioPort
        
          if (InPipe)
          {
-            if ( WorldMap[MapX, MapY + 1] = '0' )
+            if ( WorldMap[MapX, MapY + 1] == '0' )
                StartDemo (dmUpOutOfPipe );
             else
-               if ( WorldMap[MapX, MapY - 1] = '0' )
+               if ( WorldMap[MapX, MapY - 1] == '0' )
                   StartDemo (dmDownOutOfPipe );
             return;
          }
@@ -934,12 +878,12 @@ namespace MarioPort
             Fired = true;
             FireCounter = 0;
             StartMusic (GrowMusic );
-            Growing = TRUE;
+            Growing = true;
             GrowCounter = 0;
             cdFlower = 0;            
          }
 
-         if ( (!Blinking) && (!Star) && (!Growing) )
+         if ( !Blinking && !Star && !Growing )
          {
             if ( cdHit != 0 )
 
@@ -990,7 +934,7 @@ namespace MarioPort
             StarCounter++;
             if ( StarCounter >= StarTime )
                Star = false;
-            if ( StarCounter % 3 = 0 )
+            if ( StarCounter % 3 == 0 )
                StartGlitter (X, Y + 11 * (byte)(Data.mode[Player] = mdSmall), W, H + 3 + 11 * (byte)(Data.mode[Player] != mdSmall) );
             cdStar = 0;
          }
@@ -1023,12 +967,12 @@ namespace MarioPort
          keyCtrl = kbCtrl || jsButton2;
          keySpace = kbSpace || jsButton2;
 
-         if ( keyRight && (!LastKeyRight) && (Direction = dirLeft) )
+         if ( keyRight && (!LastKeyRight) && (Direction == dirLeft) )
          {
             OldDir = dirRight;
             OldXVel = -XVel;
          }
-         if ( keyLeft && (!LastKeyLeft) && (Direction = dirRight) )
+         if ( keyLeft && (!LastKeyLeft) && (Direction == dirRight) )
          {
             OldDir = dirLeft;
             OldXVel = -XVel;
@@ -1038,7 +982,7 @@ namespace MarioPort
          if ( Fired && (!keySpace) )
             Fired = false;
 
-         if ( keySpace && (!Fired) && (Data.mode[Player] = mdFire) )
+         if ( keySpace && (!Fired) && (Data.mode[Player] == mdFire) )
          {
             FireCounter = 0;
             NewEnemy (tpFireBall, 0, X / W + Direction, (Y + H) / H,
@@ -1055,7 +999,7 @@ namespace MarioPort
          }
          if ( cdStopJump != 0 )
          {
-            Jumped = TRUE;
+            Jumped = true;
             cdStopJump = 0;
          }
 
@@ -1086,8 +1030,8 @@ namespace MarioPort
          {
             if ( (XVel < MaxSpeed) )
             {
-               if ( CheckX || (cdLift != 0) )
-                 XVel += 1 + (byte)((cdLift != 0) && keyCtrl );
+               if ( CheckX || cdLift != 0 )
+                 XVel += 1 + (byte)( cdLift != 0 && keyCtrl );
             }
             else
                XVel = MaxSpeed;
@@ -1114,7 +1058,7 @@ namespace MarioPort
 
          Check( );
 
-         if ( (Status == stOnTheGround) && (YVel == 0) )
+         if ( (Status == stOnTheGround) && YVel == 0 )
          {
             if ( (XVel == 0) || ((cdLift != 0) && (XVel == PlayerXVel)) )
             {
@@ -1125,7 +1069,7 @@ namespace MarioPort
             {
                WalkCount++;
                WalkCount = WalkCount & 0xF;
-               Walkingmode = (byte)(WalkCount < 0x8 );
+               Walkingmode = (byte)(WalkCount < 0x8);
             }
          }
          else

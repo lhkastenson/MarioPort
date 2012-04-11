@@ -236,10 +236,10 @@ namespace MarioPort
       private void InitPipes(byte NewColor)
       {
 //      {
-//        ReColor (@Pipe000, Pipe000, NewColor);
-//        ReColor (@Pipe001, Pipe001, NewColor);
-//        ReColor (@Pipe002, Pipe002, NewColor);
-//        ReColor (@Pipe003, Pipe003, NewColor);
+//        ReColor (@Pipe000, Resources.PIPE_000, NewColor);
+//        ReColor (@Pipe001, Resources.PIPE_001, NewColor);
+//        ReColor (@Pipe002, Resources.PIPE_002, NewColor);
+//        ReColor (@Pipe003, Resources.PIPE_003, NewColor);
 //
 //      }
       }
@@ -644,11 +644,11 @@ namespace MarioPort
                   break;
 
                case 'X':
-                  Fig = XBlock000;
+                  Fig = Resources.XBLOCK_000;
                   break;
 
                case 'W':
-                  Fig = Wood000;
+                  Fig = Resources.WOOD_000;
                   break;
                case '=':
                {
@@ -662,58 +662,58 @@ namespace MarioPort
                }
 
                case '0':
-                  Fig = Pipe000;
+                  Fig = Resources.PIPE_000;
                   break;
                case '1':
-                  Fig = Pipe001;
+                  Fig = Resources.PIPE_001;
                   break;
                case '2':
-                  Fig = Pipe002;
+                  Fig = Resources.PIPE_002;
                   break;
                case '3':
-                  Fig = Pipe003;
+                  Fig = Resources.PIPE_003;
                   break;
 
                case '*':
-                  Fig = Coin000;
+                  Fig = Resources.COIN_000;
                   break;
 
                case 'þ':
                {
                   if ( WorldMap[X, Y - 1] == 'þ' )
-                     Fig = Exit001;
+                     Fig = Resources.EXIT_001;
                   else
-                     Fig = Exit000;
+                     Fig = Resources.EXIT_000;
                   break;
                }
                case '÷':
                {
                   if ( (WorldMap[X, Y - 1] == 'ð') && (Options.Design == 2) )
                   {
-                     Fig = SmTree001;
+                     Fig = Resources.SMTREE_001;
                      DrawImage(XPos, YPos, W, H, Fig);
                   }
                   if ( WorldMap[X, Y - 1] == 'ö' )
                   {
                      if ( Options.Design == 1 )
                      {
-                        Fig = WPalm_000;
+                        Fig = Resources.WPALM_000;
                         DrawImage(XPos, YPos, W, H, Fig);
                      }
                   }
                   if ( (X == 0) || (WorldMap[X - 1, Y] == Ch) )
                   {
                      if (WorldMap[X + 1, Y] = Ch)
-                        Fig = Grass2000;
+                        Fig = Resources.GRASS2_000;
                      else
-                        Fig = Grass3000;
+                        Fig = Resources.GRASS3_000;
                   }
                   else
                   {
                      if ( WorldMap[X + 1, Y] == Ch )
-                        Fig = Grass1000;
+                        Fig = Resources.GRASS1_000;
                      else
-                        Fig = Grass3000;
+                        Fig = Resources.GRASS3_000;
                   }
                   break;
                }
@@ -725,17 +725,17 @@ namespace MarioPort
                      case 1:
                      {
                         if ( WorldMap[X, Y - 1] != Ch )
-                           Fig = Fence001;
+                           Fig = Resources.FENCE_001;
                         else
-                           Fig = Fence000;
+                           Fig = Resources.FENCE_000;
                         break;
                      }
                      case 2:
                      {
                         if ( WorldMap[X, Y - 1] != Ch )
-                           Fig = SmResources.TREE_000;
+                           Fig = Resources.SMTREE_000;
                         else
-                           Fig = SmTree001;
+                           Fig = Resources.SMTREE_001;
                      }
                   }
                   break;
@@ -744,7 +744,7 @@ namespace MarioPort
                {
                   switch (Options.Design)
                   {
-                     case 1: Fig = WPalm_000;
+                     case 1: Fig = Resources.WPALM_000;
                   }
                }
                case 'ú':
@@ -755,18 +755,18 @@ namespace MarioPort
                      {
                         if ( WorldMap[X - 1, Y] == 'ù' )
                         {
-                          Fig = PALM3_000;
+                          Fig = Resources.PALM3_000;
                           DrawImage(XPos, YPos, W, H, Fig);
                         }
                         else
                         {
                            if ( WorldMap[X + 1, Y] == 'ù' )
                            {
-                              Fig = Palm1000;
+                              Fig = Resources.PALM1_000;
                               DrawImage(XPos, YPos, W, H, Fig);
                            }
                         }
-                        Fig = Palm0_000;
+                        Fig = Resources.Palm0_000;
                      }
                   }
                   break;
@@ -779,10 +779,10 @@ namespace MarioPort
                      {
                         if ( WorldMap[X, Y + 1] == 'ö' )
                         {
-                           Fig = WPalm_000;
+                           Fig = Resources.WPALM_000;
                            DrawImage(XPos, YPos, W, H, Fig);
                         }
-                        Fig = Palm1_000;
+                        Fig = Resources.PALM1_000;
                       }
                   }
                   break;
@@ -792,7 +792,7 @@ namespace MarioPort
                   switch (Options.Design)
                   {
                      case 1:
-                        Fig = Palm2_000;
+                        Fig = Resources.PALM2_000;
                   }
                }
                case 'õ':
@@ -803,10 +803,10 @@ namespace MarioPort
                      {
                         if ( WorldMap[X, Y + 1] == 'ö' )
                         {
-                           Fig = WPalm_000;
+                           Fig = Resources.WPALM_000;
                            DrawImage(XPos, YPos, W, H, Fig);
                         }
-                        Fig = PALM3_000;
+                        Fig = Resources.PALM3_000;
                      }
                   }
                   break;
@@ -816,32 +816,32 @@ namespace MarioPort
                   switch (Options.Design)
                   {
                      case 1:
-                        Fig = Fall000;
+                        Fig = Resources.FALL_000;
                         break;
                      case 2:
                      {
                         switch (WorldMap[X, Y - 1])
                         {
                            case '#':
-                              PutImage(XPos, YPos, W, H, Tree001);
+                              PutImage(XPos, YPos, W, H, Resources.TREE_001);
                               break;
                            case '%':
                            {
                                Fig = Resources.TREE_000;
                                PutImage(XPos, YPos, W, H, Fig);
-                               Fig = Tree003;
+                               Fig = Resources.TREE_003;
                                break;
                            }
                            default:
-                              Fig = Tree003;
+                              Fig = Resources.TREE_003;
                         }
                         break;
                      }
                      case 3:
-                        Fig = Window001;
+                        Fig = Resources.WINDOW_001;
                         break;
                      case 4:
-                        Fig = Lava000;
+                        Fig = Resources.LAVA_000;
                         break;
                      case 5:
                         Fill (XPos, YPos, W, H, 5);
@@ -853,7 +853,7 @@ namespace MarioPort
                   switch (Options.Design)
                   {
                      case 1:
-                        Fig = Fall001;
+                        Fig = Resources.FALL_001;
                         break;
                      case 2: 
                      {
@@ -864,13 +864,13 @@ namespace MarioPort
                               break;
                            case '#':
                            {
-                               Fig = Tree001;
+                               Fig = Resources.TREE_001;
                                PutImage(XPos, YPos, W, H, Fig);
-                               Fig = Tree002;
+                               Fig = Resources.TREE_002;
                                break;
                            }
                            default:
-                             Fig = Tree002;
+                             Fig = Resources.TREE_002;
                         }
                         break;
                      }
@@ -878,26 +878,26 @@ namespace MarioPort
                         Fig = WINDOW_000;
                         break;
                      case 4:
-                        Fig = Lava001;
+                        Fig = Resources.LAVA_001;
                         break;
                      case 5:
                      {
                         switch ((X + LavaCounter / 8) % 5)
                         {
                            case 0:
-                              Fig = Lava2001;
+                              Fig = Resources.LAVA2_001;
                               break;
                            case 1:
-                              Fig = Lava2002;
+                              Fig = Resources.LAVA2_002;
                               break;
                            case 2:
-                              Fig = Lava2003;
+                              Fig = Resources.LAVA2_003;
                               break;
                            case 3:
-                              Fig = Lava2004;
+                              Fig = Resources.LAVA2_004;
                               break;
                            case 4:
-                              Fig = Lava2005;
+                              Fig = Resources.LAVA2_005;
                         }
                         break;
                      }
@@ -1008,8 +1008,8 @@ namespace MarioPort
 //        ConvertGrass (@PALM3_000, Palm3001, Palm3002);
 //
 //        Recolor (@Block001, Resources.BLOCK_001, Options.BrickColor);
-//        Recolor (@Wood000, Wood000, Options.WoodColor);
-//        Recolor (@XBlock000, XBlock000, Options.XBlockColor);
+//        Recolor (@Wood000, Resources.WOOD_000, Options.WoodColor);
+//        Recolor (@XBlock000, Resources.XBLOCK_000, Options.XBlockColor);
 //
 //      }
       }
