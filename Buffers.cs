@@ -1,11 +1,13 @@
 using System;
-
+using System.Collections.Generic;
 namespace MarioPort
-{
 
-	List<KeyValuePair<string, char>> CanHoldYou;
-	List<KeyValuePair<string, char>> CanStandOn;
-	char[] Hidden = new char['$'];
+{
+   public class buffers
+   {
+   string[,] CanHoldYou = new string[] {/* #0..#13, '0'..'Z' */};
+	string[,] CanStandOn = new string[] {/* #14..#16, 'a'..'f' */};
+	char[] Hidden = {'$'};
 
 	long Timer;
 	int wTimer;
@@ -32,39 +34,56 @@ namespace MarioPort
 	public const int NV = 13;
 	
 	public const int MaxWorldSize = 236;
-	public cosnt int EX = 1;
+	public const int EX = 1;
 	public const int EY1 = 8;
 	public const int EY2 = 3;
 	
-	public const int DIRLEFT = 0;
-	public const int DIRRIGHT = 1;
+	public const int DirLeft = 0;
+	public const int DirRight = 1;
 	
-	public const int MDSMALL = 0;
-	public const int MDLARGE = 1;
-	public const int MDFIRE = 2;
+	public const int mdSmall = 0;
+	public const int mdLarge = 1;
+	public const int mdFire = 2;
 	
-	public const int PLMARIO = 0;
-	public const int PLLUIGI = 1;
+	public const int plMario = 0;
+	public const int plLuigi = 1;
 	
-	public const bool QUITGAME = false;
-	public const bool BEEPERSOUND = true;
+	public const bool QuitGame = false;
+	public const bool BeeperSound = true;
 	
-	public const string[] PLAYERNAME = new string [PLMARIO, PLLUIGI];
-	
-	struct GameData
-	{
-		public int[] numPlayers = new int [PLMARIO, PLLUIGI];
-		public int[] progress = new int [PLMARIO, PLLUIGI];
-		public int[] lives = new int[PLMARIO, PLLUIGI];
-		public int[] coins = new int [PLMARIO, PLLUIGI];
-		public long[] score = new long [PLMARIO, PLLUIGI];
-		public byte[] mode = new byte [PLMARIO, PLLUIGI];
-	}
-	
+	public const string[] PlayerName = new string[] {"PLMARIO", "PLLUIGI"};
+		
 	public byte Player;
-	public data GameData;
+	public static GameData data = new GameData();
 	public string[] WorldNumber = new string[3];
 	public long LevelScore;
+
+	public struct GameData
+	{
+		public int[] numPlayers;
+		public int[] progress = new int[2];
+		public int[] lives = new int[2];
+		public int[] coins = new int [2];
+		public long[] score = new long [2];
+		public byte[] mode = new byte [2];
+      public GameData()
+      {
+         this.numPlayers = new int[] {0, 0};
+         this.progress = new int[] {0, 0};
+         this.lives = new int[] {0, 0};
+         this.coins = new int[] {0, 0};
+         this.score = new long[] {0, 0};
+         this.mode = new byte[] {0, 0};
+      }
+      //public GameData(int[] numPlayers, int[] progress, int[] lives,
+      //                int[] coins, long[] score, byte[] mode);
+      //{
+      //   this.numPlayers = numPlayers;
+      //   this.progress = progress;
+      //}
+
+	}
+
 	
 /**
 	ImageBuffer * ImageBufferPtr;
@@ -173,16 +192,16 @@ namespace MarioPort
 	
 	   public bool GameDone;
 	   public bool Passed;
-	   public WorldBuffer * WorldMap;
-	   public WorldBuffer * SaveWorldMap;
+	   //public WorldBuffer * WorldMap;
+	   //public WorldBuffer * SaveWorldMap;
 	   public WorldOptions Options;
 	   public WorldOptions SaveOptions;
 	   public int XView;
 	   public int YView;
-	   public int[] LastXView = new int[MAX_PAGE];
-	   public StarBuffer * StarBackGr;
+	   public int[] LastXView = new int[Game.MAX_PAGE];
+	   //public StarBuffer * StarBackGr;
 	   public int Size;
-	   public PictureBuffer * Pictures;
+	   //public PictureBuffer * Pictures;
 	   public int Demo;
 	   public int TextCounter;
 	   public byte LavaCounter;
@@ -193,14 +212,6 @@ namespace MarioPort
 	   public const int dmUpInToPipe = 3;
 	   public const int dmDownOutOfPipe = 4;
 	   public const int dmDead = 5;
-	
-	   public void ReadWorld(Map map, WorldBuffer * W, Opt opt);
-	   public void Swap();
-	   public void BeeperOn();
-	   public void BeeperOff();
-	   public void Beep(int Freq);
-	   public void InitLevelScore();
-	   public void AddScore(long N);
 	
 	   public void ReadWorld(Map Map, WorldBuffer * W, Opt Opt)
 	   {
@@ -214,11 +225,11 @@ namespace MarioPort
 				   W*[i,j] = '@';
 		   X = 0;
 		
-		   while (M*[x+1,1] != '#0') and (X < MaxWorldSize)
+		   while (M*[x+1,1] != Chr(0) and (X < MaxWorldSize)
 		   {
 			   for (int i = 1; i < NV; i++)
 				   W*[X,NV-i] = M*[X+1,i];
-			   W*[X,-EY1] = '#0';
+			   W*[X,-EY1] = Chr(0);
 			   for (int i = 1; i < EY2; i++)
 				   W*[X,NV-1+i] = W*[X,NV-1];
 			   X++;
