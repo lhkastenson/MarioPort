@@ -101,158 +101,131 @@ public class Play
 		   for (int i = 0; i < Options.XSize - 1; i++)
 			   for (int j = 0; j < NH; j++)
 				   if (i != MapX || k != MapY)
-					   if (WorldMap*[i,j]) //need to figure out how to do this.
-	   /**
-	   procedure FindPipeExit;
-         var
-           i, j: Integer;
-       begin
-         for i := 0 to Options.XSize - 1 - 1 do
-           for j := 0 to NH - 1 do
-             if (i <> MapX) or (j <> MapY) then
-               if (WorldMap^ [i, j] in ['à' .. 'ï'])
-                 and (WorldMap^ [i + 1, j] = PipeCode [2]) then
-                 begin
-                   MapX := i;
-                   MapY := j;
-                   XView := Succ (i - NH div 2) * W;
-                   if XView > (Options.XSize - NH) * W then
-                     XView := (Options.XSize - NH) * W;
-                   if XView < 0 then
-                     XView := 0;
-                   Exit;
-                 end;
-       end;
-	   **/
+				   {
+					   if (WorldMap*[i,j] in ['a' .. 'i'] &&
+						   WorldMap*[i + 1, j] = PipeCode [2]) //need to figure out how to do this.
+						{
+							MaxX = i;
+							MapY = j;
+							XView = Succ (i - NH / 2) * W;
+							if (XView > (Options.XSize - NH) * W)
+								XView = (Options.XSize - NH) * W
+							if (XView < 0)
+								XView = 0;
+						}
+					}
 	   }
-	   /**
-	   Label
-         BuildLevel,
-         Restart;
-
-       var
-         Waiting: Boolean;
-         TextStatus: Boolean;
-         TotalBackGrAddr: array[0..MAX_PAGE] of Integer;
-         ShowScore,
-         CountingScore,
-         ShowObjects: Boolean;
-         OnlyDraw: Boolean;
-	   **/
+	   
+	   bool Waiting;
+	   bool TextStatus;
+	   int[] TotalBackGrAddr = new int[MAX_PAGE];
+	   bool ShowScore, CountingScore, ShowObjects, OnlyDraw;
+	   
 	   public void WriteTotalScore()
 	   {
-	   /**
-	   procedure WriteTotalScore;
-         var
-           i: Integer;
-           S: String;
-       begin
-         SetFont (0, Bold + Shadow);
-         Str (Data.Score[Player]: 11, S);
-         for i := 4 to Length (S) do
-           if S[i] = ' ' then
-             S[i] := '0';
-         CenterText (120, 'TOTAL SCORE:' + S, 31);
-       end;
-	   **/
+			int i;
+			string s;
+			//SetFont(0, Bold + Shadow);
+			//Str (Data.Score[Player]: 11, S);
+			for (int i = 4; i < s.Size(); i++)
+				if (S[i] == ' ')
+					S[i] = '0';
+			CenterText (120, "TOTAL SCORE: " + S, 31);
 	   }
 	
 	   public void ShowTotalBack
 	   {
-	   /**
-	   procedure ShowTotalBack;
-       begin
-         if Passed and CountingScore then
-           Beep (4 * 880);
-         TotalBackGrAddr[CurrentPage] := PushBackGr (XView + 160, 120, 120, 8);
-         if Passed and CountingScore then
-           Beep (2 * 880);
-         WriteTotalScore;
-         if Passed and CountingScore then
-           Beep (0);
-       end;
-	   **/
+			if (Passed && CountingScore)
+				Beep (4 * 880);
+			TotalBackGrAddr[CurrentPage] = PushBackGr (XView + 160, 120, 120, 8);
+			if (Passed && CoutingScore)
+				Beep (2 * 880);
+			WriteTotalScore();
+			if (Passed && CountingScore)
+				Beep(0);
 	   }
 	   public void HideTotalBack
 	   {
-	   /**
-	   procedure HideTotalBack;
-         var
-           Page: Integer;
-       begin
-         Page := CurrentPage;
-         if TotalBackGrAddr[Page] <> 0 then
-           PopBackGr (TotalBackGrAddr[CurrentPage]);
-         TotalBackGrAddr[Page] := 0;
-       end;
-	   **/
+			int Page = CurrentPage;
+			if (TotalBackGrAddr[Page] != 0)
+				PopBackGr (TotalBackGrAddr[CurrentPage]);
+			TotalBackGrAddr[Page] = 0;
 	   }
 	
 	   public void Pause()
 	   {
-	   /**
-	   procedure Pause;
-         type
-           StrPtr = ^string;
-         var
-           i,
-           PauseBack: Integer;
-           OldKey,
-           Ch: Char;
-           EndPause: Boolean;
-           PauseText,
-           Cheat: String;
-           P: StrPtr;
-
-         const
-           CRED_LEN = 26;
-
-         const Credit: array[0..CRED_LEN] of Byte = (CRED_LEN,
-           ord('P')+  1 + $10, ord('R')+  2 + $20, ord('O')+  3 + $30,
-           ord('G')+  4 + $40, ord('R')+  5 + $50, ord('A')+  6 + $60,
-           ord('M')+  7 + $70, ord('M')+  8 + $80, ord('E')+  9 + $10,
-           ord('D')+ 10 + $20, ord(' ')+ 11 + $30, ord('B')+ 12 + $40,
-           ord('Y')+ 13 + $50, ord(' ')+ 14 + $60, ord('M')+ 15 + $70,
-           ord('I')+ 16 + $80, ord('K')+ 17 + $10, ord('E')+ 18 + $20,
-           ord(' ')+ 19 + $30, ord('W')+ 20 + $40, ord('I')+ 21 + $50,
-           ord('E')+ 22 + $60, ord('R')+ 23 + $70, ord('I')+ 24 + $80,
-           ord('N')+ 25 + $10, ord('G')+ 26 + $20);
-
-       begin  { pause }
-         PauseText := 'PAUSE';
-
-         PauseMusic;
-         FadeDown (8);
-
-         SwapPages;
-         PauseBack := PushBackGr (XView + 120, 85, 80, 10);
-
-         if PauseBack <> 0 then
-         begin
-           OutPalette ($0F, 63, 63, 63);
-           SetFont (0, Bold + Shadow);
-           CenterText (85, PauseText, $0F);
-         end;
-
-         EndPause := FALSE;
-         Cheat := '';
-         While Key = kbP do ;
-         While Chr (bKey - $80) = kbP do ;
-         OldKey := Key;
-         if Key = kbTab then
-         begin
-           repeat
-             if Key <> OldKey then
-             begin
-               Ch := GetAsciiCode (Key);
-               if Key < #$80 then
-               begin
-                 Cheat := Cheat + Key;
-                 EndPause := (Ch = #0);
-               end;
-               OldKey := Key;
-
-               if (Cheat = kbT+kbE+kbS+kbT) or    { TEST }
+			// string * StrPtr;
+			int i, PauseBack;
+			char OldKey, Ch;
+			bool EndPause;
+			string PauseText, Cheat;
+			// string * P;
+			
+			const int CRED_LEN = 26;
+			// there's got to be a better way to do this...
+			const byte[] Credit = new Byte[] {CRED_LEN,
+				ascii.GetBytes('P') 1 + 10.ToString("X"),
+				ascii.GetBytes('R') 2 + 20.ToString("X"),
+				ascii.GetBytes('O') 3 + 30.ToString("X"),
+				ascii.GetBytes('G') 4 + 40.ToString("X"),
+				ascii.GetBytes('R') 5 + 50.ToString("X"),
+				ascii.GetBytes('A') 6 + 60.ToString("X"),
+				ascii.GetBytes('M') 7 + 70.ToString("X"),
+				ascii.GetBytes('M') 8 + 80.ToString("X"),
+				ascii.GetBytes('E') 9 + 10.ToString("X"),
+				ascii.GetBytes('D') 10 + 20.ToString("X"),
+				ascii.GetBytes(' ') 11 + 30.ToString("X"),
+				ascii.GetBytes('B') 12 + 40.ToString("X"),
+				ascii.GetBytes('Y') 13 + 50.ToString("X"),
+				ascii.GetBytes(' ') 14 + 60.ToString("X"),
+				ascii.GetBytes('M') 15 + 70.ToString("X"),
+				ascii.GetBytes('I') 16 + 80.ToString("X"),
+				ascii.GetBytes('K') 17 + 10.ToString("X"),
+				ascii.GetBytes('E') 18 + 20.ToString("X"),
+				ascii.GetBytes(' ') 19 + 30.ToString("X"),
+				ascii.GetBytes('W') 20 + 40.ToString("X"),
+				ascii.GetBytes('I') 21 + 50.ToString("X"),
+				ascii.GetBytes('E') 22 + 60.ToString("X"),
+				ascii.GetBytes('R') 23 + 70.ToString("X"),
+				ascii.GetBytes('I') 24 + 80.ToString("X"),
+				ascii.GetBytes('N') 25 + 10.ToString("X"),
+				ascii.GetBytes('G') 26 + 20.ToString("X")}
+				
+			PauseText = "Pause";
+			
+			PauseMusic();
+			FadeDown(8);
+			SwapPages();
+			PauseBack = PushBackGr (XView + 120, 85, 80, 10);
+			
+			if (PauseBack != 0)
+			{
+				OutPalette (15.ToString("X"), 63, 63, 63);
+				//SetFont (0, Bold + Shadow);
+				CenterText (85, PauseText, 15.ToString("X"));
+			}
+			
+			EndPause = false;
+			Cheat = ' ';
+			While (Key = kbP)
+				While ( bKey - 128.ToString("X"))
+					OldKey = Key;
+			if (Key = kbTab)
+			{
+				do
+				{
+					if (Key != OldKey)
+					{
+						Ch = Key.ToString();
+						if (Key < 128.ToString("X"))
+						{
+							Cheat = Cheat + Key;
+							EndPause = (Ch == 0);
+						}
+						OldKey = Key;
+						
+						/** Add cheats here
+						if (Cheat = kbT+kbE+kbS+kbT) or    { TEST }
                   (Cheat = kb0+kb0+kb4+kb4) then  { 0044 - ShowRetrace }
                begin
                  ShowRetrace := not ShowRetrace;
@@ -361,412 +334,404 @@ public class Play
                  PauseBack := PushBackGr (XView + 20, 85, 280, 10);
                  CenterText (85, PauseText, $0F);
                end;
-             end;
-           until EndPause;
-         end;
-
-         if PauseBack <> 0 then
-           PopBackGr (PauseBack);
-         SwapPages;
-
-         FadeUp (8);
-         Key := #255;
-       end;
-	   **/
+						**/
+					}
+				} while (EndPause)
+			}
+			if (PauseBack != 0)
+				PopBackGr (PauseBack);
+			SwapPages();
+			
+			FadeUp(8);
+			Key = 255;
 	   }
 	
-	   /**
-	   begin  { PlayWorld }
-       PlayWorld := False;
-       Key := #0;
-
-       SetYOffset (YBase);
-       SetYStart ($12);
-       SetYEnd ($7D);
-
-       ClearPalette;
-       LockPal;
-       ClearVGAMem;
-
-       TextCounter := 0;
-
-       WorldNumber := N1 + '-' + N2;
-       OnlyDraw := (N1 = #0) and (N2 = #0);
-
-       ShowObjects := TRUE;
-
-       InPipe := False;
-       PipeCode := '  ';
-       Demo := dmNoDemo;
-
-       InitLevelScore;
-       FillChar (TotalBackGrAddr, SizeOf (TotalBackGrAddr), #0);
-       ShowScore := FALSE;
-
-       if not Turbo then
-       begin
-         ReadWorld (Map2, WorldMap, Opt2);
-         Swap;
-         ReadWorld (Map1, WorldMap, Opt1);
-       end
-       else
-       begin
-         ReadWorld (Map2, WorldMap, Opt2b);
-         Swap;
-         ReadWorld (Map1, WorldMap, Opt1b);
-       end;
-
-       with Options do
-       begin
-         InitPlayer (InitX, InitY, Player);
-         MapX := InitX;
-         MapY := InitY;
-       end;
-
-       XView := 0;
-       YView := 0;
-
-       FillChar (LastXView, SizeOf (LastXView), 0);
-       SetView (XView, YView);
-
-     BuildLevel:
-
-       with Options do
-       begin
-         InitSky (SkyType);
-         InitWalls (WallType1, WallType2, WallType3);
-         InitPipes (PipeColor);
-         InitBackGr (BackGrType, Clouds);
-         if Stars <> 0 then
-           InitStars;
-       end;
-
-       BuildWorld;
-
-     Restart:
-       ResetStack;
-
-       TextStatus := FALSE;
-       InitStatus;
-
-       InitBlocks;
-       InitTempObj;
-       ClearGlitter;
-       ClearEnemies;
-
-       ShowPage;
-
-       GameDone := FALSE;
-       Passed := FALSE;
-
-       for i := - StartEnemiesAt to NH + StartEnemiesAt do
-       begin
-         j := (XView div W) + i;
-         StartEnemies (j, 1 - 2 * Byte (j > MapX));
-       end;
-
-       SetYOffset (YBase);
-
-       for i := 0 to MAX_PAGE do
-       begin
-         DrawSky (XView, 0, NH * W, NV * H);
-
-         StartClouds;
-
-         for X := XView div W - 1 to XView div W + NH do
-           for Y := 0 to NV - 1 do
-             Redraw (X, Y);
-
-         DrawBackGr (TRUE);
-         ReadColorMap;
-
-         if Options.Stars <> 0 then
-           ShowStars;
-
-         ShowEnemies;
-         if not OnlyDraw then
-           DrawPlayer;
-         ShowPage;
-       end;
-
-       Demo := dmNoDemo;
-       Waiting := FALSE;
-
-       NewPalette (P256^);
-       for i := 1 to 100 do  { Waterfalls }
-         BlinkPalette;
-
-       SetSkyPalette;
-       DrawPalBackGr;
-       InitGrass;
-
-       if OnlyDraw then
-         Exit;
-
-       UnLockPal;
-       FadeUp (64);
-       Palettes.ReadPalette (Palette);
-
-       TextStatus := Stat and (not PlayingMacro);
-
-       repeat
-
-         if not PlayingMacro then
-         begin
-
-           if Key = #31 then  { S - Status on/off }
-           begin
-             Stat := not Stat;
-             TextStatus := Stat;
-             Key := #255;
-           end;
-           if Key = #16 then  { Q - quiet/sound }
-           begin
-             if BeeperSound then
-               BeeperOff
-             else
-             begin
-               BeeperOn;
-               Beep (80);
-             end;
-             Key := #255;
-           end;
-
-           if Key in [#197, #198] then  { Pause/Break }
-           begin
-             PauseMusic;
-             repeat
-               while Key = #197 do ;
-             until kbHit;
-           end;
-         end
-         else
-           if Key <> #0 then
-           begin
-             GameDone := TRUE;
-             Passed := TRUE;
-           end;
-
-
-         if TextCounter in [40..40 + MAX_PAGE] then
-           ShowObjects := FALSE;
-
-         begin
-           HideGlitter;
-           if Options.Stars <> 0 then
-             HideStars;
-           if ShowObjects then
-             HideTempObj;
-           HideStatus;
-           if ShowScore then
-             HideTotalBack;
-           ErasePlayer;
-           if ShowObjects then
-           begin
-             HideEnemies;
-             EraseBlocks;
-           end;
-
-         end;
-
-       {  Fade; }
-         Inc (LavaCounter);
-
-         if not Waiting then
-           if Demo = dmNoDemo then
-           begin
-             MoveEnemies;
-             MovePlayer;
-           end
-           else
-             DoDemo;
-
-         if not Waiting then
-           if Passed then
-           begin
-             if (Demo = dmNoDemo) or (InPipe) then
-             begin
-               Waiting := TRUE;
-               TextCounter := 0;
-             end;
-             Inc (TextCounter);
-             if (not ShowScore) and (TextCounter in [50..50 + MAX_PAGE]) then
-             begin
-               SetFont (0, Bold + Shadow);
-               CenterText (20, PlayerName [Player], $1E);
-               SetFont (1, Bold + Shadow);
-               CenterText (40, 'STAGE CLEAR!', 31);
-               if TextCounter = 50 + MAX_PAGE then
-                 ShowScore := TRUE;
-             end;
-           end
-           else
-             if GameDone then
-             begin
-               Dec (Data.Lives [Player]);
-               Data.Mode [Player] := mdSmall;
-               TextCounter := 0;
-               Inc (Data.Score[Player], LevelScore);
-               Waiting := TRUE;
-               GameDone := FALSE;
-             end;
-
-         if Key = #25 then  { P - pause }
-           Pause;
-
-         if ShowScore and (TextCounter = 120) and (LevelScore > 0) then
-         begin
-           i := LevelScore - 50;
-           if i < 0 then i := 0;
-           Inc (Data.Score[Player], LevelScore - i);
-           LevelScore := i;
-           TextCounter := 119;
-           CountingScore := TRUE;
-         end
-         else
-           CountingScore := FALSE;
-
-         if Waiting then
-         begin
-           Inc (TextCounter);
-           if Data.Lives [player] = 0 then
-           begin
-             if TextCounter in [100..100 + MAX_PAGE] then
-             begin
-               SetFont (0, Bold + Shadow);
-               CenterText (20, PlayerName [Player], $1E);
-               SetFont (1, Bold + Shadow);
-               CenterText (40, 'GAME OVER', 31);
-               ShowScore := TRUE;
-             end;
-             if TextCounter > 350 then
-               GameDone := TRUE;
-           end
-           else
-             if Passed then
-             begin
-               if TextCounter > 250 then
-                 Waiting := FALSE;
-             end
-             else
-               if TextCounter > 100 then
-                 GameDone := TRUE;
-         end;
-
-         MoveTempObj;
-         MoveBlocks;
-
-         if (Key in [kbEsc, #129]) then
-           QuitGame := True;  { Esc }
-
-         MoveScreen;
-         RunRemove;
-
-         if Options.Horizon < NV then
-         begin
-           j := Options.Horizon - 1;
-           for i := 0 div W to NH do
-           begin
-             k := XView div W + (i + LavaCounter div 8) mod (NH + 1);
-             if WorldMap^ [k, j] = '%'
-             then
-               Redraw (k, j);
-           end;
-         end;
-
-         ResetStack;
-
-         begin
-           if ShowObjects then
-           begin
-             DrawBlocks;
-             ShowEnemies;
-           end;
-           DrawPlayer;
-
-           if ShowScore then
-             ShowTotalBack;
-           if TextStatus then
-             ShowStatus;
-           if ShowObjects then
-             ShowTempObj;
-           if Options.Stars <> 0 then
-             ShowStars;
-           ShowGlitter;
-         end;
-
-         LastXView [CurrentPage] := XView;
-
-         if ShowRetrace then
-           SetPalette (0, 0, 0, 0);
-
-         ShowPage;
-
-         if ShowRetrace then
-           SetPalette (0, 63, 63, 63);
-
-         DrawPalBackGr;
-
-         BlinkPalette;
-
-         PlayMusic;
-
-         if InPipe and PlayingMacro then
-           GameDone := TRUE;
-
-         if InPipe and (not GameDone) and (not Waiting) then
-         begin
-           StopEnemies;
-           ClearGlitter;
-           FadeDown (64);
-           ClearPalette;
-           LockPal;
-           ClearVGAMem;
-
-           case PipeCode [1] of
-             'à': begin
-                    FindPipeExit;
-                    Delay (100);
-                  end;
-             'á': begin
-                    Swap;
-                    FindPipeExit;
-                  end;
-             'ç': begin
-                    GameDone := True;
-                    PlayWorld := True;
-                  end;
-
-           end;
-
-           InitPlayer (MapX * W + W div 2, (MapY - 1) * H, Player);
-
-           SetView (XView, YView);
-           SetYOffset (YBase);
-
-           for i := 0 to MAX_PAGE do
-             LastXView [i] := XView;
-
-           if PipeCode [1] in ['à'] then
-             GoTo Restart
-           else
-             if PipeCode [1] in ['á'] then
-               GoTo BuildLevel;
-         end;
-       until GameDone or QuitGame;
-
-       SetYOffset (YBase);
-
-       ClearEnemies;
-       ClearGlitter;
-       FadeDown (64);
-       ClearPalette;
-       ClearVGAMem;
-       StopMusic;
-     end;
-
-   end.
-	   **/
+		PlayWorld = false;
+		Key = 0;
+		
+		SetYOffset (YBase);
+		SetYStart (18.ToString("X"));
+		SetYEnd (125.ToString("X"));
+		
+		ClearPalette();
+		LockPal();
+		ClearVGAMem();
+		
+		TextCounter = 0;
+		
+		WorldNumber = N1 + '-' + N2;
+		OnlyDraw = ((N1 = 0) && (N2 = 0));
+		
+		ShowObjects = true;
+		
+		InPipe = false;
+		PipeCode = '  ';
+		Demo = dmNoDemo;
+		
+		InitLevelScore();
+		
+		FillChar (TotalBackGrAddr, TotalBackGrAddr.Size(), 0);
+		ShowScore = false;
+		
+		if (! Turbo)
+		{
+			ReadWorld (Map2, WorldMap, Opt2);
+			Swap();
+			ReadWorld (Map1, WorldMap, Opt1);
+		}
+		else
+		{
+			ReadWorld (Map2, WorldMap, Opt2b);
+			Swap();
+			ReadWorld (Map1, WorldMap, Opt1b);
+		}
+		
+		Options.InitPlayer (InitX, InitY, Player);
+		Options.MapX = InitX;
+		Options.Mapy = InitY;
+		
+		XView = 0;
+		YView = 0;
+		
+		FillChar (LastXView, LastXView.Size(), 0);
+		SetView (XView, YView);
+		
+		void BuildLevel()
+		{
+				InitSky (SkyType);
+				InitWalls (WallType1, WallType2, WallType3);
+				InitPipes (PipeColor);
+				InitBackGr (BackGrType, Clouds);
+				if (Stars != 0)
+					InitStars();
+				
+				BuildWorld();
+		}
+		
+		void Restart()
+		{
+			ResetStack();
+			
+			TextStatus = false;
+			InitStatus();
+			
+			InitBlocks();
+			InitTempObj();
+			ClearGlitter();
+			ClearEnemies();
+			
+			ShowPage();
+			
+			GameDone = false;
+			Passed = false;
+			
+			for (int i = StartEnemiesAt * -1; i < NH + StartEnemiesAt; i++)
+			{
+				j = (XView / W) + i;
+				StartEnemies (j, 1 - 2 * System.Text.ASCIIEncoding.GetBytes(j > MapX));
+			}
+			
+			SetYOffset (YBase);
+			
+			for (int i = 0; i < MAX_PAGE; i++)
+			{
+				DrawSky (XView, 0, NH * W, NV * H);
+				
+				StartClouds();
+				
+				for (int x = XView / W - 1; x < XView / W + NH; x++)
+					for (int y = 0; y < NV - 1; y++)
+						Redraw (x, y);
+					
+				DrawBackGr(true);
+				ReadColorMap();
+				
+				if (Options.Stars != 0)
+					ShowStars();
+					
+				ShowEnemies(0;
+				if (! OnlyDraw)
+					DrawPlayer();
+				ShowPage();				
+			}
+			
+			Demo = dmNoDemo;
+			Waiting = false;
+			
+			NewPalette (P256*);
+			for (int i = 1; i < 100; i++)
+			{
+				//Waterfalls()?
+				BlinkPalette();
+			}
+			
+			SetSkyPalette();
+			DrawPalBackGr();
+			InitGrass();
+			
+			if (OnlyDraw)
+				Exit();
+				
+			UnLockPal();
+			FadeUp (64);
+			Palettes.ReadPalette (Palette);
+			
+			TextStatus = (Stat && !PlayingMacro);
+			
+			do //until gamedone
+			{
+				if (!PlayingMacro)
+				{
+					if (Key = 31) //'S'
+					{
+						Stat = !Stat;
+						TextStatus = Stat;
+						Key = 255;
+					}
+					if (Key = 16) //'Q'
+					{
+						if (BeeperSound)
+							BeeperOff();
+						else
+						{
+							BeeperOn();
+							Beep (80);
+						}
+						Key = 255;
+					}
+					
+					if (Key == 197 || Key == 198) //Pause/Break
+					{
+						PauseMusic();
+						do
+						{
+							while (Key = 197) {} //busy wait of some sort?
+						} while kbHit;
+					}
+					else
+					{
+						if (Key != 0)
+						{
+							GameDone = true;
+							Passed = true;
+						}
+					}
+					
+					if (TextCounter) //in 40..40+MAX_PAGE
+						ShowObjects = false;
+						
+					HideGlitter();
+					if (Options.Stars != 0)
+						HideStars();
+					if (ShowObjects)
+						HideTempObj();
+					if (ShowScore)
+						HideTotalBack();
+					ErasePlayer();
+					if (ShowObjects)
+					{
+						HideEnemies();
+						EraseBlocks();
+					}
+				}
+				
+				// { Fade }; 
+				LavaCounter++;
+				
+				if (!Waiting)
+					if (Demo == dmNoDemo)
+					{
+						MoveEnemies();
+						MovePlayer();
+					}
+					else
+						DoDemo();
+				
+				if (!Waiting)
+				{
+					if (Passed)
+					{
+						if (Demo = dmNoDemo || InPipe)
+						{
+							Waiting = true;
+							TextCounter = 0;
+						}
+						TextCounter++;
+						if (!ShowScore && (TextCounter)) //in 50..50 + MAX_PAGE
+						{
+							//SetFont (0, Bold + Shadow);
+							CenterText (20, PlayerName [Player], 30.ToString("X"));
+							//SetFont(1, Bold + Shadow);
+							CenterText (40, "STAGE CLEAR!", 31);
+							if (TextCounter = 50 + MAX_PAGE)
+								ShowScore = true;
+						}
+					}
+					else
+						if (GameDone)
+						{
+							Data.Lives[Player]--;
+							Data.Mode[Player = mdSmall;
+							TextCounter = 0;
+							Data.Score[Player] += LevelScore;
+							Waiting = true;
+							GameDone = false;
+						}
+				}
+				
+				if (Key = 25) //P
+					Pause();
+					
+				if (ShowScore && (TextCounter == 120) && (LevelScore > 0))
+				{
+					i = LevelScore - 50;
+					if (i < 0)
+						i = 0;
+					Data.Score[Player] += LevelScore - 1;
+					LevelScore = i;
+					TextCounter = 119;
+					CountingScore = true;
+				}
+				else
+					CountingScore = false;
+				
+				if (Waiting)
+				{
+					TextCounter++;
+					if (Data.Lives[Player] == 0)
+					{
+						if (TextCounter) //in 100..100 + MAX_PAGE
+						{
+							//SetFont (0, Bold + Shadow);
+							CenterText (20, PlayerName[Player], 30.ToString("X"));
+							//SetFont (1, Bold + Shadow);
+							CenterText (40, "GAME OVER", 31);
+							ShowScore = true;
+						}
+						if (TextCounter > 350)
+							GameDone = true;
+					}
+					else
+						if (Passed)
+						{
+							if (TextCounter > 250)
+								Waiting = false;
+						}
+						else
+							if (TextCounter > 100)
+								GameDone = true;
+				}
+				MoveTempObj();
+				MoveBlocks();
+				
+				if (Key == kbEsc || Key == 129)
+					QuitGame = true;
+					
+				MoveScreen();
+				RunRemove();
+				
+				if (Options.Horizon < NV)
+				{
+					j = Options.Horizon - 1;
+					for (int i = 0 / W; i < NH; i++)
+					{
+						k = XView / W + (i + LavaCounter / 8) % (NH + 1);
+						if (WorldMap * [k, j] = '%')
+							Redraw(k, j);
+					}
+				}
+				
+				ResetStack();
+				
+				if (ShowObjects)
+				{
+					DrawBlocks();
+					ShowEnemies();
+				}
+				DrawPlayer();
+				
+				if (ShowScore)
+					ShowTotalBack();
+				if (TextStatus)
+					ShowStatus();
+				if (ShowObjects)
+					ShowTempObj();
+				if (Options.Stars != 0)
+					ShowStars();
+				ShowGlitter();
+				
+				LastXView[CurrentPage] = XView;
+				
+				if (ShowRetrace)
+					SetPalette(0, 0, 0, 0);
+					
+				ShowPage();
+				
+				if (ShowRetrace)
+					SetPalette( 0, 63, 63, 63);
+					
+				DrawPalBackGr();
+				
+				BlinkPalette();
+				
+				PlayMusic();
+				
+				if (InPipe && PlayingMacro)
+					GameDone = true;
+					
+				if (InPipe && !GameDone && !Waiting)
+				{
+					StopEnemies();
+					ClearGlitter();
+					FadeDown(64);
+					ClearPalette();
+					LockPal();
+					ClearVGAMem();
+					
+					switch (PipeCode[1])
+					{
+						case 'à'
+							FindPipeExit();
+							Delay(100);
+							break;
+						case 'á'
+							Swap();
+							FindPipeExit();
+							break;
+						case 'ç'
+							GameDone = true;
+							PlayWorld = true;
+							break;
+					}
+					
+					InitPlayer (MaxX * W + W / 2, (MapY - 1) * H, Player);
+					
+					SetView (XView, YView);
+					SetYOffset (YBase);
+					
+					for (int i = 0; i < MAX_PAGE); i++)
+						LastXView[i] = XView;
+						
+					if PipeCode[1] == 'à'
+						Restart();
+					else
+						if (PipeCode[1] == 'á')
+							BuildLevel();
+					
+				}
+				
+				
+			} while (GameDone || QuitGame)
+			
+			SetYOffset(YBase);
+			
+			ClearEnemies();
+			ClearGlitter();
+			FadeDown(64);
+			ClearPalette();
+			ClearVGAMem();
+			StopMusic();
+		}
    }
 }
 }
