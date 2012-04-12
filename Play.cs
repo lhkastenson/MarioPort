@@ -33,7 +33,7 @@ interface
 **/
 namespace MarioPort
 {
-public class Play
+public statuc class Play
 {
 	public const bool Stat = false;
 	public const bool ShowRetrace = false;
@@ -116,10 +116,10 @@ public class Play
 					}
 	   }
 	   
-	   bool Waiting;
-	   bool TextStatus;
-	   int[] TotalBackGrAddr = new int[MAX_PAGE];
-	   bool ShowScore, CountingScore, ShowObjects, OnlyDraw;
+	   public static bool Waiting;
+	   public static bool TextStatus;
+	   public static int[] TotalBackGrAddr = new int[MAX_PAGE];
+	   public static bool ShowScore, CountingScore, ShowObjects, OnlyDraw;
 	   
 	   public void WriteTotalScore()
 	   {
