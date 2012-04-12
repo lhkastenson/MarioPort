@@ -237,7 +237,7 @@ namespace MarioPort
       public const int dmDownOutOfPipe = 4;
       public const int dmDead = 5;
 	
-      public void ReadWorld(Map Map, ref WorldBuffer W, Opt Opt)
+      public void ReadWorld(byte[,] Map, ref WorldBuffer W, WorldOptions Opt)
       {
          MapBuffer M;
          int i, j, x;
