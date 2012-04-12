@@ -16,13 +16,13 @@ namespace MarioPort
       private Graphics graphics;
 
       //const VGA_SEGMENT = $A000;  do not think we will need this
-      const int windowHeight = 13 * 14;
-      const int windowWidth = 16 * 20;
+      public const int windowHeight = 13 * 14;
+      public const int windowWidth = 16 * 20;
       public const int screenWidth = 320;
-      const int screenHeight = 200;
-      const int virScreenWidth = screenWidth + 2 * 20;
-      const int virScreenHeight = 182;
-      const int bytesPerLine = virScreenWidth / 4;
+      public const int screenHeight = 200;
+      public const int virScreenWidth = screenWidth + 2 * 20;
+      public const int virScreenHeight = 182;
+      public const int bytesPerLine = virScreenWidth / 4;
 
       /*MISC_OUTPUT         = $03C2;
       SC_INDEX            = $03C4;

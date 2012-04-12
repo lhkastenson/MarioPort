@@ -118,7 +118,7 @@ namespace MarioPort
       public static WorldOptions SaveOptions;
       public static int XView;
       public static int YView;
-      //public static int[] LastXView = new int[MAX_PAGE];
+      public static int[] LastXView = new int[FormMarioPort.MAX_PAGE];
       public static byte[,] StarBuffer;
       public static byte[,] StarBackGr;
       public static int Size;
