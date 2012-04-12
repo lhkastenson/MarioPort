@@ -111,16 +111,18 @@ namespace MarioPort
 
       public static bool GameDone;
       public static bool Passed;
+      public static byte[,] WorldBuffer;
       public static byte[,] WorldMap;
       public static byte[,] SaveWorldMap;
       public static WorldOptions Options = new WorldOptions();
       public static WorldOptions SaveOptions;
       public static int XView;
       public static int YView;
-      //public static int[] LastXView = new int[Game.MAX_PAGE];
-      //public StarBuffer * StarBackGr;
+      //public static int[] LastXView = new int[MAX_PAGE];
+      public static byte[,] StarBuffer;
+      public static byte[,] StarBackGr;
       public static int Size;
-      //public PictureBuffer * Pictures;
+      public static byte[,] PictureBuffer;
       public static int Demo;
       public static int TextCounter;
       public static byte LavaCounter;
