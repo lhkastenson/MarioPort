@@ -41,7 +41,7 @@ namespace MarioPort
       byte MODE_CONTROL = 23;
 
       const int readMap = 4;
-      const int graphicsMode = 5;
+      public int graphicsMode = 5;
       const int misc = 6;
 
       const int maxScreens = 24;
@@ -135,14 +135,14 @@ namespace MarioPort
       // get video mode
       public byte GetMode()
       {
-         return 1;
+         return (byte)graphicsMode;
       }
 
       //procedure SetMode (NewMode: Byte);
       // set video mode
       public void SetMode(byte newMode)
       {
-
+          graphicsMode = newMode;
       }
 
       //procedure ClearVGAMem;
@@ -174,8 +174,7 @@ namespace MarioPort
       //{ Set the offset of video memory }
       public void SetViewport(int X, int Y, byte PageNr)
       {
-         int i;
-
+          
       }
 
       //procedure SwapPages;
@@ -252,7 +251,9 @@ namespace MarioPort
       //{ Draw a single pixel at (X, Y) with color Attr }
       public void PutPixel(int x, int y, byte attr)
       {
-
+          Color color = Color.FromArgb(attr);
+          Pen pen = new Pen(color, 1);
+          graphics.DrawLine(pen, x, y, x, y);
       }
 
       //function GetPixel (X, Y: Integer): Byte;
@@ -271,14 +272,14 @@ namespace MarioPort
       //procedure DrawPart (XPos, YPos, Width, Height, Y1, Y2: Integer; var BitMap);
       public void DrawPart(int xPos, int yPos, int width, int height, int y1, int y2, Bitmap var)
       {
-
+          //graphics.DrawImage(var, xPos, yPos, width, height);
       }
 
       //procedure UpSideDown (XPos, YPos, Width, Height: Integer; var BitMap);
       //{ Draw an image on the screen up-side-down (NULL-bytes are ignored) }
       public void UpSideDown(int xPos, int yPos, int width, int height, Bitmap var)
       {
-
+          
       }
 
       //procedure GetImage (XPos, YPos, Width, Height: Integer; var BitMap);
@@ -291,13 +292,16 @@ namespace MarioPort
       //{ Fills an area on the screen with Attr }
       public void Fill(int x, int y, int width, int height, int attr)
       {
+          Color color = Color.FromArgb(attr);
+          SolidBrush br = new SolidBrush(color);
+          graphics.FillRectangle(br, x, y, width, height);
 
       }
 
       //procedure SetPalette (Color, Red, Green, Blue: Byte);
       public void setPalete(byte color, byte red, byte green, byte blue)
       {
-
+          
       }
 
       //procedure ReadPalette (var NewPalette);
@@ -525,9 +529,9 @@ namespace MarioPort
 
       //procedure DrawBitmap (X, Y: Integer; var BitMap; Attr: Byte);
       //{ Bitmap starts with size W, H (Byte) }
-      public static void DrawBitmap(int x, int y, Bitmap var, byte attr)
+      public void DrawBitmap(int x, int y, Bitmap var, byte attr)
       {
-
+           //graphics.DrawImage(var, x, y);
       }
    }
 }
