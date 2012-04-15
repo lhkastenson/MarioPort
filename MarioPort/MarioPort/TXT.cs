@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace MarioPort
 {
@@ -28,7 +29,8 @@ namespace MarioPort
          //bBold := Style or Bold = Style;
          //bShadow := Style or Shadow = Style;
       }
-
+      // according to how this is called in WriteText it should return bitmap 
+      // of the char ar the ascii value i.
       public void Letter(int i)
       {
          //ushort w1, w2;
@@ -48,7 +50,6 @@ namespace MarioPort
          //end;
          //Letter := Ptr (W1, W2);*/
          //return UIntPtr(w1, w2);
-
       }
 
       public int TextWidth(string s)
@@ -101,10 +102,10 @@ namespace MarioPort
          //    if (bBold)
          //    {
          //        if (bShadow)
-         //            Game.DrawBitmap(x, y + 1 /*Letter(Ord(c))^*/, 16);
-         //        Game.DrawBitmap(x - 1, y /*Letter(Ord(c))^*/, attr);
+         //            FormMarioPort.DrawBitmap(x, y + 1, Letter(Ord(c))^, 16);
+         //        FormMarioPort.DrawBitmap(x - 1, y, Letter(Ord(c))^, attr);
          //    }
-         //    Game.DrawBitmap(x, y /*Letter(Ord(c))^*/, attr);
+         //    FormMarioPort.DrawBitmap(x, y, Letter((int)c), attr);
          //    x += TextWidth(c + "");
          //    i++;
          //}
@@ -112,8 +113,7 @@ namespace MarioPort
 
       public int CenterX(string s)
       {
-         //return Game.xView + (Game.screenWidth - TextWidth(s)) >> 1;
-         return 1;
+          return FormMarioPort.xView + (FormMarioPort.screenWidth - TextWidth(s)) >> 1;
       }
 
       public void CenterText(int y, string s, byte attr)
