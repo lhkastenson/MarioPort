@@ -172,9 +172,9 @@ namespace MarioPort
 //        }
 //      }
 //      }
-      
-      private static void Mirror(ref Bitmap from, ref Bitmap to)
-      {
+      **/
+      public static void Mirror(ref System.Drawing.Bitmap from, ref System.Drawing.Bitmap to)
+      { /**
 //        type
 //          PlaneBuffer = array[0..H - 1, 0..W div 4 - 1] of Byte;
 //          PlaneBufferArray = array[0..3] of PlaneBuffer;
@@ -198,7 +198,7 @@ namespace MarioPort
 //        Swap (0, 3);
 //        Swap (1, 2);
 //      }
-      }
+      **/}/**
 
       private static void Rotate(ref Bitmap from, ref Bitmap to)
       {
