@@ -18,9 +18,12 @@ namespace MarioPort
          public bool SLine;
          public static Buffers.GameData[] Games =
             {
-               Buffers.GameData.Create(),
-               Buffers.GameData.Create(),
-               Buffers.GameData.Create()
+               new Buffers.GameData(),
+               new Buffers.GameData(),
+               new Buffers.GameData()
+               //Buffers.GameData.Create(),
+               //Buffers.GameData.Create(),
+               //Buffers.GameData.Create()
             };
          public bool UseJS;
          //public JoyRec JSDat;
@@ -64,7 +67,7 @@ namespace MarioPort
       {
          //byte absolute len = S;
          string S = args[0];
-         // Not sure if we absolutely need this function it's in all the preprocessor
+         // Not sure if we absolutely need this function it's calls are in all the preprocessor
          // debug statements
          //S[S.Length - 2] = "C";
          //S[S.Length - 1] = "F";
@@ -84,21 +87,21 @@ namespace MarioPort
    		Close(F);
    		if IOResult != 0 
 #endif
-         {
-            NewData();
-            for(int i = 0; i < MAX_SAVE - 1; i++)
-               ConfigData.Games[i] = Buffers.data;  //pretty sure this needs to be Config.Games[i] but it errors out
-            Config.SLine = true;
-            Config.Sound = true;
-            Config.UseJS = false;
-            GameNumber = -1;
-         }
+         //{
+         //   NewData();
+         //   for(int i = 0; i < MAX_SAVE - 1; i++)
+         //      ConfigData.Games[i] = Buffers.data;  //pretty sure this needs to be Config.Games[i] but it errors out
+         //   Config.SLine = true;
+         //   Config.Sound = true;
+         //   Config.UseJS = false;
+         //   GameNumber = -1;
+         //}
          Play.Stat = Config.SLine;
          Buffers.BeeperSound = Config.Sound;
-         Name = args[0];
-         j = 0;
-         if(Name.Length > 9)
-            Name = Name.Remove(1, Name.Length - 9);
+         //Name = args[0];
+         //j = 0;
+         //if(Name.Length > 9)
+         //   Name = Name.Remove(1, Name.Length - 9);
          //for(int i = 0; i < Name.Length; i++)
          //Inc(j, Ord(Name[i].ToUpper));
          //if (j != 648)
@@ -187,12 +190,12 @@ namespace MarioPort
       public static void Demo()
       {
          NewData();
-         //TurboType Turbo = false;
+         Enemies.Turbo = false;
          Buffers.data.progress[Buffers.plMario] = 5;
-         //PlayMacro();
+         //Keyboard.PlayMacro();
          Play.PlayWorld(' ', ' ', Worlds.Level_6a(), Worlds.Options_6a(), Worlds.Options_6a(),
                  Worlds.Level_6b(), Worlds.Options_6b(), Worlds.Options_6b(), Buffers.plMario);
-         //Play.StopMacro();
+         //Keyboard.StopMacro();
       }
       public static void Intro()
       {
@@ -212,31 +215,31 @@ namespace MarioPort
          Status = Statuses.ST_NONE;
          TestVGAMode = false;
          GameNumber = -1;
-         NextNumPlayers = Buffers.data.numPlayers[CurPlayer];
+         NextNumPlayers = Buffers.data.numPlayers;
 
          do //until IntroDone and (not TestVGAMode);
          {
-            //if(TestVGAMode)
-            //   InitVGA();
+            //if(FormMarioPort.formRef.TestVGAMode)
+            //   FormMarioPort.InitVGA();
             TestVGAMode = false;
             IntroDone = false;
             NewData();
 
             Play.PlayWorld('0', '0', Worlds.Intro_0(), Worlds.Options_0(), Worlds.Options_0(),
                     Worlds.Intro_0(), Worlds.Options_0(), Worlds.Options_0(), Buffers.plMario);
-            //InitBackGr(3, 0);
+            //BackGr.InitBackGr(3, 0);
 
-            //OutPalette(0xA0, 35, 45, 50);
-            //OutPalette(0xA1, 45, 55, 60);
+            //Palettes.OutPalette(0xA0, 35, 45, 50);
+            //Palettes.OutPalette(0xA1, 45, 55, 60);
 
-            //OutPalette(0xEF, 30, 40, 30);
-            //OutPalette(0x18, 10, 15, 25);
+            //Palettes.OutPalette(0xEF, 30, 40, 30);
+            //Palettes.OutPalette(0x18, 10, 15, 25);
 
-            //OutPalette(0x8D, 28, 38, 50);
-            //OutPalette(0x8F, 40, 50, 63);
+            //Palettes.OutPalette(0x8D, 28, 38, 50);
+            //Palettes.OutPalette(0x8F, 40, 50, 63);
 
             //for(int i = 1; i < 50; i++)
-            //   BlinkPalette();
+            //   Palettes.BlinkPalette();
 
             for(int p = 0; p < FormMarioPort.MAX_PAGE; p++)
             {
@@ -522,7 +525,7 @@ namespace MarioPort
 
          if(GameNumber != -1)
             Buffers.data = ConfigData.Games[GameNumber];
-         ConfigData.Games[GameNumber].numPlayers[CurPlayer] = NextNumPlayers;
+         ConfigData.Games[GameNumber].numPlayers = NextNumPlayers;
       }
 
       static void ShowPlayerName(byte Player)
@@ -560,9 +563,9 @@ namespace MarioPort
       public static void main(string[] args)
       {
          //Keyboard.InitKeyBoard();
-         Buffers.data.numPlayers[CurPlayer] = 1;
+         Buffers.data.numPlayers = 1;
          ReadConfig(args);
-         ReadCmdLine(args);
+         //ReadCmdLine(args);
 
          //jr = Config.JSDat;
          //jsEnabled = jsDetected() && Config.UseJS();
@@ -586,25 +589,25 @@ namespace MarioPort
 **/
 #endif
 
-         //if(!FormMarioPort.DetectVga)
-         //{
-         //   Console.Write("VGA graphics adapter required");
+         if(!FormMarioPort.formRef.DetectVGA())
+         {
+            Console.Write("VGA graphics adapter required");
          //   //halt (1);
-         //}
+         }
 
          //Keyboard.ResetKeyBoard();
 
-         //if(!FormMarioPort.InGraphicsMode)
-         //   FormMarioPortInitVGA();
+         if(!FormMarioPort.formRef.InGraphicsMode)
+            FormMarioPort.formRef.InitializeVGA();
 
 #if DEBUG
          do
          {
 #endif
-            //FormMarioPort.ClearVGAMem();
+            FormMarioPort.formRef.ClearVGAMem();
 
-            //Figures.InitPlayerFigures();
-            //Figures.InitEnemyFigures();
+            Players.InitPlayerFigures();
+            Enemies.InitEnemyFigures();
 
             EndGame = false;
 #if MENU
@@ -612,7 +615,7 @@ namespace MarioPort
 #endif
             //Randomize();
 
-            if(Buffers.data.numPlayers[CurPlayer] == 2)
+            if(Buffers.data.numPlayers == 2)
                if(Buffers.data.progress[Buffers.plMario] > Buffers.data.progress[Buffers.plLuigi])
                   Buffers.data.progress[Buffers.plLuigi] = Buffers.data.progress[Buffers.plMario];
                else
@@ -629,9 +632,9 @@ namespace MarioPort
 
             do //until EndGame or QuitGame 
             {
-               if(Buffers.data.numPlayers[CurPlayer] == 1)
+               if(Buffers.data.numPlayers == 1)
                   Buffers.data.lives[Buffers.plLuigi] = 0;
-               for(CurPlayer = Buffers.plMario; CurPlayer < Buffers.data.numPlayers[CurPlayer]; CurPlayer++)
+               for(CurPlayer = Buffers.plMario; CurPlayer < Buffers.data.numPlayers; CurPlayer++)
                {
                   if(!(EndGame || Buffers.QuitGame))
                      if(Buffers.data.lives[CurPlayer] >= 1)

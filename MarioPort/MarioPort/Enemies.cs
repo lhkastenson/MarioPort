@@ -63,7 +63,7 @@ namespace MarioPort
       public const int kGreen = 0;
       public const int kRed = 1;
       
-      public const bool Turbo = false;
+      public static bool Turbo = false;
       
       public static byte cdChamp;
       public static byte cdLife;
@@ -141,9 +141,9 @@ namespace MarioPort
       // TODO
 //      TimeCounter: Byte;
       private static byte TimeCounter;
-
+      **/
       private static Image[,] EnemyPictures = new Image[MaxEnemies, Right - Left + 1];
-
+      /**
       private static void Kill(int i)
       {
          EnemyRec enemyRec = EnemyList[i];
@@ -237,12 +237,12 @@ namespace MarioPort
       //  var
       //    Source, Dest: PlaneBufferArrayPtr;
       //}
-      
+      **/
       private static void Mirror20x24(ref Bitmap from, ref Bitmap to)
       {
          
       }
-      
+      /**
       //private static void Swap (byte Plane1, byte Plane2)
       //{
       //       var
@@ -261,7 +261,7 @@ namespace MarioPort
       //   }
       //}
 
-
+      **/
       public static void InitEnemyFigures()
       {
          EnemyPictures[1, Right] = Resources.CHIBIBO_000;
@@ -271,7 +271,7 @@ namespace MarioPort
          EnemyPictures[5, Right] = Resources.CHIBIBO_003;
 
          EnemyPictures[3, Left] = Resources.FISH_001;
-         Mirror(EnemyPictures[3, Left], EnemyPictures[3, Right]);
+         //Figures.Mirror(ref EnemyPictures[3, Left], ref EnemyPictures[3, Right]);
 
          EnemyPictures[6, Left] = Resources.RED_000;
          EnemyPictures[7, Left] = Resources.RED_001;
@@ -285,10 +285,10 @@ namespace MarioPort
          for( int i = 0; i < MaxEnemies; i++ )
          {
             if ( i == 6 || i == 7 )
-               Mirror(ref EnemyPictures[i, Left], ref EnemyPictures[i, Right]);
+               ;//Figures.Mirror(ref EnemyPictures[i, Left], ref EnemyPictures[i, Right]);
             else
                if ( i != 3 )
-                  Mirror(ref EnemyPictures[i, Left], ref EnemyPictures[i, Right]);
+                  ;// Figures.Mirror(ref EnemyPictures[i, Left], ref EnemyPictures[i, Right]);
          }
          
          for( int i = 0; i <= 1; i++ )
@@ -301,7 +301,7 @@ namespace MarioPort
       }
 
       public static void ClearEnemies()
-      {
+      {/**
          for (int i = 0; i < MaxEnemiesAtOnce; i++)
          {
             EnemyList[i].Tp = EnemyType.tpDead;
@@ -316,7 +316,7 @@ namespace MarioPort
          cdHit = 0;
          cdLift = 0;
          cdStopJump = 0;
-      }
+      **/}/**
 
       public static void StopEnemies()
       {

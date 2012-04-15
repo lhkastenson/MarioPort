@@ -44,139 +44,138 @@ namespace MarioPort
       public static int Small;
 
       //// implementation ////
-/*
-      private const int Safe = EY1;
-      private const int HSafe = H * Safe;
+      /*
+            private const int Safe = EY1;
+            private const int HSafe = H * Safe;
 
-      private static bool keyLeft;
-      private static bool keyRight;
-      private static bool keyUp;
-      private static bool keyDown;
-      private static bool keyAlt;
-      private static bool keyCtrl;
-      private static bool keyLeftShift;
-      private static bool keyRightShift;
-      private static bool keySpace;
+            private static bool keyLeft;
+            private static bool keyRight;
+            private static bool keyUp;
+            private static bool keyDown;
+            private static bool keyAlt;
+            private static bool keyCtrl;
+            private static bool keyLeftShift;
+            private static bool keyRightShift;
+            private static bool keySpace;
 
-      struct ScreenRec
-      {
-         public static bool Visible;
-         public static int XPos;
-         public static int YPos;
-         public uint BackGrAddr;
-      }
+            struct ScreenRec
+            {
+               public static bool Visible;
+               public static int XPos;
+               public static int YPos;
+               public uint BackGrAddr;
+            }
       
-      private static ScreenRec[] SaveScreen = new ScreenRec[MAX_PAGE + 1];
+            private static ScreenRec[] SaveScreen = new ScreenRec[MAX_PAGE + 1];
 
-      private static int X;
-      private static int Y;
-      private static int OldX;
-      private static int OldY;
-      private static int DemoX;
-      private static int DemoY;
-      private static int DemoCounter1;
-      private static int DemoCounter2;
-      private static int XVel;
-      private static int YVel;
+            private static int X;
+            private static int Y;
+            private static int OldX;
+            private static int OldY;
+            private static int DemoX;
+            private static int DemoY;
+            private static int DemoCounter1;
+            private static int DemoCounter2;
+            private static int XVel;
+            private static int YVel;
       
-      private static byte Direction;
-      private static byte Status;
-      private static byte Walkingmode;
-      private static byte Counter;
-      private static byte WalkCount;
+            private static byte Direction;
+            private static byte Status;
+            private static byte Walkingmode;
+            private static byte Counter;
+            private static byte WalkCount;
       
-      private static bool HighJump;
-      private static bool HitEnemy;
-      private static bool Jumped;
-      private static bool Fired;
+            private static bool HighJump;
+            private static bool HitEnemy;
+            private static bool Jumped;
+            private static bool Fired;
       
-      private static int FireCounter;
-      private static int StarCounter;
-      private static int GrowCounter;
-      private static int BlinkCounter;
+            private static int FireCounter;
+            private static int StarCounter;
+            private static int GrowCounter;
+            private static int BlinkCounter;
       
-      private static char AtCh1;
-      private static char AtCh2;
-      private static char Below1;
-      private static char Below2;
+            private static char AtCh1;
+            private static char AtCh2;
+            private static char Below1;
+            private static char Below2;
 
       
-//      private static void HighMirror (P1, P2: Pointer)
-//      {
-//        type
-//          PlaneBuffer = array[0..2 * H - 1, 0..W / 4 - 1] of Byte;
-//          PlaneBufferArray = array[0..3] of PlaneBuffer;
-//          PlaneBufferArrayPtr = ^PlaneBufferArray;
-//        var
-//          Source, Dest: PlaneBufferArrayPtr;
-//        private static void Swap (Plane1, Plane2: Byte );
-//          var
-//            i, j: Byte;
-//        {
-//          for j = 0 to 2 * H - 1 do
-//            for i = 0 to W / 4 - 1 do
-//            {
-//              Dest^[Plane2, j, i] = Source^[Plane1, j, W / 4 - 1 - i];
-//              Dest^[Plane1, j, i] = Source^[Plane2, j, W / 4 - 1 - i];
-//            }
-//        }
-//      {
-//        Source = P1;
-//        Dest = P2;
-//        Swap (0, 3 );
-//        Swap (1, 2 );
-//      }
-//      }
+      //      private static void HighMirror (P1, P2: Pointer)
+      //      {
+      //        type
+      //          PlaneBuffer = array[0..2 * H - 1, 0..W / 4 - 1] of Byte;
+      //          PlaneBufferArray = array[0..3] of PlaneBuffer;
+      //          PlaneBufferArrayPtr = ^PlaneBufferArray;
+      //        var
+      //          Source, Dest: PlaneBufferArrayPtr;
+      //        private static void Swap (Plane1, Plane2: Byte );
+      //          var
+      //            i, j: Byte;
+      //        {
+      //          for j = 0 to 2 * H - 1 do
+      //            for i = 0 to W / 4 - 1 do
+      //            {
+      //              Dest^[Plane2, j, i] = Source^[Plane1, j, W / 4 - 1 - i];
+      //              Dest^[Plane1, j, i] = Source^[Plane2, j, W / 4 - 1 - i];
+      //            }
+      //        }
+      //      {
+      //        Source = P1;
+      //        Dest = P2;
+      //        Swap (0, 3 );
+      //        Swap (1, 2 );
+      //      }
+      //      }
 
-      // NOTE: I'm guessing that "Mirror" means flip over Y axis
-      
+            // NOTE: I'm guessing that "Mirror" means flip over Y axis
+            **/
       private static void HighMirror(Bitmap from, ref Bitmap to)
       {
          
       }
-
+      
       public static void InitPlayerFigures()
       {
-         Pictures[plMario, mdSmall, 0, dirLeft] = Resources.SWMAR_000;
-         Pictures[plMario, mdSmall, 1, dirLeft] = Resources.SWMAR_001;
-         Pictures[plMario, mdSmall, 2, dirLeft] = Resources.SJMAR_000;
-         Pictures[plMario, mdSmall, 3, dirLeft] = Resources.SJMAR_001;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdSmall, 0, Buffers.dirLeft] = Resources.SWMAR_000;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdSmall, 1, Buffers.dirLeft] = Resources.SWMAR_001;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdSmall, 2, Buffers.dirLeft] = Resources.SJMAR_000;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdSmall, 3, Buffers.dirLeft] = Resources.SJMAR_001;
 
-         Pictures[plMario, mdLarge, 0, dirLeft] = Resources.LWMAR_000;
-         Pictures[plMario, mdLarge, 1, dirLeft] = Resources.LWMAR_001;
-         Pictures[plMario, mdLarge, 2, dirLeft] = Resources.LJMAR_000;
-         Pictures[plMario, mdLarge, 3, dirLeft] = Resources.LJMAR_001;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdLarge, 0, Buffers.dirLeft] = Resources.LWMAR_000;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdLarge, 1, Buffers.dirLeft] = Resources.LWMAR_001;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdLarge, 2, Buffers.dirLeft] = Resources.LJMAR_000;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdLarge, 3, Buffers.dirLeft] = Resources.LJMAR_001;
+ 
+         Buffers.Pictures[Buffers.plMario, Buffers.mdFire, 0, Buffers.dirLeft] = Resources.FWMAR_000;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdFire, 1, Buffers.dirLeft] = Resources.FWMAR_001;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdFire, 2, Buffers.dirLeft] = Resources.FJMAR_000;
+         Buffers.Pictures[Buffers.plMario, Buffers.mdFire, 3, Buffers.dirLeft] = Resources.FJMAR_001;
+
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdSmall, 0, Buffers.dirLeft] = Resources.SWLUI_000;
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdSmall, 1, Buffers.dirLeft] = Resources.SWLUI_001;
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdSmall, 2, Buffers.dirLeft] = Resources.SJLUI_000;
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdSmall, 3, Buffers.dirLeft] = Resources.SJLUI_001;
+
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdLarge, 0, Buffers.dirLeft] = Resources.LWLUI_000;
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdLarge, 1, Buffers.dirLeft] = Resources.LWLUI_001;
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdLarge, 2, Buffers.dirLeft] = Resources.LJLUI_000;
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdLarge, 3, Buffers.dirLeft] = Resources.LJLUI_001;
+
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdFire, 0, Buffers.dirLeft] = Resources.FWLUI_000;
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdFire, 1, Buffers.dirLeft] = Resources.FWLUI_001;
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdFire, 2, Buffers.dirLeft] = Resources.FJLUI_000;
+         Buffers.Pictures[Buffers.plLuigi, Buffers.mdFire, 3, Buffers.dirLeft] = Resources.FJLUI_001;
          
-         Pictures[plMario, mdFire, 0, dirLeft] = Resources.FWMAR_000;
-         Pictures[plMario, mdFire, 1, dirLeft] = Resources.FWMAR_001;
-         Pictures[plMario, mdFire, 2, dirLeft] = Resources.FJMAR_000;
-         Pictures[plMario, mdFire, 3, dirLeft] = Resources.FJMAR_001;
-         
-         Pictures[plLuigi, mdSmall, 0, dirLeft] = Resources.SWLUI_000;
-         Pictures[plLuigi, mdSmall, 1, dirLeft] = Resources.SWLUI_001;
-         Pictures[plLuigi, mdSmall, 2, dirLeft] = Resources.SJLUI_000;
-         Pictures[plLuigi, mdSmall, 3, dirLeft] = Resources.SJLUI_001;
-         
-         Pictures[plLuigi, mdLarge, 0, dirLeft] = Resources.LWLUI_000;
-         Pictures[plLuigi, mdLarge, 1, dirLeft] = Resources.LWLUI_001;
-         Pictures[plLuigi, mdLarge, 2, dirLeft] = Resources.LJLUI_000;
-         Pictures[plLuigi, mdLarge, 3, dirLeft] = Resources.LJLUI_001;
-         
-         Pictures[plLuigi, mdFire, 0, dirLeft] = Resources.FWLUI_000;
-         Pictures[plLuigi, mdFire, 1, dirLeft] = Resources.FWLUI_001;
-         Pictures[plLuigi, mdFire, 2, dirLeft] = Resources.FJLUI_000;
-         Pictures[plLuigi, mdFire, 3, dirLeft] = Resources.FJLUI_001;
-         
-         for ( int Pl = plMario; Pl <= plLuigi; Pl++ )
+         for ( int Pl = Buffers.plMario; Pl <= Buffers.plLuigi; Pl++ )
          {
-            for ( int Md = mdSmall; Md <= mdFire; Md++ )
+            for ( int Md = Buffers.mdSmall; Md <= Buffers.mdFire; Md++ )
                for ( int N = 0; N <= 3; N++ )
-                  HighMirror ( Pictures[Pl, Md, N, dirLeft], ref Pictures[Pl, Md, N, dirRight] );
+                  HighMirror ( Buffers.Pictures[Pl, Md, N, Buffers.dirLeft], ref Buffers.Pictures[Pl, Md, N, Buffers.dirRight] );
          }
       }
-
       public static void InitPlayer (int InitX, int InitY, byte Name)
-      {
+      {/**
          Player = Name;
          X = InitX;
          Y = InitY;
@@ -204,9 +203,9 @@ namespace MarioPort
          Star = false;
          Growing = false;
          EarthQuake = false;
-
+         **/
       }
-      
+      /**
       private static void DrawDemo()
       {
          int i, j;

@@ -10,75 +10,80 @@ namespace MarioPort
       public static bool Stat = false;
       public static bool ShowRetrace = false;
 
+      const int YBase = 9;
+
       public static int CheatsUsed = 0;
 
       public static bool PlayWorld(char N1, char N2, byte[,] Map1, Buffers.WorldOptions Opt1, Buffers.WorldOptions Opt1b, 
 						  byte[,] Map2, Buffers.WorldOptions Opt2, Buffers.WorldOptions Opt2b, byte Player)
 	   {
-		   int i, j, k, x, y;
+		   int j, k, x, y;
          bool Waiting;
 	      bool TextStatus;
 	      int[] TotalBackGrAddr = new int[FormMarioPort.MAX_PAGE];
 	      bool ShowScore, CountingScore, ShowObjects, OnlyDraw;
          //PlayWorld = false;
-         //Key = 0;
+         //Keyboard.Key = 0;
 
-         //SetYOffset (YBase);
-         //SetYStart (18.ToString("X"));
-         //SetYEnd (125.ToString("X"));
+         FormMarioPort.formRef.SetYOffset(YBase);//FormMarioPort.formRef.Y);
+         FormMarioPort.formRef.SetYStart (18);
+         FormMarioPort.formRef.SetYEnd (125);
 
-         //ClearPalette();
-         //LockPal();
-         //ClearVGAMem();
+         //Palettes.ClearPalette();
+         //Palettes.LockPal();
+         FormMarioPort.formRef.ClearVGAMem();
 
-         //TextCounter = 0;
+         Buffers.TextCounter = 0;
 
-         //WorldNumber = N1 + '-' + N2;
-         //OnlyDraw = ((N1 = 0) && (N2 = 0));
+         Buffers.WorldNumber = new string[] {N1.ToString(), "-", N2.ToString()};
+         OnlyDraw = ((N1 == '0') && (N2 == '0'));
 
-         //ShowObjects = true;
+         ShowObjects = true;
 
-         //InPipe = false;
-         //PipeCode = '  ';
-         //Demo = dmNoDemo;
+         Players.InPipe = false;
+         Players.PipeCode = new char[] { ' ', ' '};
+         Buffers.Demo = Buffers.dmNoDemo;
 
-         //InitLevelScore();
+         Buffers.InitLevelScore();
 
          //FillChar (TotalBackGrAddr, TotalBackGrAddr.Size(), 0);
-         //ShowScore = false;
+         for (int i = 0; i < TotalBackGrAddr.Length; i++)
+            TotalBackGrAddr[i] = 0;
+         ShowScore = false;
 
-         //if (! Turbo)
-         //{
-         //   ReadWorld (Map2, WorldMap, Opt2);
-         //   Swap();
-         //   ReadWorld (Map1, WorldMap, Opt1);
-         //}
-         //else
-         //{
-         //   ReadWorld (Map2, WorldMap, Opt2b);
-         //   Swap();
-         //   ReadWorld (Map1, WorldMap, Opt1b);
-         //}
+         if (! Enemies.Turbo)
+         {
+            Buffers.ReadWorld (Map2, ref Buffers.WorldMap, Opt2);
+            Buffers.Swap();
+            Buffers.ReadWorld (Map1, ref Buffers.WorldMap, Opt1);
+         }
+         else
+         {
+            Buffers.ReadWorld (Map2, ref Buffers.WorldMap, Opt2b);
+            Buffers.Swap();
+            Buffers.ReadWorld (Map1, ref Buffers.WorldMap, Opt1b);
+         }
 
-         //Options.InitPlayer (InitX, InitY, Player);
-         //Options.MapX = InitX;
-         //Options.Mapy = InitY;
+         Players.InitPlayer (Buffers.Options.InitX, Buffers.Options.InitY, Buffers.Player);
+         Players.MapX = Buffers.Options.InitX;
+         Players.MapY = Buffers.Options.InitY;
 
-         //XView = 0;
-         //YView = 0;
+         Buffers.XView = 0;
+         Buffers.YView = 0;
 
          //FillChar (LastXView, LastXView.Size(), 0);
-         //SetView (XView, YView);
+         for (int i = 0; i < Buffers.LastXView.Length; i++)
+            Buffers.LastXView[i] = 0;
+         FormMarioPort.formRef.SetView (Buffers.XView, Buffers.YView);
 
-         //   SetYOffset(YBase);
+         FormMarioPort.formRef.SetYOffset(YBase);
 
-         //   ClearEnemies();
-         //   ClearGlitter();
-         //   FadeDown(64);
-         //   ClearPalette();
-         //   ClearVGAMem();
-         //   StopMusic();
-         //}
+         Enemies.ClearEnemies();
+         //ClearGlitter();
+         //Palettes.FadeDown(64);
+         //Palettes.ClearPalette();
+         FormMarioPort.formRef.ClearVGAMem();
+         //Music.StopMusic();
          return true;
          //http://en.wikipedia.org/wiki/Return_statement#Syntax
          //"In Pascal there is no return statement." ...wat!?
