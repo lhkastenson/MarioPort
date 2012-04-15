@@ -38,8 +38,8 @@ namespace MarioPort
       public const int EY1 = 8;
       public const int EY2 = 3;
       
-      public const int DirLeft = 0;
-      public const int DirRight = 1;
+      public const int dirLeft = 0;
+      public const int dirRight = 1;
       
       public const int mdSmall = 0;
       public const int mdLarge = 1;
@@ -54,14 +54,15 @@ namespace MarioPort
       public static string[] PlayerName = {"PLMARIO", "PLLUIGI"};
       	
       public static byte Player;
-      public static GameData data = new GameData();
+      public static GameData data;
       public static string[] WorldNumber = new string[3];
       public static long LevelScore;
+      public static char[,] ImageBuffer = new char[H, W];
 
       public class GameData
       {
          
-         public int[] numPlayers;
+         public int numPlayers;
          public int[] progress;
          public int[] lives;
          public int[] coins;
@@ -70,7 +71,7 @@ namespace MarioPort
 
          public GameData(bool x = true)
          {
-            this.numPlayers = new int[] { 0, 0 };
+            this.numPlayers = 0 ;
             this.progress = new int[] { 0, 0 };
             this.lives = new int[] { 0, 0 };
             this.coins = new int[] { 0, 0 };
@@ -81,7 +82,7 @@ namespace MarioPort
          {
             return new GameData()
             {
-               numPlayers = new int[] { 0, 0 },
+               numPlayers = 0,
                progress = new int[] { 0, 0 },
                lives = new int[] { 0, 0 },
                coins = new int[] { 0, 0 },
@@ -135,7 +136,7 @@ namespace MarioPort
       public static byte[,] StarBuffer;
       public static byte[,] StarBackGr;
       public static int Size;
-      public static byte[,] PictureBuffer;
+      public static System.Drawing.Bitmap[,,,] Pictures;
       public static int Demo;
       public static int TextCounter;
       public static byte LavaCounter;
@@ -224,7 +225,7 @@ namespace MarioPort
 	   static Buffers()
 	   {
 		   Size = 2 * WorldBuffer.Length + StarBuffer.Length +
-			      PictureBuffer.Length;
+			      Pictures.Length;
 	   }
 
       public static void main()

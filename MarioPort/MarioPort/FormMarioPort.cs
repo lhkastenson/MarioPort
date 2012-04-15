@@ -75,6 +75,7 @@ namespace MarioPort
          InitializeComponent();
          formRef = this;
          graphics = CreateGraphics();
+         //Mario.main(new string[0]);
       }
 
       public void PutImage(int XPos, int YPos, int Width, int Height, Bitmap bitmap)
