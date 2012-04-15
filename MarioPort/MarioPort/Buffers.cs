@@ -58,7 +58,7 @@ namespace MarioPort
       public static string[] WorldNumber = new string[3];
       public static long LevelScore;
 
-      public struct GameData
+      public class GameData
       {
          
          public int[] numPlayers;
@@ -77,6 +77,19 @@ namespace MarioPort
             this.score = new long[] { 0, 0 };
             this.mode = new byte[] { 0, 0 };
          }
+         public static GameData Create() //factory function to create arrays of GameData
+         {
+            return new GameData()
+            {
+               numPlayers = new int[] { 0, 0 },
+               progress = new int[] { 0, 0 },
+               lives = new int[] { 0, 0 },
+               coins = new int[] { 0, 0 },
+               score = new long[] { 0, 0 },
+               mode = new byte[] { 0, 0 }
+            };
+         }
+
       }
       public struct WorldOptions
       {
@@ -199,5 +212,33 @@ namespace MarioPort
       //         Crt.Sound(Freq);
       //}
 
+      public static void InitLevelScore()
+	   {
+		   LevelScore = 0;
+	   }
+	
+	   public static void AddScore(long N)
+	   {
+		   LevelScore += N;
+	   }
+	   static Buffers()
+	   {
+		   Size = 2 * WorldBuffer.Length + StarBuffer.Length +
+			      PictureBuffer.Length;
+	   }
+
+      public static void main()
+      {
+         int MemAvail = 0;
+         if(MemAvail < Size)
+         {
+            //Console.Write("Not enough memory");
+            //Exit
+         }
+         //	      GetMem(WorldMap, WorldBuffer.SizeOf());
+         //	      GetMem(SaveWorldMap, WorldBuffer.SizeOf());
+         //	      GetMem(StarBackGr, StarBuffer.SizeOf());
+         //	      GetMem(Pictures, PictureBuffer.SizeOf());
+      }
    }
 }
