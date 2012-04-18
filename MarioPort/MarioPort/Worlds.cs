@@ -362,7 +362,7 @@ namespace MarioPort
                level_1b[x, y] = temp[x * 13 + y];
             }
          }
-         level_1b[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         level_1b[(temp.Length / 13) - 1, 0] = 0; //Storing 0 at end, not positive if necessary
          return level_1b;
       }
 
