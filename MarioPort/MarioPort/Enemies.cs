@@ -264,23 +264,23 @@ namespace MarioPort
       **/
       public static void InitEnemyFigures()
       {
-         EnemyPictures[1, Right] = Resources.CHIBIBO_000;
-         EnemyPictures[2, Right] = Resources.CHIBIBO_001;
+         EnemyPictures[0, Right] = Resources.CHIBIBO_000;
+         EnemyPictures[1, Right] = Resources.CHIBIBO_001;
 
-         EnemyPictures[4, Right] = Resources.CHIBIBO_002;
-         EnemyPictures[5, Right] = Resources.CHIBIBO_003;
+         EnemyPictures[2, Right] = Resources.CHIBIBO_002;
+         EnemyPictures[3, Right] = Resources.CHIBIBO_003;
 
-         EnemyPictures[3, Left] = Resources.FISH_001;
+         EnemyPictures[4, Left] = Resources.FISH_001;
          //Figures.Mirror(ref EnemyPictures[3, Left], ref EnemyPictures[3, Right]);
 
-         EnemyPictures[6, Left] = Resources.RED_000;
-         EnemyPictures[7, Left] = Resources.RED_001;
+         EnemyPictures[5, Left] = Resources.RED_000;
+         EnemyPictures[6, Left] = Resources.RED_001;
 
-         EnemyPictures[8, Right] = Resources.GRKP_000;
-         EnemyPictures[9, Right] = Resources.GRKP_001;
+         EnemyPictures[7, Right] = Resources.GRKP_000;
+         EnemyPictures[8, Right] = Resources.GRKP_001;
 
-         EnemyPictures[10, Right] = Resources.RDKP_000;
-         EnemyPictures[11, Right] = Resources.RDKP_001;
+         EnemyPictures[9, Right] = Resources.RDKP_000;
+         EnemyPictures[10, Right] = Resources.RDKP_001;
 
          for( int i = 0; i < MaxEnemies; i++ )
          {

@@ -16,15 +16,7 @@ namespace MarioPort
       {
          public bool Sound;
          public bool SLine;
-         public static Buffers.GameData[] Games =
-            {
-               new Buffers.GameData(),
-               new Buffers.GameData(),
-               new Buffers.GameData()
-               //Buffers.GameData.Create(),
-               //Buffers.GameData.Create(),
-               //Buffers.GameData.Create()
-            };
+         public static Buffers.GameData[] Games = new Buffers.GameData[3];
          public bool UseJS;
          //public JoyRec JSDat;
       }
@@ -97,7 +89,7 @@ namespace MarioPort
          //   GameNumber = -1;
          //}
          Play.Stat = Config.SLine;
-         Buffers.BeeperSound = Config.Sound;
+         //Buffers.BeeperSound = Config.Sound;
          //Name = args[0];
          //j = 0;
          //if(Name.Length > 9)
@@ -563,7 +555,7 @@ namespace MarioPort
       public static void main(string[] args)
       {
          //Keyboard.InitKeyBoard();
-         Buffers.data.numPlayers = 1;
+         Buffers.data.numPlayers =  1;
          ReadConfig(args);
          //ReadCmdLine(args);
 

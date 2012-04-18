@@ -54,7 +54,7 @@ namespace MarioPort
       public static string[] PlayerName = {"PLMARIO", "PLLUIGI"};
       	
       public static byte Player;
-      public static GameData data;
+      public static GameData data = GameData.Create();
       public static string[] WorldNumber = new string[3];
       public static long LevelScore;
       public static char[,] ImageBuffer = new char[H, W];
@@ -69,26 +69,24 @@ namespace MarioPort
          public long[] score;
          public byte[] mode;
 
-         public GameData(bool x = true)
+         public GameData(int numPlayers, int[] progress, int[] lives, int[] coins, long[] score, byte[] mode)
          {
-            this.numPlayers = 0 ;
-            this.progress = new int[] { 0, 0 };
-            this.lives = new int[] { 0, 0 };
-            this.coins = new int[] { 0, 0 };
-            this.score = new long[] { 0, 0 };
-            this.mode = new byte[] { 0, 0 };
+            this.numPlayers = numPlayers;
+            this.progress = progress;
+            this.lives = lives;
+            this.coins = coins;
+            this.score = score;
+            this.mode = mode;
          }
          public static GameData Create() //factory function to create arrays of GameData
          {
-            return new GameData()
-            {
-               numPlayers = 0,
-               progress = new int[] { 0, 0 },
-               lives = new int[] { 0, 0 },
-               coins = new int[] { 0, 0 },
-               score = new long[] { 0, 0 },
-               mode = new byte[] { 0, 0 }
-            };
+               int numPlayers = 0;
+               int[] progress = new int[] { 0, 0 };
+               int[] lives = new int[] { 0, 0 };
+               int[] coins = new int[] { 0, 0 };
+               long[] score = new long[] {(long) 0, (long)0 };
+               byte[] mode = new byte[] { Convert.ToByte(0), Convert.ToByte(0) };
+               return new GameData(numPlayers, progress, lives, coins, score, mode);
          }
 
       }
@@ -125,18 +123,18 @@ namespace MarioPort
 
       public static bool GameDone;
       public static bool Passed;
-      public static byte[,] WorldBuffer;
-      public static byte[,] WorldMap;
-      public static byte[,] SaveWorldMap;
+      public static byte[,] WorldBuffer = new byte[MaxWorldSize + EX, NV + EY2];
+      public static byte[,] WorldMap = new byte[MaxWorldSize, NV];
+      public static byte[,] SaveWorldMap = new byte[MaxWorldSize, NV];
       public static WorldOptions Options = new WorldOptions();
       public static WorldOptions SaveOptions;
       public static int XView;
       public static int YView;
       public static int[] LastXView = new int[FormMarioPort.MAX_PAGE];
-      public static byte[,] StarBuffer;
+      public static byte[,] StarBuffer = new byte[FormMarioPort.MAX_PAGE + 1, 320];
       public static byte[,] StarBackGr;
       public static int Size;
-      public static System.Drawing.Bitmap[,,,] Pictures;
+      public static System.Drawing.Bitmap[,,,] Pictures = new System.Drawing.Bitmap[plLuigi + 1,mdFire + 1,4,dirRight + 1];
       public static int Demo;
       public static int TextCounter;
       public static byte LavaCounter;
@@ -155,15 +153,17 @@ namespace MarioPort
          //Move(Opt, Options, Options.SizeOf());
          //M = Map;
          //FillChar(W, W.size(), ' ');
+         for (int i = 0; i < W.GetLength(0); i++)
+            W[i,0] = (byte)' ';
          for (int i = -EX; i < -1; i++)
       	   for (int j = -EY1; j < NV - 1 + EY2; j++)
       		   W[i,j] = (byte)'@';
          x = 0;
       
-         while (M[x+1,1] != (0) && (x < MaxWorldSize))
+         while (M[x,0] != (0) && (x < MaxWorldSize))
          {
-      	   for (int i = 1; i < NV; i++)
-      		   W[x,NV-i] = M[x+1,i];
+      	   for (int i = 0; i < NV; i++)
+      		   W[x,NV-i] = M[x,i];
       	   W[x,-EY1] = (0);
       	   for (int i = 1; i < EY2; i++)
       		   W[x,NV-1+i] = W[x,NV-1];
