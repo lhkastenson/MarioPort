@@ -1406,8 +1406,8 @@ namespace MarioPort
             }
          } // end for
          
-         i = 1;
-         while ( i <= ActiveEnemies.Length )
+         i = 0;
+         while ( i < ActiveEnemies.Length )
          {
             if ( EnemyList[(int)(ActiveEnemies[i])].Tp == EnemyType.tpDead )
                //Delete(ActiveEnemies, i, 1);

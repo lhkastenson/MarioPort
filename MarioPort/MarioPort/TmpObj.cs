@@ -158,7 +158,7 @@ namespace MarioPort
         {
              int i;
              //int page = FormMarioPort.formRef.CurrentPage();
-             for( i = 1; i <= MaxTempObj; i++ ) 
+             for( i = 0; i < MaxTempObj; i++ ) 
              {
                 if(TempObj[i].Alive == true )
                 {
@@ -204,7 +204,7 @@ namespace MarioPort
         public static void MoveTempObj()
         {
              int i;
-             for (i = 1; i <= MaxTempObj; i++ )
+             for (i = 0; i < MaxTempObj; i++ )
              {
                  if(TempObj[i].Alive == true )
                  {
@@ -276,7 +276,7 @@ namespace MarioPort
         public static void RunRemove()
         {
              int i;
-             for( i = 1; i <= MaxRemove; i++ )
+             for( i = 0; i < MaxRemove; i++ )
              {
                if (RemList[i].Active == true )
                {

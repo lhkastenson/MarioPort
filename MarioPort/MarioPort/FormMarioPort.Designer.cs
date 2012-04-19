@@ -39,6 +39,8 @@
          this.Text = "MarioPort";
          this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMarioPort_FormClosing);
          this.Load += new System.EventHandler(this.FormMarioPort_Load);
+         this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormMarioPort_KeyDown);
+         this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormMarioPort_KeyUp);
          this.ResumeLayout(false);
 
       }
