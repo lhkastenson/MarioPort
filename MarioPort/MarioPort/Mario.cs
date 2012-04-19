@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using MarioPort;
+﻿using Resources = MarioPort.Properties.Resources;
+
 namespace MarioPort
 {
    public static class Mario
@@ -23,9 +26,11 @@ namespace MarioPort
       public static ConfigData ConfigFile;
       public static int GameNumber;
       public static int CurPlayer;
-      public static bool Passed;
+      public static bool Passed = false;
       public static bool EndGame;
       public static ConfigData Config;
+
+      public static bool MENU = true;
 
       public enum Statuses
       {
@@ -179,13 +184,13 @@ namespace MarioPort
          }
       }
 
-      public static void Demo()
+      public static bool Demo()
       {
          NewData();
          Enemies.Turbo = false;
          Buffers.data.progress[Buffers.plMario] = 5;
          //Keyboard.PlayMacro();
-         Play.PlayWorld(' ', ' ', Worlds.Level_6a(), Worlds.Options_6a(), Worlds.Options_6a(),
+         return Play.PlayWorld(' ', ' ', Worlds.Level_6a(), Worlds.Options_6a(), Worlds.Options_6a(),
                  Worlds.Level_6b(), Worlds.Options_6b(), Worlds.Options_6b(), Buffers.plMario);
          //Keyboard.StopMacro();
       }
@@ -235,23 +240,23 @@ namespace MarioPort
 
             for(int p = 0; p < FormMarioPort.MAX_PAGE; p++)
             {
-               for(int i = 1; i == 0; i--)
-                  for(int j = 1; j == 0; j--)
-                     for(int k = 1; k == 0; k--)
+               for(int i = 1; i >= 0; i--)
+                  for(int j = 1; j >= 0; j--)
+                     for(int k = 1; k >= 0; k--)
                      {
-                        //FormMarioPort.DrawImage(38 + i + j, 29 + i + k, 108, 28, Resources.Intro_000);
-                        //FormMarioPort.DrawImage(159 + i + j, 29 + i + k, 24, 28, Resources.Intro_001);
-                        //FormMarioPort.DrawImage(198 + i + j, 29 + i + k, 84, 28, Resources.Intro_002);
+                        FormMarioPort.formRef.DrawImage(38 + i + j, 29 + i + k, 108, 28, Resources.INTRO_000);
+                        FormMarioPort.formRef.DrawImage(159 + i + j, 29 + i + k, 24, 28, Resources.INTRO_001);
+                        FormMarioPort.formRef.DrawImage(198 + i + j, 29 + i + k, 84, 28, Resources.INTRO_002);
                      }
                BackGr.DrawBackGrMap(10 * Buffers.H + 6, 11 * Buffers.H - 1, 54, 0xA0);
                BackGr.DrawBackGrMap(10 * Buffers.H + 6, 11 * Buffers.H - 1, 55, 0xA1);
                BackGr.DrawBackGrMap(10 * Buffers.H + 6, 11 * Buffers.H - 1, 53, 0xA1);
-               //for(int i = 0; i < Buffers.NH - 1; i++)
-               //   for(int j = 0; j < Buffers.NV - 1; j++)
-               //      if((i == 0 || i == Buffers.NH - 1) || (j == 0 || j == Buffers.NV - 1))
-               //         DrawImage(i * W, j * H, W, H, @Block000);
-               //FormMarioPort.DrawPlayer();
-               //FormMarioPort.ShowPage();
+               for(int i = 0; i < Buffers.NH - 1; i++)
+                  for(int j = 0; j < Buffers.NV - 1; j++)
+                     if((i == 0 || i == Buffers.NH - 1) || (j == 0 || j == Buffers.NV - 1))
+                        FormMarioPort.formRef.DrawImage(i * Buffers.W, j * Buffers.H, Buffers.W, Buffers.H, Resources.BLOCK_000);
+               Players.DrawPlayer();
+               FormMarioPort.formRef.ShowPage();
             }
             //UnlockPal();
             //Keyboard.Key = 0;
@@ -552,11 +557,11 @@ namespace MarioPort
          //FormMarioPort.ClearVGAMem();
       }
 
-      public static void main(string[] args)
+      public static void main()//string[] args)
       {
          //Keyboard.InitKeyBoard();
          Buffers.data.numPlayers =  1;
-         ReadConfig(args);
+         //ReadConfig(args);
          //ReadCmdLine(args);
 
          //jr = Config.JSDat;
@@ -602,9 +607,10 @@ namespace MarioPort
             Enemies.InitEnemyFigures();
 
             EndGame = false;
-#if MENU
-      		Intro();
-#endif
+//#if MENU
+            if (MENU)
+      		   Intro();
+//#endif
             //Randomize();
 
             if(Buffers.data.numPlayers == 2)
@@ -679,6 +685,7 @@ namespace MarioPort
                               EndGame = true;
                               break;
                         }
+                        Console.WriteLine("I want to play a world");
                         if(Passed)
                            Buffers.data.progress[CurPlayer]++;
                         if(Buffers.QuitGame)
