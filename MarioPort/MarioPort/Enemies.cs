@@ -8,12 +8,11 @@ using System.Drawing;
 using MarioPort;
 ﻿using Resources = MarioPort.Properties.Resources;
 
-/*
- * 
- */
-
 namespace MarioPort
 {
+   //-------------------------------------------------
+   // Enemy Types
+   //-------------------------------------------------
    public enum EnemyType
    {
       tpDead            =  0,
@@ -52,6 +51,9 @@ namespace MarioPort
       tpLiftEnd         = 69,
    }
 
+   //-------------------------------------------------
+   // Class that controls the Enemies
+   //-------------------------------------------------
    public static class Enemies
    {
       public const int StartEnemiesAt  = 2;
@@ -87,8 +89,6 @@ namespace MarioPort
       {
          // init FireballList && KoopaList
       }
-      
-      //// implementation ////
 
       private static byte[,] rKoopa = new byte[4, 20 * 24 + 1];
 
@@ -103,6 +103,9 @@ namespace MarioPort
       //int i = MarioPort.Buffers.W;
       //int j = Buffers.W;
 
+      //-------------------------------------------------
+      // Enemy Rectangle
+      //-------------------------------------------------
       public class EnemyRec
       {
          public EnemyType Tp;
@@ -136,26 +139,18 @@ namespace MarioPort
          }
       }
 
-//          EnemyListPtr = EnemyList;
       private static EnemyRec[] EnemyList = EnemyRec.Create();
-
-//      Enemy: EnemyListPtr;
-//      private EnemyRec* Enemy = &EnemyList;
-      
-//      ActiveEnemies: String [MaxEnemiesAtOnce];
       private static string ActiveEnemies = "";
-//      NumEnemies: (byte)absolute ActiveEnemies;
       private static byte NumEnemies;
-      // TODO
-//      TimeCounter: Byte;
       private static byte TimeCounter;
 
       private static Bitmap[,] EnemyPictures = new Bitmap[MaxEnemies, Right - Left + 1];
       
+      //-------------------------------------------------
+      // Kill the Enemy at EnemyList[i]
+      //-------------------------------------------------
       private static void Kill(int i)
       {
-         //EnemyRec enemyRec = EnemyList[i];
-
          switch (EnemyList[i].Tp)
          {
             case EnemyType.tpChibibo:
@@ -216,6 +211,9 @@ namespace MarioPort
          }
       }
       
+      //-------------------------------------------------
+      // Show a temporary star
+      //-------------------------------------------------
       private static void ShowStar (int X, int Y)
       {
 //         Beep (100);
@@ -223,6 +221,9 @@ namespace MarioPort
             TmpObj.NewTempObj(TmpObj.tpHit, X, Y, 0, 0, Buffers.W, Buffers.H);
       }
 
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       private static void ShowFire (int X, int Y)
       {
          //Beep (50);
@@ -231,45 +232,19 @@ namespace MarioPort
          if ((X + Buffers.W > Buffers.XView) && (X < Buffers.XView + FormMarioPort.SCREEN_WIDTH))
             TmpObj.NewTempObj(TmpObj.tpFire, X, Y, 0, 0, Buffers.W, Buffers.H);
       }
-      /*
-      //private static void Mirror20x24 (P1, P2: Pointer)
-      //{
-    
-      //  const
-      //    Buffers.W = 20;
-      //    H = 24;
-      //  type
-      //    PlaneBuffer = array[0..H - 1, 0..W / 4 - 1] of Byte;
-      //    PlaneBufferArray = array[0..3] of PlaneBuffer;
-      //    PlaneBufferArrayPtr = PlaneBufferArray;
-      //  var
-      //    Source, Dest: PlaneBufferArrayPtr;
-      //}
-      **/
-      private static void Mirror20x24(ref Bitmap from, ref Bitmap to)
+      
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
+      private static void Mirror20x24(Bitmap from, ref Bitmap to)
       {
-         
+         from.RotateFlip(RotateFlipType.Rotate180FlipY);
+         to = from.Clone() as Bitmap;
       }
-      /**
-      //private static void Swap (byte Plane1, byte Plane2)
-      //{
-      //       var
-      //         i, j: Byte;
-      //     {
-      //       for j = 0 to H - 1 do
-      //         for i = 0 to Buffers.W / 4 - 1 do
-      //         {
-      //           Dest[Plane2, j, i] = Source[Plane1, j, Buffers.W / 4 - 1 - i];
-      //           Dest[Plane1, j, i] = Source[Plane2, j, Buffers.W / 4 - 1 - i];
-      //         }
-      //     Source = P1;
-      //     Dest = P2;
-      //     Swap (0, 3);
-      //     Swap (1, 2);
-      //   }
-      //}
-
-      **/
+      
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       public static void InitEnemyFigures()
       {
          EnemyPictures[0, Right] = Resources.CHIBIBO_000;
@@ -279,7 +254,7 @@ namespace MarioPort
          EnemyPictures[3, Right] = Resources.CHIBIBO_003;
 
          EnemyPictures[4, Left] = Resources.FISH_001;
-         //Figures.Mirror(ref EnemyPictures[3, Left], ref EnemyPictures[3, Right]);
+         Figures.Mirror(EnemyPictures[3, Left], ref EnemyPictures[3, Right]);
 
          EnemyPictures[5, Left] = Resources.RED_000;
          EnemyPictures[6, Left] = Resources.RED_001;
@@ -293,21 +268,24 @@ namespace MarioPort
          for( int i = 0; i < MaxEnemies; i++ )
          {
             if ( i == 6 || i == 7 )
-               ;//Figures.Mirror(EnemyPictures[i, Left], ref EnemyPictures[i, Right]);
+               Figures.Mirror(EnemyPictures[i, Left], ref EnemyPictures[i, Right]);
             else
                if ( i != 3 )
-                  ;// Figures.Mirror(EnemyPictures[i, Left], ref EnemyPictures[i, Right]);
+                  Figures.Mirror(EnemyPictures[i, Left], ref EnemyPictures[i, Right]);
          }
          
          for( int i = 0; i <= 1; i++ )
          {
             for( int j = kGreen; j <= kRed; j++ )
             {
-               Mirror20x24(ref KoopaList[Left, j, i], ref KoopaList[Right, j, i]);
+               Mirror20x24(KoopaList[Left, j, i], ref KoopaList[Right, j, i]);
             }
          }
       }
 
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       public static void ClearEnemies()
       {
          for (int i = 0; i < MaxEnemiesAtOnce; i++)
@@ -326,6 +304,9 @@ namespace MarioPort
          cdStopJump = 0;
       }
 
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       public static void StopEnemies()
       {
          int j;
@@ -371,7 +352,9 @@ namespace MarioPort
          ClearEnemies();
       }
 
-      
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       public static void NewEnemy(EnemyType InitType, int SubType, int InitX, int InitY, int InitXVel, int InitYVel, int InitDelay)
       {
          int i, j;
@@ -426,7 +409,7 @@ namespace MarioPort
          }
 
          EnemyList[i].Counter = 0;
-         //         case EnemyList[j].Tp of
+
          switch (EnemyList[i].Tp)
          {
             case EnemyType.tpVertPlant:
@@ -451,17 +434,20 @@ namespace MarioPort
          ActiveEnemies = ActiveEnemies + (char)(i);
       }
       
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       public static void ShowEnemies()
       {
          int i, j, Page;
          Bitmap Fig;
 
          Page = FormMarioPort.formRef.CurrentPage();
-//         for i = 1 to NumEnemies do
+
          for (i = 0; i < NumEnemies; i++)
          {
             j = (int)(ActiveEnemies[i]);
-//            with EnemyList[j] do
+
             if ( (EnemyList[j].XPos + 1 * Buffers.W < Buffers.XView) ||
                      (EnemyList[j].XPos > Buffers.XView + FormMarioPort.SCREEN_WIDTH + 0 * Buffers.W) ||
                            (EnemyList[j].YPos >= Buffers.YView + FormMarioPort.SCREEN_HEIGHT))
@@ -486,7 +472,7 @@ namespace MarioPort
                      else
                         EnemyList[j].BackGrAddr[Page] = FormMarioPort.formRef.PushBackGr(EnemyList[j].XPos, EnemyList[j].YPos, Buffers.W + 4, Buffers.H);
             }
-//            case EnemyList[j].Tp of
+
             switch (EnemyList[i].Tp)
             {
                case EnemyType.tpChibibo:
@@ -560,7 +546,6 @@ namespace MarioPort
                {
                   if ( TimeCounter % 32 < 16 )
                   {
-//                    case SubTp of
                      switch (EnemyList[i].SubTp)
                      {
                         case 0:
@@ -574,7 +559,6 @@ namespace MarioPort
                   }
                   else
                   {
-                     //case SubTp of
                      switch (EnemyList[i].SubTp)
                      {
                         case 0:
@@ -647,7 +631,9 @@ namespace MarioPort
          }
       }
       
-      
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       public static void HideEnemies()
       {
          int i, j, Page;
@@ -655,36 +641,25 @@ namespace MarioPort
          for ( i = NumEnemies - 1; i >= 0; i++)
          {
             j = (int)(ActiveEnemies[i]);
-//            with EnemyList[j] do
+
             if (EnemyList[j].BackGrAddr[Page] != 0xFFFF)
                FormMarioPort.formRef.PopBackGr( (ushort)EnemyList[j].BackGrAddr[Page] );
          }
       }
       
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       private static void Check (int i)
       {
-//      const
-//        Safe = EY1;
-//        HSafe = H * Safe;
-         
          const int Safe = Buffers.EY1;
          const int HSafe = Buffers.H * Safe;
-         
-//      var
-//        NewCh1, NewCh2, Ch: Char;
-//        j, k, l, Side, AtX, NewX,
-//        NewX1, NewX2, Y1, Y2, NewY: Integer;
-//        Hold1, Hold2: Boolean;
-//        X, Y: Integer;
 
          char NewCh1, NewCh2, Ch;
          int j, k, l, Side, AtX, NewX, NewX1, NewX2, Y1, Y2, NewY;
          bool Hold1, Hold2;
          int X, Y;
 
-//        with EnemyList[i] do
-
-//          case EnemyList[j].Tp of
          switch (EnemyList[i].Tp)
          {
             case EnemyType.tpRisingChamp:
@@ -695,7 +670,7 @@ namespace MarioPort
                if ( ((EnemyList[i].YPos / Buffers.H) == (EnemyList[i].YPos / Buffers.H)) && (EnemyList[i].YPos != EnemyList[i].MapY * Buffers.H) )
                {
                   EnemyList[i].XVel = 1 - 2 * System.Convert.ToByte( Buffers.CanHoldYou( Buffers.WorldMap[EnemyList[i].MapX + 1, EnemyList[i].MapY - 1] ) );
-//                  case EnemyList[j].Tp of
+
                   switch (EnemyList[i].Tp)
                   {
                      case EnemyType.tpRisingChamp:
@@ -729,7 +704,6 @@ namespace MarioPort
                   j = (EnemyList[i].YPos % Buffers.H);
                   if ( j % 2 == 0 )
                      //Beep (130 - 20 * j);
-//                  Exit;
                      return;
                }
                break;
@@ -763,7 +737,6 @@ namespace MarioPort
                   EnemyList[i].DelayCounter = - (FormMarioPort.MAX_PAGE + 1);
                   EnemyList[i].Tp = EnemyType.tpDyingFireBall;
                }
-//                Exit;
                return;
             }
             case EnemyType.tpStar:
@@ -776,7 +749,6 @@ namespace MarioPort
                   || EnemyList[i].Tp == EnemyType.tpVertFireBall || EnemyList[i].Tp == EnemyType.tpVertPlant 
                   || EnemyList[i].Tp == EnemyType.tpDeadVertPlant))
          {
-            //Side = Integer(EnemyList[i].XVel > 0) * (W - 1);
             Side = (EnemyList[i].XVel > 0) ? 1 : 0;
             Side *= Buffers.W - 1;
 
@@ -799,7 +771,6 @@ namespace MarioPort
                      Ch = Buffers.WorldMap[NewX, l];
                      if ( (EnemyList[i].XPos >= Buffers.XView) && (EnemyList[i].XPos + Buffers.W <= Buffers.XView + Buffers.NH * Buffers.W) )
                      {
-//                        case Ch of
                         switch (Ch)
                         {
                            case 'J':
@@ -807,7 +778,6 @@ namespace MarioPort
                               break;
                            case '?':
                            {
-//                              case WorldMap[NewX, l - 1] of
                               switch (Buffers.WorldMap[NewX, l - 1])
                               {
                                  case ' ':
@@ -827,7 +797,7 @@ namespace MarioPort
                               }
                               break;
                            }
-                           //Remove(NewX * Buffers.W, l * H, Buffers.W, H, 1);
+                              
                            Buffers.WorldMap[NewX, l] = '@';
                         }
                      }
@@ -857,7 +827,6 @@ namespace MarioPort
             }
             else
             {
-//               case Status of
                switch (EnemyList[i].Status)
                {
                   case Grounded:
@@ -916,7 +885,6 @@ namespace MarioPort
                      EnemyList[i].Tp == EnemyType.tpWakingKoopa ||
                      EnemyList[i].Tp == EnemyType.tpRunningKoopa)
          {
-//            for k = 1 to NumEnemies do
             for (k = 0; k < NumEnemies; k++)
             {
                j = (int)(ActiveEnemies[k]);
@@ -928,7 +896,6 @@ namespace MarioPort
                      EnemyList[j].Tp == EnemyType.tpWakingKoopa ||
                      EnemyList[j].Tp == EnemyType.tpRunningKoopa))
                   {
-//                     with EnemyList[j] do
                      X = EnemyList[i].XPos + EnemyList[j].XVel;
                      Y = EnemyList[i].YPos + EnemyList[j].YVel;
                      
@@ -973,11 +940,9 @@ namespace MarioPort
                   {
                      if ( (EnemyList[j].Tp == EnemyType.tpFireBall) )
                      {
-//                        with EnemyList[j] do
-//                        {
                         X = EnemyList[i].XPos + EnemyList[j].XVel;
                         Y = EnemyList[i].YPos + EnemyList[j].YVel;
-//                        }
+                        
                         if ( (NewX1 <= X + Buffers.W / 2) )
                         {
                            if ( (NewX2 >= X) )
@@ -997,6 +962,9 @@ namespace MarioPort
          }
       }
       
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       public static void MoveEnemies()
       {
          int i, j, Page, NewX, OldXVel, OldYVel;
@@ -1004,11 +972,10 @@ namespace MarioPort
          Page = FormMarioPort.formRef.CurrentPage();
          TimeCounter++;
          
-//        for i = 1 to NumEnemies do
          for (i = 0; i < NumEnemies; i++)
          {
             j = (int)(ActiveEnemies[i]);
-//          with EnemyList[j] do
+
             EnemyList[j].DelayCounter++;
             NewX = EnemyList[i].XPos + EnemyList[j].XVel;
             if (EnemyList[j].DelayCounter > EnemyList[j].MoveDelay)
@@ -1016,17 +983,15 @@ namespace MarioPort
                EnemyList[i].XPos = EnemyList[j].LastXPos;
                EnemyList[i].YPos = EnemyList[j].LastYPos;
                EnemyList[j].DirCounter++;
-//               if ( EnemyList[j].Tp in [tpVertFish, EnemyType.tpVertFireBall, EnemyType.tpVertPlant] )
+
                if (EnemyList[j].Tp == EnemyType.tpVertFish || EnemyList[j].Tp == EnemyType.tpVertFireBall || EnemyList[j].Tp == EnemyType.tpVertPlant)
                {
                   if (EnemyList[j].Tp == EnemyType.tpVertPlant)
                   {
-//                     case Status of
                      switch (EnemyList[j].Status)
                      {
                         case 0:
                         {
-//                           case SubTp of
                            switch (EnemyList[j].SubTp)
                            {
                               case 0:
@@ -1138,7 +1103,7 @@ namespace MarioPort
                         EnemyList[j].XVel = -1;
                   }
                }
-//               if ( EnemyList[j].Tp in [tpDying, EnemyType.tpDyingFireBall, EnemyType.tpDyingKoopa] )
+               
                if ( EnemyList[j].Tp == EnemyType.tpDying || EnemyList[j].Tp == EnemyType.tpDyingFireBall || EnemyList[j].Tp == EnemyType.tpDyingKoopa )
                   EnemyList[j].Tp = EnemyType.tpDead;
                else
@@ -1146,7 +1111,6 @@ namespace MarioPort
                   if ((EnemyList[j].Tp == EnemyType.tpFlatChibibo) || (NewX <= -Buffers.W) || (NewX < Buffers.XView - ForgetEnemiesAt * Buffers.W) ||
                            (NewX > Buffers.XView + Buffers.NH * Buffers.W + ForgetEnemiesAt * Buffers.W) || (EnemyList[j].YPos + EnemyList[j].YVel > Buffers.NV * Buffers.H))
                   {
-//                     case EnemyList[j].Tp of
                      switch (EnemyList[j].Tp)
                      {
                         case EnemyType.tpChibibo:
@@ -1193,14 +1157,13 @@ namespace MarioPort
                   {
                      EnemyList[j].DelayCounter = 0;
                      OldXVel = EnemyList[j].XVel;
-                     //{ OldYVel = YVel; }
-//                     if ( EnemyList[j].Tp in [tpVertFish, EnemyType.tpDeadVertFish, EnemyType.tpVertFireBall, EnemyType.tpDeadVertPlant] )
+
                      if ( EnemyList[j].Tp == EnemyType.tpVertFish || EnemyList[j].Tp == EnemyType.tpDeadVertFish || EnemyList[j].Tp == EnemyType.tpVertFireBall || EnemyList[j].Tp == EnemyType.tpDeadVertPlant )
                      {
                         if ((EnemyList[j].DirCounter % 3 == 0) && (EnemyList[j].YPos + Buffers.H < Buffers.NV * Buffers.H))
                           EnemyList[j].YVel++;
                      }
-//                     if EnemyList[j].Tp in [tpDeadChibibo, EnemyType.tpDeadRed, EnemyType.tpDeadKoopa] )
+
                      if ( EnemyList[j].Tp == EnemyType.tpDeadChibibo || EnemyList[j].Tp == EnemyType.tpDeadRed || EnemyList[j].Tp == EnemyType.tpDeadKoopa )
                      {
                         if ( EnemyList[i].XPos % 6 == 0 )
@@ -1216,7 +1179,6 @@ namespace MarioPort
                         if ( EnemyList[j].Tp == EnemyType.tpDyingFireBall )
                           ShowFire(EnemyList[i].XPos, EnemyList[i].YPos);
                      }
-//                     { if YVel = 0 ) YVel = - OldYVel; }
                   }
                   EnemyList[j].LastXPos = EnemyList[i].XPos;
                   EnemyList[j].LastYPos = EnemyList[i].YPos;
@@ -1232,11 +1194,10 @@ namespace MarioPort
             }
          }
 
-//        for i = 1 to NumEnemies do
          for (i = 0; i < NumEnemies; i++)
          {
             j = (int)(ActiveEnemies[i]);
-//            with EnemyList[j] do
+
             if ( EnemyList[j].Tp == EnemyType.tpChibibo ||EnemyList[j].Tp == EnemyType.tpChamp ||EnemyList[j].Tp == EnemyType.tpLife ||EnemyList[j].Tp == EnemyType.tpFlower ||EnemyList[j].Tp == EnemyType.tpStar 
                   ||EnemyList[j].Tp == EnemyType.tpVertFish ||EnemyList[j].Tp == EnemyType.tpVertFireBall ||EnemyList[j].Tp == EnemyType.tpVertPlant
                   ||EnemyList[j].Tp == EnemyType.tpRed ||EnemyList[j].Tp == EnemyType.tpKoopa || EnemyList[j].Tp == EnemyType.tpSleepingKoopa 
@@ -1260,7 +1221,7 @@ namespace MarioPort
                                  cdHit = 1;
                               }
                            }
-//                           case EnemyList[j].Tp of
+
                            switch (EnemyList[j].Tp)
                            {
                               case EnemyType.tpSleepingKoopa:
@@ -1328,7 +1289,6 @@ namespace MarioPort
                               {
                                  if (((PlayerYVel > EnemyList[j].YVel) || (PlayerYVel > 0)) && (PlayerY2 <= EnemyList[i].YPos + Buffers.H))
                                  {
-   //                                 case EnemyList[j].Tp of
                                     switch (EnemyList[j].Tp)
                                     {
                                        case EnemyType.tpChibibo:
@@ -1419,7 +1379,9 @@ namespace MarioPort
          NumEnemies = (byte)ActiveEnemies.Length;
       }
       
-      
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       public static void StartEnemies (int X, short Dir)
       {
          int i;
@@ -1461,6 +1423,9 @@ namespace MarioPort
          }
       }
       
+      //-------------------------------------------------
+      // 
+      //-------------------------------------------------
       public static void HitAbove (int MapX, int MapY)
       {
          int i, j, X, Y;
