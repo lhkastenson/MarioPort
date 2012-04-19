@@ -52,7 +52,7 @@ namespace MarioPort
       byte page0 = 0;
       uint page1 = 32768;
 
-      const int yBase = 9;
+      public const int YBASE = 9;
       public bool InGraphicsMode = false;
       public static int xView = 0;
       public static int yView = 0;

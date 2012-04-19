@@ -93,51 +93,50 @@ namespace MarioPort
 
 		public static void MoveScreen()
 		{
-         //int Scroll;
-         //int N1, N2;
-         //int i, j, OldX, NewX, Page;
-         //Random random = new Random();
-         //int randomNumber;
-         //Page = CurrentPage;
-         //Scroll = XView - LastXView[Page];
-         //if (!EarthQuake)
-         //   SetView(XView, YView);
-         //else
-         //{
-         //   EarthQuakeCounter++;
-         //   if (EarthQuakeCounter > 0)
-         //      EarthQuake = false;
-         //   int Rand1 = randomNumber.Next(0, 2);
-         //   int Rand2 = randomNumber.Next(0, 2);
-         //   SetView (XView, YView + Rand1 - Rand2;				
-         //}
-         //if (Scroll < 0)
-         //   StartEnemies ((XView / W) - StartEnemiesAt, 1);
-         //else if (Scroll > 0)
-         //   StartEnemies((XView / W) + NH + StartEnemiesAt(), -1);
+         int Scroll;
+         int N1, N2;
+         int OldX, NewX, Page;
+         Random rand = new Random();
+         Page = FormMarioPort.formRef.CurrentPage();
+         Scroll = Buffers.XView - Buffers.LastXView[Page-1];
+         if (!Players.EarthQuake)
+            FormMarioPort.formRef.SetView(Buffers.XView, Buffers.YView);
+         else
+         {
+            Players.EarthQuakeCounter++;
+            if (Players.EarthQuakeCounter > 0)
+               Players.EarthQuake = false;
+            int Rand1 = rand.Next(0, 2);
+            int Rand2 = rand.Next(0, 2);
+            FormMarioPort.formRef.SetView (Buffers.XView, Buffers.YView + Rand1 - Rand2);				
+         }
+         if (Scroll < 0)
+            Enemies.StartEnemies ((Buffers.XView / Buffers.W) - Enemies.StartEnemiesAt, 1);
+         else if (Scroll > 0)
+            Enemies.StartEnemies((Buffers.XView / Buffers.W) + Buffers.NH + Enemies.StartEnemiesAt, -1);
 			
-         //// Need to find out what else is in "Options"
-         //i = Buffers.Options.Horizon;
-         //Options.Horizon = i + GetYOffset() - YBASE;
-         //DrawBackGr(false);
-         //Options.Horizon = i;
+         // Need to find out what else is in "Options"
+         int i = Buffers.Options.Horizon;
+         Buffers.Options.Horizon = (byte)(i + FormMarioPort.formRef.GetYOffset() - FormMarioPort.YBASE);
+         BackGr.DrawBackGr(false);
+         Buffers.Options.Horizon = (byte)i;
 			
-         //if (Scroll > 0)
-         //   for (int j = LastXView[Page]; j < XView; j++)
-         //   {
-         //      i = j - W - W;
-         //      if (i >= 0)
-         //         PutPixel(i, 0, 0);
-         //      i = W - j % W - 1;
-         //      Redraw (j / W + NH + 1, i);
-         //   }
+         if (Scroll > 0)
+            for (int j = Buffers.LastXView[Page]; j < Buffers.XView; j++)
+            {
+               i = j - Buffers.W - Buffers.W;
+               if (i >= 0)
+                  FormMarioPort.formRef.PutPixel(i, 0, 0);
+               i = Buffers.W - j % Buffers.W - 1;
+               Figures.Redraw (j / Buffers.W + Buffers.NH + 1, i);
+            }
 				
-         //   if (Scroll < 0)
-         //      for (int j = LastXView[Page]; j > XView; j--);
-         //      {
-         //         i = W - j % W - 1;
-         //         Redraw(j / W - 1, i);
-         //      }
+            if (Scroll < 0)
+               for (int j = Buffers.LastXView[Page]; j > Buffers.XView; j--)
+               {
+                  i = Buffers.W - j % Buffers.W - 1;
+                  Figures.Redraw(j / Buffers.W - 1, i);
+               }
 		}
 		
 	
@@ -716,6 +715,7 @@ namespace MarioPort
 
                   }
 
+                  System.Threading.Thread.Sleep(10);
 
          } while (!Buffers.GameDone && !Buffers.QuitGame);
 

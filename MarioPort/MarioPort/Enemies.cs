@@ -238,6 +238,8 @@ namespace MarioPort
       //-------------------------------------------------
       private static void Mirror20x24(Bitmap from, ref Bitmap to)
       {
+         if (from == null)
+            return;
          from.RotateFlip(RotateFlipType.Rotate180FlipY);
          to = from.Clone() as Bitmap;
       }

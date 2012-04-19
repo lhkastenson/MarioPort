@@ -1,4 +1,24 @@
-﻿using System;
+﻿//-------------------------------------------------------------------
+//Purpose: This file contains the methods and declarations associated
+//         with maintaining the background environment of the game.
+//Author:  Brandon Lambert
+//
+//Note:    This file contains multiple unimplemented (skeleton)
+//         functions. The functions are mostly present to maintain
+//         the original software architecture until it was confirmed
+//         that they could be removed or fully translated correctly.
+//         
+//         Some of the "Palette" functions are translated, but we
+//         did not implement a new way to replace the calls to 
+//         Palettes or Palette prior to this documentation.
+//
+//File Translation Percentage: 60 - 70% Translated correctly. The asm
+//                             sections and Palette functionalities
+//                             were not re-engineered yet to replace
+//                             the past software architectures and
+//                             this results in lost functionality.
+//-------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +29,9 @@ using Resources = MarioPort.Properties.Resources;
 
 namespace MarioPort
 {
+   //----------------------------------------------------------------
+   //Static Class that represents the BackGr object for the game.
+   //----------------------------------------------------------------
    public static class BackGr
    {
       //constants
@@ -35,13 +58,16 @@ namespace MarioPort
       private static int[,] CloudMap = new int[MaxClouds - 1, 2];
       private static byte Clouds;
 
-      //Methods
+	  //-------------------------------------------------------------
+      //Initializes the BackGround
+      //-------------------------------------------------------------
       public static void InitBackGr(byte NewBackGr, byte bClouds)
       {
          int i, j, h;
          BackGround = NewBackGr;
          //----------------------------------------------------------------
-         //@BOGEN and @MOUNT are not bitmaps
+         //@BOGEN and @MOUNT are not bitmaps, need to find out what these
+		 //   addresses are corresponding to.
          //----------------------------------------------------------------
          //if(BackGround == 1 || BackGround == 2)
          //   move(@BOGEN^, BackGrMap, BackGrMap.Length);
@@ -59,6 +85,9 @@ namespace MarioPort
             InitClouds();
       }
 
+	  //-------------------------------------------------------------
+      //Draws the background onto the screen.
+      //-------------------------------------------------------------
       public static void DrawBackGr(bool FirstTime)
       {
          int i;
@@ -74,6 +103,10 @@ namespace MarioPort
          }
       }
 
+	  //-------------------------------------------------------------
+      //Draws the corresponding object represented by C at the given 
+	  //   location.
+      //-------------------------------------------------------------
       public static void DrawBackGrMap(int Y1, int Y2, int Shift, byte C)
       {
          int j;
@@ -85,6 +118,9 @@ namespace MarioPort
          }
       }
 
+	  //-------------------------------------------------------------
+      //Starts the drawing of the clouds for the background.
+      //-------------------------------------------------------------
       public static void StartClouds()
       {
          if (Clouds == 0)
@@ -97,6 +133,9 @@ namespace MarioPort
          }
       }
 
+	  //-------------------------------------------------------------
+      //
+      //-------------------------------------------------------------
       public static void DrawPalBackGr()
       {
          int i;
@@ -111,6 +150,9 @@ namespace MarioPort
             WindowPalette(i);
       }
 
+	  //-------------------------------------------------------------
+      //Loads pixels into the ColorMap.
+      //-------------------------------------------------------------
       public static void ReadColorMap()
       {
          for (int i = 0; i <= Buffers.NV * Buffers.H - 1; i++)
@@ -119,11 +161,18 @@ namespace MarioPort
          }
       }
 
+	  //-------------------------------------------------------------
+      //Draws a brick at the given location with the given 
+	  //   dimensions.
+      //-------------------------------------------------------------
       public static void DrawBricks(int X, int Y, int W, int H)
       {
          FormMarioPort.formRef.PutImage(X, Y, W, H, Resources.PALBRICK_000);
       }
 
+	  //-------------------------------------------------------------
+      //NOT IMPLEMENTED
+      //-------------------------------------------------------------
       public static void LargeBricks(int X, int Y, int W, int H)
       {
          //asm
@@ -198,6 +247,10 @@ namespace MarioPort
          //            pop   es
       }
 
+	  //-------------------------------------------------------------
+      //Draws a pillar bitmap at the given location with given 
+	  //   dimensions.
+      //-------------------------------------------------------------
       public static void Pillar(int X, int Y, int W, int H)
       {
          if (((X / W) % 3) == 0)
@@ -208,6 +261,9 @@ namespace MarioPort
             FormMarioPort.formRef.PutImage(X, Y, W, H, Resources.PALPILL_002);
       }
 
+	  //-------------------------------------------------------------
+      //NOT IMPLEMENTED
+      //-------------------------------------------------------------
       public static void Windows(int X, int Y, int W, int H)
       {
          const int Y1 = 50;
@@ -268,6 +324,9 @@ namespace MarioPort
          //          pop   es
       }
 
+	  //-------------------------------------------------------------
+      //Draws a background block.
+      //-------------------------------------------------------------
       public static void DrawBackGrBlock(int X, int Y, int W, int H)
       {
          if (Buffers.Options.SkyType == 2 ||
@@ -289,6 +348,9 @@ namespace MarioPort
                FormMarioPort.formRef.Fill(X, Y + i, W, 1, ColorMap[Y + i]);
       }
 
+	  //-------------------------------------------------------------
+      //NOT IMPLEMENTED
+      //-------------------------------------------------------------
       public static void SmoothFill(int X, int Y, int W, int H)
       {
          ushort PageOffset = FormMarioPort.formRef.GetPageOffset();
@@ -399,6 +461,9 @@ namespace MarioPort
          //        pop     es
       }
 
+	  //-------------------------------------------------------------
+      //Initializes the clouds.
+      //-------------------------------------------------------------
       private static void InitClouds()
       {
          int i, j, Tmp0, Tmp1;
@@ -411,6 +476,9 @@ namespace MarioPort
          CloudMap[7, 0] = 1200; CloudMap[7, 1] = 20; CloudMap[MaxClouds + 7, 0] = 1240;
       }
 
+	  //-------------------------------------------------------------
+      //NOT IMPLEMENTED
+      //-------------------------------------------------------------
       private static void TraceCloud(int X, int Y, int N, byte Dir, byte Attr, byte Ovr)
       {
          int min, max;
@@ -504,6 +572,9 @@ namespace MarioPort
          //        pop     es
       }
 
+	  //-------------------------------------------------------------
+      //Draws the clouds on the background.
+      //-------------------------------------------------------------
       private static void PutClouds(int Offset, int N)
       {
          int i, X1, X2, Y;
@@ -553,6 +624,9 @@ namespace MarioPort
          }
       }
 
+	  //-------------------------------------------------------------
+      //Partially Implemented, asm portion not Implemented.
+      //-------------------------------------------------------------
       private static void PutBackGr(Array Map, bool Fill)
       {
          int Y, PageOffset, X1, X2, XPos, X1Pos, X2Pos, DX, OldXView, XStart, OldXStart, Count;
@@ -709,6 +783,9 @@ namespace MarioPort
          //@Exit:
       }
 
+	  //-------------------------------------------------------------
+      //Palette for brick objects.
+      //-------------------------------------------------------------
       private static void BrickPalette(int i)
       {
          //i = i % 20;
@@ -723,6 +800,9 @@ namespace MarioPort
          //}
       }
 
+	  //-------------------------------------------------------------
+      //Palette for large brick objects.
+      //-------------------------------------------------------------
       private static void LargeBrickPalette(int i)
       {
          //i = i % 32;
@@ -737,6 +817,9 @@ namespace MarioPort
          //}
       }
 
+	  //-------------------------------------------------------------
+      //Palette for pillar objects.
+      //-------------------------------------------------------------
       private static void PillarPalette(int i)
       {
          //const int ShadowPos = 28;
@@ -777,7 +860,10 @@ namespace MarioPort
          //for( j = ShadowEnd + 1; j <= 59; j++)
          //     Palettes.OutPalette (0xC0 + ((i + j) % 60), c1, c2, c3);
       }
-
+      
+	  //-------------------------------------------------------------
+      //Palette for window objects.
+      //-------------------------------------------------------------
       private static void WindowPalette(int i)
       {
          //int j;

@@ -279,14 +279,8 @@ namespace MarioPort
       {
          if ( !SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible )
             return;
-
-         FormMarioPort.PutImage(SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos, 
-                                SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos, 
-                                Buffers.W, 2 * Buffers.H, Buffer);
          
-         FormMarioPort.PopBackGr(SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos, 
-                                 SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos,
-                                 Buffers.W + 4, 2 * Buffers.H, BackGrAddr);
+         //FormMarioPort.PopBackGr(BackGrAddr);
          
          SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible = false;
       }
@@ -976,35 +970,25 @@ namespace MarioPort
          OldDir = Direction;
          OldXVel = XVel;
          
-         //ReadJoystick( );
-         
-         LastKeyLeft = Keyboard.keyLeft;
-         LastKeyRight = Keyboard.keyRight;
-         
-         //keyLeft = kbLeft || jsLeft;
-         //keyRight = kbRight || jsRight;
-         //keyUp = kbUp || jsUp;
-         //keyDown = kbDown || jsDown;
-         //keyAlt = kbAlt || jsButton1;
-         //keyCtrl = kbCtrl || jsButton2;
-         //keySpace = kbSpace || jsButton2;
+         //LastKeyLeft = Keyboard.keyLeft;
+         //LastKeyRight = Keyboard.keyRight;
 
-         keyLeft  = Keyboard.kbLeft;
-         keyRight = Keyboard.kbRight;
-         keyUp    = Keyboard.kbUp;
-         keyDown  = Keyboard.kbDown;
+         keyLeft = Keyboard.kbLeftArrow;
+         keyRight = Keyboard.kbRightArrow;
+         keyUp = Keyboard.kbUpArrow;
+         keyDown = Keyboard.kbDownArrow;
          keyAlt   = Keyboard.kbAlt;
          keyCtrl  = Keyboard.kbCtrl;
-         keySpace = Keyboard.kbSpace;
+         keySpace = Keyboard.kbSP;
          
-         if ( keyRight && (!LastKeyRight) && (Direction == dirLeft) )
+         if ( keyRight && (Direction == Buffers.dirLeft) )
          {
-            OldDir = dirRight;
+            OldDir = Buffers.dirRight;
             OldXVel = -XVel;
          }
-         if ( keyLeft && (!LastKeyLeft) && (Direction == dirRight) )
+         if (keyLeft && (Direction == Buffers.dirRight))
          {
-            OldDir = dirLeft;
+            OldDir = Buffers.dirLeft;
             OldXVel = -XVel;
          }
 
