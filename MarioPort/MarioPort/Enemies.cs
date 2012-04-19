@@ -238,6 +238,8 @@ namespace MarioPort
       //-------------------------------------------------
       private static void Mirror20x24(Bitmap from, ref Bitmap to)
       {
+         if (from == null)
+            return;
          from.RotateFlip(RotateFlipType.Rotate180FlipY);
          to = from.Clone() as Bitmap;
       }
@@ -1366,8 +1368,8 @@ namespace MarioPort
             }
          } // end for
          
-         i = 1;
-         while ( i <= ActiveEnemies.Length )
+         i = 0;
+         while ( i < ActiveEnemies.Length )
          {
             if ( EnemyList[(int)(ActiveEnemies[i])].Tp == EnemyType.tpDead )
                //Delete(ActiveEnemies, i, 1);

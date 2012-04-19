@@ -1,4 +1,25 @@
-﻿using System;
+﻿//-------------------------------------------------------------------
+//Purpose: This File contains the world and world options for the
+//         levels.
+//Author:  Brandon Lambert
+//
+//Note:    This file is highly correlated to the original Worlds.pas
+//         file. The level symbols are almost all identical except
+//         for the following symbols which were changed due to being
+//         incompatible in Visual Studio.
+//
+//         Symbols Changed:
+//         (1)Empty Square box was changed to a section symbol "§" 
+//            (alt + 0167). The original symbol can be found on line
+//             133 of Worlds.pas if needed for reference.
+//         (2)A hyphen like character was changed to a normal hyphen 
+//            (-). Consult line 569 or 570 of Worlds.pas for 
+//            reference.
+//
+//File Translation Percentage: This file is 100% completely 
+//                             translated.
+//-------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +27,20 @@ using System.Text;
 //Manually Added
 using System.IO; 
 
+
 namespace MarioPort
 {
+
+   //----------------------------------------------------------------
+   //Static class that represents the Worlds object for the game.
+   //----------------------------------------------------------------
    public static class Worlds
    {
+      private const int LEVEL_HEIGHT = 13;
+      //-------------------------------------------------------------
+      //Returns the Intro level information in a two-dimensional 
+	  //   char array
+      //-------------------------------------------------------------
       public static char[,] Intro_0()
       {
          string levelInfo = 
@@ -31,20 +62,23 @@ namespace MarioPort
             @"AA           " +
             @"AA           ";
          System.Text.ASCIIEncoding  encoding=new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,] intro = new char[temp.Length / 13 + 1, 13];
-         for(int x = 0; x < (temp.Length / 13); x++) 
+         char[,] intro = new char[temp.Length / LEVEL_HEIGHT + 1, LEVEL_HEIGHT];
+         for(int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++) 
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               intro[x, y] = temp[x * 13 + y];
+               intro[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         intro[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
+         intro[(temp.Length / LEVEL_HEIGHT), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return intro;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_0()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -76,6 +110,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_1a()
       {
          string levelInfo =
@@ -260,20 +298,23 @@ namespace MarioPort
             @"AA÷          " +
             @"AA÷          ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,] level_1a = new char[(temp.Length / 13) + 1, 13];
-         for (int x = 0; x < (temp.Length / 13); x++)
+         char[,] level_1a = new char[(temp.Length / LEVEL_HEIGHT) + 1, LEVEL_HEIGHT];
+         for (int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++)
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               level_1a[x, y] = temp[x * 13 + y];
+               level_1a[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         level_1a[(temp.Length / 13),0] = (char)0; //Storing 0 at end, not positive if necessary
+         level_1a[(temp.Length / LEVEL_HEIGHT),0] = (char)0; //Storing 0 at end, not positive if necessary
          return level_1a;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_1a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -305,6 +346,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Opt_1a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -336,6 +381,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_1b()
       {
          string levelInfo =
@@ -356,20 +405,23 @@ namespace MarioPort
             @"W   $       W" +
             @"WWWWWWWWWWWWW";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,] level_1b = new char[temp.Length / 13 + 1, 13];
-         for (int x = 0; x < (temp.Length / 13); x++)
+         char[,] level_1b = new char[temp.Length / LEVEL_HEIGHT + 1, LEVEL_HEIGHT];
+         for (int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++)
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               level_1b[x, y] = temp[x * 13 + y];
+               level_1b[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         level_1b[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
+         level_1b[(temp.Length / LEVEL_HEIGHT), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return level_1b;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_1b()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -401,6 +453,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_2a()
       {
          string levelInfo =
@@ -639,20 +695,23 @@ namespace MarioPort
             @"    @    ?à A" +
             @"AAAAAAAAAAAAA";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,] level_2a = new char[temp.Length / 13 + 1, 13];
-         for (int x = 0; x < (temp.Length / 13); x++)
+         char[,] level_2a = new char[temp.Length / LEVEL_HEIGHT + 1, LEVEL_HEIGHT];
+         for (int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++)
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               level_2a[x, y] = temp[x * 13 + y];
+               level_2a[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         level_2a[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
+         level_2a[(temp.Length / LEVEL_HEIGHT), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return level_2a;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_2a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -684,6 +743,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Opt_2a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -715,6 +778,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_2b()
       {
          char[,] level_2b = new char[1,1];
@@ -722,11 +789,19 @@ namespace MarioPort
          return level_2b;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_2b()
       {
          return new Buffers.WorldOptions();
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_3a()
       {
          string levelInfo =
@@ -886,20 +961,23 @@ namespace MarioPort
             @"AAAAAAAAAAAAA" +
             @"AAAAAAAAAAAAA";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,]Level_3a = new char[temp.Length / 13 + 1, 13];
-         for (int x = 0; x < (temp.Length / 13); x++)
+         char[,]Level_3a = new char[temp.Length / LEVEL_HEIGHT + 1, LEVEL_HEIGHT];
+         for (int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++)
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               Level_3a[x, y] = temp[x * 13 + y];
+               Level_3a[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         Level_3a[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
+         Level_3a[(temp.Length / LEVEL_HEIGHT), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_3a;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_3a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -931,6 +1009,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Opt_3a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -962,6 +1044,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_3b()
       {
          char[,] level_3b = new char[1,1];
@@ -969,11 +1055,19 @@ namespace MarioPort
          return level_3b;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_3b()
       {
          return new Buffers.WorldOptions();
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_4a()
       {
          string levelInfo =
@@ -1180,20 +1274,23 @@ namespace MarioPort
             @"AI          I" +
             @"¯AIIIIIIIIIII";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,] Level_4a = new char[temp.Length / 13 + 1, 13];
-         for (int x = 0; x < (temp.Length / 13); x++)
+         char[,] Level_4a = new char[temp.Length / LEVEL_HEIGHT + 1, LEVEL_HEIGHT];
+         for (int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++)
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               Level_4a[x, y] = temp[x * 13 + y];
+               Level_4a[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         Level_4a[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
+         Level_4a[(temp.Length / LEVEL_HEIGHT), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_4a;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_4a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -1225,6 +1322,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Opt_4a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -1256,6 +1357,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_4b()
       {
          string levelInfo =
@@ -1377,20 +1482,23 @@ namespace MarioPort
             @"AAAAAAAAAAAAA" +
             @"AAAAAAAAAAAAA";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,] Level_4b = new char[temp.Length / 13 + 1, 13];
-         for (int x = 0; x < (temp.Length / 13); x++)
+         char[,] Level_4b = new char[temp.Length / LEVEL_HEIGHT + 1, LEVEL_HEIGHT];
+         for (int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++)
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               Level_4b[x, y] = temp[x * 13 + y];
+               Level_4b[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         Level_4b[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
+         Level_4b[(temp.Length / LEVEL_HEIGHT), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_4b;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_4b()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -1422,6 +1530,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_5a()
       {
          string levelInfo =
@@ -1591,20 +1703,23 @@ namespace MarioPort
             @"AA           " +
             @"AA           ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,] Level_5a = new char[temp.Length / 13 + 1, 13];
-         for (int x = 0; x < (temp.Length / 13); x++)
+         char[,] Level_5a = new char[temp.Length / LEVEL_HEIGHT + 1, LEVEL_HEIGHT];
+         for (int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++)
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               Level_5a[x, y] = temp[x * 13 + y];
+               Level_5a[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         Level_5a[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
+         Level_5a[(temp.Length / LEVEL_HEIGHT), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_5a;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_5a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -1636,6 +1751,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Opt_5a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -1667,6 +1786,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_5b()
       {
          string levelInfo =
@@ -1718,20 +1841,23 @@ namespace MarioPort
             @"AA          X" +
             @"AAXXXXXXXXXXX";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,] Level_5b = new char[temp.Length / 13 + 1, 13];
-         for (int x = 0; x < (temp.Length / 13); x++)
+         char[,] Level_5b = new char[temp.Length / LEVEL_HEIGHT + 1, LEVEL_HEIGHT];
+         for (int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++)
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               Level_5b[x, y] = temp[x * 13 + y];
+               Level_5b[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         Level_5b[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
+         Level_5b[(temp.Length / LEVEL_HEIGHT), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_5b;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_5b()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -1763,6 +1889,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_6a()
       {
          string levelInfo =
@@ -1908,20 +2038,23 @@ namespace MarioPort
             @"AA           " +
             @"AA           ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,] Level_6a = new char[temp.Length / 13 + 1, 13];
-         for (int x = 0; x < (temp.Length / 13); x++)
+         char[,] Level_6a = new char[temp.Length / LEVEL_HEIGHT + 1, LEVEL_HEIGHT];
+         for (int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++)
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               Level_6a[x, y] = temp[x * 13 + y];
+               Level_6a[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         Level_6a[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
+         Level_6a[(temp.Length / LEVEL_HEIGHT), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_6a;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_6a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -1953,6 +2086,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Opt_6a()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();
@@ -1984,6 +2121,10 @@ namespace MarioPort
          return options;
       }
 
+	  //-------------------------------------------------------------
+      //Returns the level information in a two-dimensional 
+	  //   char array.
+      //-------------------------------------------------------------
       public static char[,] Level_6b()
       {
          string levelInfo =
@@ -2038,20 +2179,23 @@ namespace MarioPort
             @"AA           " +
             @"AA           ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         //byte[] temp = encoding.GetBytes(levelInfo);
          char[] temp = levelInfo.ToCharArray();
-         char[,] Level_6b = new char[temp.Length / 13 + 1, 13];
-         for (int x = 0; x < (temp.Length / 13); x++)
+         char[,] Level_6b = new char[temp.Length / LEVEL_HEIGHT + 1, LEVEL_HEIGHT];
+         for (int x = 0; x < (temp.Length / LEVEL_HEIGHT); x++)
          {
-            for (int y = 0; y < 13; y++)
+            for (int y = 0; y < LEVEL_HEIGHT; y++)
             {
-               Level_6b[x, y] = temp[x * 13 + y];
+               Level_6b[x, y] = temp[x * LEVEL_HEIGHT + y];
             }
          }
-         Level_6b[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
+         Level_6b[(temp.Length / LEVEL_HEIGHT), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_6b;
       }
 
+	  //-------------------------------------------------------------
+      //Returns a WorldOptions object that defines the options for
+	  //   the level.
+      //-------------------------------------------------------------
       public static Buffers.WorldOptions Options_6b()
       {
          Buffers.WorldOptions options = new Buffers.WorldOptions();

@@ -182,9 +182,9 @@ namespace MarioPort
       {
          WorldOptions TempOptions;
          byte C;
-         //Move(Options, TempOptions, TempOptions.SizeOf());
-         //Move(SaveOptions, Buffers.Options, Buffers.Options.SizeOf());
-         //Move(TempOptions, SaveOptions, SaveOptions.SizeOf());
+         TempOptions = Options;
+         Options = SaveOptions;
+         SaveOptions = TempOptions;
          for (int i = EX; i < MaxWorldSize - 1 + EX; i++)
       	   for (int j = EY1; j < NV -1 + EY2; j++)
       	   {
@@ -206,14 +206,14 @@ namespace MarioPort
          //NoSound();
       }
 
-      //public static void Beep(int Freq)
-      //{
+      public static void Beep(int Freq)
+      {
       //   if (BeeperSound)
       //      if (freq = 0)
       //         Crt.NoSound;
       //      else
       //         Crt.Sound(Freq);
-      //}
+      }
 
       public static void InitLevelScore()
 	   {
