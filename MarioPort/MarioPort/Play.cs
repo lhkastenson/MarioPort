@@ -63,7 +63,7 @@ namespace MarioPort
             Buffers.Swap();
             Buffers.ReadWorld (Map1, ref Buffers.WorldMap, Opt1b);
          }
-
+         Console.WriteLine("Done Reading World");
          Players.InitPlayer (Buffers.Options.InitX, Buffers.Options.InitY, Buffers.Player);
          Players.MapX = Buffers.Options.InitX;
          Players.MapY = Buffers.Options.InitY;
@@ -76,6 +76,9 @@ namespace MarioPort
             Buffers.LastXView[i] = 0;
          FormMarioPort.formRef.SetView (Buffers.XView, Buffers.YView);
 
+         BuildLevel();
+         Restart();
+
          FormMarioPort.formRef.SetYOffset(YBase);
 
          Enemies.ClearEnemies();
@@ -84,10 +87,11 @@ namespace MarioPort
          //Palettes.ClearPalette();
          FormMarioPort.formRef.ClearVGAMem();
          //Music.StopMusic();
-         return true;
+         return false;
          //http://en.wikipedia.org/wiki/Return_statement#Syntax
          //"In Pascal there is no return statement." ...wat!?
 		}
+
 		public static void MoveScreen()
 		{
          //int Scroll;
@@ -114,7 +118,7 @@ namespace MarioPort
          //   StartEnemies((XView / W) + NH + StartEnemiesAt(), -1);
 			
          //// Need to find out what else is in "Options"
-         //i = Options.Horizon;
+         //i = Buffers.Options.Horizon;
          //Options.Horizon = i + GetYOffset() - YBASE;
          //DrawBackGr(false);
          //Options.Horizon = i;
@@ -138,15 +142,15 @@ namespace MarioPort
 		}
 		
 	
-	   public static void FindPipeExit()
+	   public static bool FindPipeExit()
 	   {
-         //int i, j;
-         //for (int i = 0; i < Options.XSize - 1; i++)
-         //   for (int j = 0; j < NH; j++)
-         //      if (i != MapX || k != MapY)
+         ////int i, j;
+         //for (int i = 0; i < Buffers.Options.XSize - 1; i++)
+         //   for (int j = 0; j < Buffers.NH; j++)
+         //      if (i != Buffers.MapX || k != Buffers.MapY)
          //      {
-         //         if (WorldMap*[i,j] in ['a' .. 'i'] &&
-         //            WorldMap*[i + 1, j] = PipeCode [2]) //need to figure out how to do this.
+         //         if (Buffers.WorldMap[i,j] in ['a' .. 'i'] &&
+         //            Buffers.WorldMap[i + 1, j] = PipeCode [2]) //need to figure out how to do this.
          //         {
          //            MaxX = i;
          //            MapY = j;
@@ -155,8 +159,11 @@ namespace MarioPort
          //               XView = (Options.XSize - NH) * W
          //            if (XView < 0)
          //               XView = 0;
+         //            return true;
          //         }
          //      }
+         return false;
+         
 	   }
 	   
 	   public static void WriteTotalScore()
@@ -385,14 +392,14 @@ namespace MarioPort
         }
 		static void BuildLevel()
 		{
-            //InitSky (SkyType);
-            //InitWalls (WallType1, WallType2, WallType3);
-            //InitPipes (PipeColor);
-            //InitBackGr (BackGrType, Clouds);
-            //if (Stars != 0)
-            //   InitStars();
+            Figures.InitSky(Buffers.Options.SkyType);
+            Figures.InitWalls(Buffers.Options.WallType1, Buffers.Options.WallType2, Buffers.Options.WallType3);
+            Figures.InitPipes(Buffers.Options.PipeColor);
+            BackGr.InitBackGr(Buffers.Options.BackGrType, Buffers.Options.Clouds);
+            if (Buffers.Options.Stars != 0)
+               Stars.InitStars();
 				
-            //BuildWorld();
+            Figures.BuildWorld();
 		}
 		
 		static void Restart()
@@ -619,7 +626,7 @@ namespace MarioPort
 				
       //      if (Options.Horizon < NV)
       //      {
-      //         j = Options.Horizon - 1;
+      //         j = Buffers.Options.Horizon - 1;
       //         for (int i = 0 / W; i < NH; i++)
       //         {
       //            k = XView / W + (i + LavaCounter / 8) % (NH + 1);

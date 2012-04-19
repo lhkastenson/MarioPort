@@ -32,7 +32,7 @@ namespace MarioPort
             @"AA           ";
          System.Text.ASCIIEncoding  encoding=new System.Text.ASCIIEncoding();
          byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] intro = new byte[temp.Length / 13, 13];
+         byte[,] intro = new byte[temp.Length / 13 + 1, 13];
          for(int x = 0; x < (temp.Length / 13); x++) 
          {
             for (int y = 0; y < 13; y++)
@@ -40,6 +40,7 @@ namespace MarioPort
                intro[x, y] = temp[x * 13 + y];
             }
          }
+         intro[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
          return intro;
       }
 
@@ -354,7 +355,7 @@ namespace MarioPort
             @"WWWWWWWWWWWWW";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
          byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] level_1b = new byte[temp.Length / 13, 13];
+         byte[,] level_1b = new byte[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -362,7 +363,7 @@ namespace MarioPort
                level_1b[x, y] = temp[x * 13 + y];
             }
          }
-         level_1b[(temp.Length / 13) - 1, 0] = 0; //Storing 0 at end, not positive if necessary
+         level_1b[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
          return level_1b;
       }
 
@@ -636,7 +637,7 @@ namespace MarioPort
             @"AAAAAAAAAAAAA";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
          byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] level_2a = new byte[temp.Length / 13, 13];
+         byte[,] level_2a = new byte[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -882,7 +883,7 @@ namespace MarioPort
             @"AAAAAAAAAAAAA";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
          byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,]Level_3a = new byte[temp.Length / 13, 13];
+         byte[,]Level_3a = new byte[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -1175,7 +1176,7 @@ namespace MarioPort
             @"¯AIIIIIIIIIII";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
          byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,]Level_4a = new byte[temp.Length / 13, 13];
+         byte[,] Level_4a = new byte[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -1371,7 +1372,7 @@ namespace MarioPort
             @"AAAAAAAAAAAAA";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
          byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_4b = new byte[temp.Length / 13, 13];
+         byte[,] Level_4b = new byte[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -1584,7 +1585,7 @@ namespace MarioPort
             @"AA           ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
          byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_5a = new byte[temp.Length / 13, 13];
+         byte[,] Level_5a = new byte[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -1710,7 +1711,7 @@ namespace MarioPort
             @"AAXXXXXXXXXXX";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
          byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_5b = new byte[temp.Length / 13, 13];
+         byte[,] Level_5b = new byte[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -1899,7 +1900,7 @@ namespace MarioPort
             @"AA           ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
          byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_6a = new byte[temp.Length / 13, 13];
+         byte[,] Level_6a = new byte[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -2028,7 +2029,7 @@ namespace MarioPort
             @"AA           ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
          byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_6b = new byte[temp.Length / 13, 13];
+         byte[,] Level_6b = new byte[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)

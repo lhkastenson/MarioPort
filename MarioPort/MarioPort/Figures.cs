@@ -16,14 +16,14 @@ namespace MarioPort
 {
    public static class Figures
    {
-      public const int N1 = 3;
-      public const int N2 = 13;
+      public const int N1 = 4;//3;
+      public const int N2 = 14;//13;
 
       public static Bitmap[,] FigList = new Bitmap[N1, N2];
       public static Bitmap[] Bricks = new Bitmap[4];
       public static byte Sky;
 
-/*
+
 
 //        private static void ReColor (P1, P2: Pointer; C: Byte);
 //        private static void ReColor2 (P1, P2: Pointer; C1, C2: Byte);
@@ -33,7 +33,7 @@ namespace MarioPort
 //        private static void InitSky (NewSky: Byte);
 //        private static void InitPipes (NewColor: Byte);
 //        private static void InitWalls (W1, W2, W3: Byte);
-//        private static void DrawSky (X, Y, W, H: Integer);
+//        private static void DrawSky (X, Y, Buffers.W, Buffers.H: Integer);
 //        private static void SetSkyPalette;
 //        private static void Redraw (X, Y: Integer);
 //        private static void BuildWorld;
@@ -48,8 +48,8 @@ namespace MarioPort
 //        C0, C1, C2: Byte;
 //          
 //        {
-//        for i = 1 to H do
-//          for j = 1 to W do
+//        for i = 1 to Buffers.H do
+//          for j = 1 to Buffers.W do
 //          {
 //            C1 = (int)(P1^ [i, j]);
 //            C2 = (int)(P2^ [i, j]);
@@ -94,9 +94,9 @@ namespace MarioPort
 //              lds     si, P1
 //              les     di, P2
 //              cld
-//              mov     cx, H
+//              mov     cx, Buffers.H
 //      1:     push    cx
-//              mov     cx, W
+//              mov     cx, Buffers.W
 //      2:     lodsb
 //              cmp     al, $10
 //              jbe     3
@@ -122,9 +122,9 @@ namespace MarioPort
 //              lds     si, P1
 //              les     di, P2
 //              cld
-//              mov     cx, H
+//              mov     cx, Buffers.H
 //      1:     push    cx
-//              mov     cx, W
+//              mov     cx, Buffers.W
 //      2:     lodsb
 //              cmp     al, $10
 //              jbe     3
@@ -156,9 +156,9 @@ namespace MarioPort
 //              lds     si, P1
 //              les     di, P2
 //              cld
-//              mov     cx, H
+//              mov     cx, Buffers.H
 //      1:     push    cx
-//              mov     cx, W
+//              mov     cx, Buffers.W
 //      2:     lodsb
 //              cmp     al, N1
 //              jnz     3
@@ -172,11 +172,11 @@ namespace MarioPort
 //        }
 //      }
 //      }
-      **/
+
       public static void Mirror(ref System.Drawing.Bitmap from, ref System.Drawing.Bitmap to)
       { /**
 //        type
-//          PlaneBuffer = array[0..H - 1, 0..W div 4 - 1] of Byte;
+//          PlaneBuffer = array[0..Buffers.H - 1, 0..Buffers.W div 4 - 1] of Byte;
 //          PlaneBufferArray = array[0..3] of PlaneBuffer;
 //          PlaneBufferArrayPtr = ^PlaneBufferArray;
 //        var
@@ -185,11 +185,11 @@ namespace MarioPort
 //          var
 //            i, j: Byte;
 //        {
-//          for j = 0 to H - 1 do
-//            for i = 0 to W div 4 - 1 do
+//          for j = 0 to Buffers.H - 1 do
+//            for i = 0 to Buffers.W div 4 - 1 do
 //            {
-//              Dest^[Plane2, j, i] = Source^[Plane1, j, W div 4 - 1 - i];
-//              Dest^[Plane1, j, i] = Source^[Plane2, j, W div 4 - 1 - i];
+//              Dest^[Plane2, j, i] = Source^[Plane1, j, Buffers.W div 4 - 1 - i];
+//              Dest^[Plane1, j, i] = Source^[Plane2, j, Buffers.W div 4 - 1 - i];
 //            }
 //        }
 //      {
@@ -198,7 +198,7 @@ namespace MarioPort
 //        Swap (0, 3);
 //        Swap (1, 2);
 //      }
-      **/}/**
+      **/}
 
       private static void Rotate(ref Bitmap from, ref Bitmap to)
       {
@@ -209,11 +209,11 @@ namespace MarioPort
 //            lds     si, P1
 //            les     di, P2
 //            cld
-//            add     si, W * H
+//            add     si, Buffers.W * Buffers.H
 //            dec     si
-//            mov     cx, H
+//            mov     cx, Buffers.H
 //      1:   push    cx
-//            mov     cx, W
+//            mov     cx, Buffers.W
 //      2:   std
 //            lodsb
 //            cld
@@ -227,15 +227,15 @@ namespace MarioPort
 //      }
       }
 
-      private static void InitSky(byte NewSky)
+      public static void InitSky(byte NewSky)
       {
 //      {
 //        Sky = NewSky;
 //      }
 			Sky = NewSky;
       }
-      
-      private static void InitPipes(byte NewColor)
+
+      public static void InitPipes(byte NewColor)
       {
 //      {
 //        ReColor (@Pipe000, Resources.PIPE_000, NewColor);
@@ -247,14 +247,14 @@ namespace MarioPort
       }
       
       // Calls InitWall ({  } of InitWall) *moved
-      private static void InitWalls(byte W1, byte W2, byte W3)
+      public static void InitWalls(byte W1, byte W2, byte W3)
       {
          InitWall(1, W1);
          InitWall(2, W2);
          InitWall(3, W3);
       }
 
-      private static void InitWall(byte N, byte WallType)
+      public static void InitWall(byte N, byte WallType)
       {
          switch (WallType)
          {
@@ -265,6 +265,7 @@ namespace MarioPort
                FigList[N,  4]  = Resources.GREEN_002;
                FigList[N,  5]  = Resources.GREEN_003;
                FigList[N,  10] = Resources.GREEN_004;
+               break;
             }
             case 1:
             {
@@ -273,11 +274,12 @@ namespace MarioPort
                FigList[N, 4]  = Resources.SAND_002;
                FigList[N, 5]  = Resources.SAND_003;
                FigList[N, 10] = Resources.SAND_004;
+               break;
             }
             case 2:
             {
-               int i = Options.GroundColor1;
-               int j = Options.GroundColor2;
+               int i = Buffers.Options.GroundColor1;
+               int j = Buffers.Options.GroundColor2;
                
                // TODO
 //               Recolor2 (@Green000, FigList[N,  1], i, j);
@@ -291,7 +293,8 @@ namespace MarioPort
                FigList[N,  2]  = Resources.GREEN_001;
                FigList[N,  4]  = Resources.GREEN_002;
                FigList[N,  5]  = Resources.GREEN_003;
-               FigList[N,  10] = Resources.GREEN_004;
+               FigList[N, 10] = Resources.GREEN_004;
+               break;
             }
             case 3:
             {
@@ -300,6 +303,7 @@ namespace MarioPort
                FigList[N, 4]  = Resources.SAND_002;
                FigList[N, 5]  = Resources.SAND_003;
                FigList[N, 10] = Resources.SAND_004;
+               break;
             }
             case 4:
             {
@@ -308,6 +312,7 @@ namespace MarioPort
                FigList[N, 4]  = Resources.GRASS_002;
                FigList[N, 5]  = Resources.GRASS_003;
                FigList[N, 10] = Resources.GRASS_004;
+               break;
             }
             case 5:
             {
@@ -316,6 +321,7 @@ namespace MarioPort
                FigList[N, 4]  = Resources.DES_002;
                FigList[N, 5]  = Resources.DES_003;
                FigList[N, 10] = Resources.DES_004;
+               break;
             }
          }
 
@@ -381,7 +387,7 @@ namespace MarioPort
 //              ChangePalette ($F0, 52, 49, 32);
 //            }
 //          6: { Brown bricks }
-//            if Options.BackGrType = 4 )
+//            if Buffers.Options.BackGrType = 4 )
 //            {
 //              for i = $E0 to $EF do
 //                ChangePalette (i, 22, 15, 11);
@@ -398,7 +404,7 @@ namespace MarioPort
 //              ChangePalette ($D4, 17,  7,  6);
 //            }
 //          7: { Gray bricks }
-//            if Options.BackGrType = 4 )
+//            if Buffers.Options.BackGrType = 4 )
 //            {
 //              for i = $E0 to $EF do
 //                ChangePalette (i, 18, 18, 22);
@@ -415,7 +421,7 @@ namespace MarioPort
 //              ChangePalette ($D6, 12, 12, 15);
 //            }
 //          8: { Dark brown bricks }
-//            if Options.BackGrType = 4 )
+//            if Buffers.Options.BackGrType = 4 )
 //            {
 //              for i = $E0 to $EF do
 //                ChangePalette (i, 17, 10, 10);
@@ -484,64 +490,64 @@ namespace MarioPort
 //        i, j, k: Integer;
 //        Mix: Word;
 //      {
-//        if Options.BackGrType = 0 )
-//          Fill (X, Y, W, H, $E0)
+//        if Buffers.Options.BackGrType = 0 )
+//          Fill (X, Y, Buffers.W, Buffers.H, $E0)
 //        else
 //        case Sky of
 //          0, 1, 3, 4:
 //            {
-//              i = Options.Horizon;
+//              i = Buffers.Options.Horizon;
 //              j = i - Y;
 //              if (i < Y) )
-//                Fill (X, Y, W, H, $F0)
+//                Fill (X, Y, Buffers.W, Buffers.H, $F0)
 //              else
-//                if (i > Y + H - 1) )
-//                  Fill (X, Y, W, H, $E0)
+//                if (i > Y + Buffers.H - 1) )
+//                  Fill (X, Y, Buffers.W, Buffers.H, $E0)
 //                else
 //                {
-//                  Fill (X, Y, W, j, $E0);
-//                  Fill (X, i, W, H - j, $F0);
+//                  Fill (X, Y, Buffers.W, j, $E0);
+//                  Fill (X, i, Buffers.W, Buffers.H - j, $F0);
 //                }
 //            }
 //          2, 5, 9, 10, 11, 12:
-//            SmoothFill (X, Y, W, H);
+//            SmoothFill (X, Y, Buffers.W, Buffers.H);
 //          6, 7, 8:
-//            case Options.BackGrType of
-//              4: DrawBricks (X, Y, W, H);
-//              5: LargeBricks (X, Y, W, H);
-//              6: Pillar (X, Y, W, H);
-//              7: Windows (X, Y, W, H);
+//            case Buffers.Options.BackGrType of
+//              4: DrawBricks (X, Y, Buffers.W, Buffers.H);
+//              5: LargeBricks (X, Y, Buffers.W, Buffers.H);
+//              6: Pillar (X, Y, Buffers.W, Buffers.H);
+//              7: Windows (X, Y, Buffers.W, Buffers.H);
 //            }
 //        }
 //      }
       }
       
-      private static void Redraw (int X, int Y)
+      public static void Redraw (int X, int Y)
       {
          char Ch;
-         Bitmap Fig;
+         Bitmap Fig = null;
          bool L, R, LS, RS;
          int XPos, YPos;
          
-         XPos = X * W;
-         YPos = Y * H;
-         Ch = WorldMap[X, Y];
+         XPos = X * Buffers.W;
+         YPos = Y * Buffers.H;
+         Ch = (char)Buffers.WorldMap[X, Y];
          
-         if ( X >= 0 && Y >= 0 && Y < NV )
+         if ( X >= 0 && Y >= 0 && Y < Buffers.NV )
          {
             if ( Ch != (char)0 )
             {
-               if ( Ch == '%' && Options.Design == 4 )
-                  DrawSky(XPos, YPos, W, H / 2);
+               if ( Ch == '%' && Buffers.Options.Design == 4 )
+                  DrawSky(XPos, YPos, Buffers.W, Buffers.H / 2);
                else
-                  DrawSky(XPos, YPos, W, H);
+                  DrawSky(XPos, YPos, Buffers.W, Buffers.H);
             }
             if ( Ch == ' ' )
                return;
-            if ( WorldMap[X, Y - 1] == (char)18 )
+            if ( Buffers.WorldMap[X, Y - 1] == (char)18 )
             {
                Fig = FigList[1, 5];
-               PutImage(XPos, YPos, W, H, Fig);
+               FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
             }
             
             switch (Ch)
@@ -580,22 +586,22 @@ namespace MarioPort
                   }
                   else
                   {
-                     if ( WorldMap[X - 1, Y] >= 14 && WorldMap[X - 1, Y] <= 26 )
+                     if ( Buffers.WorldMap[X - 1, Y] >= 14 && Buffers.WorldMap[X - 1, Y] <= 26 )
                      {
                         if ( Ch == 1 || Ch == (char)4 || Ch == (char)7 )
                         {
-                           Fig = FigList[1, (int)(WorldMap[X - 1, Y]) - 13];
-                           PutImage(XPos, YPos, W, H, Fig);
+                           Fig = FigList[1, (int)(Buffers.WorldMap[X - 1, Y]) - 13];
+                           FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                         }
                      }
                      else
                      {
-                        if ( WorldMap[X + 1, Y] >= 14 && WorldMap[X + 1, Y] <= 26 )
+                        if ( Buffers.WorldMap[X + 1, Y] >= 14 && Buffers.WorldMap[X + 1, Y] <= 26 )
                         {
                            if ( Ch == 3 || Ch == (char)6 || Ch == (char)9 )
                            {
-                              Fig = FigList[1, (int)(WorldMap[X + 1, Y]) - 13];
-                              PutImage(XPos, YPos, W, H, Fig);
+                              Fig = FigList[1, (int)(Buffers.WorldMap[X + 1, Y]) - 13];
+                              FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                            }
                         }
                      }
@@ -610,8 +616,10 @@ namespace MarioPort
                   break;
                case 'A':
                {
-                  L = WorldMap[X - 1, Y] = 'A';
-                  R = WorldMap[X + 1, Y] = 'A';
+                  L = true;
+                     Buffers.WorldMap[X - 1, Y] = (byte)'A';
+                     R = true;
+                     Buffers.WorldMap[X + 1, Y] = (byte)'A';
                   if ( (X + Y) % 2 == 1 )
                   {
                      RS = true;
@@ -655,10 +663,10 @@ namespace MarioPort
                case '=':
                {
                   Fig = Resources.PIN_000;
-                  if ( Buffers.CanHoldYou( WorldMap[X, Y + 1] ) )
-                     DrawImage(XPos, YPos, W, H, Fig);
+                  if ( Buffers.CanHoldYou( (char)Buffers.WorldMap[X, Y + 1] ) )
+                     FormMarioPort.formRef.DrawImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                   else
-                     UpSideDown(XPos, YPos, W, H, Fig);
+                     FormMarioPort.formRef.UpSideDown(XPos, YPos, Buffers.W, Buffers.H, Fig);
 //                  Fig = null;
                   break;
                }
@@ -682,7 +690,7 @@ namespace MarioPort
 
                case 'þ':
                {
-                  if ( WorldMap[X, Y - 1] == 'þ' )
+                  if ( Buffers.WorldMap[X, Y - 1] == 'þ' )
                      Fig = Resources.EXIT_001;
                   else
                      Fig = Resources.EXIT_000;
@@ -690,29 +698,29 @@ namespace MarioPort
                }
                case '÷':
                {
-                  if ( (WorldMap[X, Y - 1] == 'ð') && (Options.Design == 2) )
+                  if ( (Buffers.WorldMap[X, Y - 1] == 'ð') && (Buffers.Options.Design == 2) )
                   {
                      Fig = Resources.SMTREE_001;
-                     DrawImage(XPos, YPos, W, H, Fig);
+                     FormMarioPort.formRef.DrawImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                   }
-                  if ( WorldMap[X, Y - 1] == 'ö' )
+                  if ( Buffers.WorldMap[X, Y - 1] == 'ö' )
                   {
-                     if ( Options.Design == 1 )
+                     if ( Buffers.Options.Design == 1 )
                      {
                         Fig = Resources.WPALM_000;
-                        DrawImage(XPos, YPos, W, H, Fig);
+                        FormMarioPort.formRef.DrawImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                      }
                   }
-                  if ( (X == 0) || (WorldMap[X - 1, Y] == Ch) )
+                  if ( (X == 0) || (Buffers.WorldMap[X - 1, Y] == Ch) )
                   {
-                     if (WorldMap[X + 1, Y] = Ch)
+                     if (Buffers.WorldMap[X + 1, Y] == (byte)Ch)
                         Fig = Resources.GRASS2_000;
                      else
                         Fig = Resources.GRASS3_000;
                   }
                   else
                   {
-                     if ( WorldMap[X + 1, Y] == Ch )
+                     if ( Buffers.WorldMap[X + 1, Y] == Ch )
                         Fig = Resources.GRASS1_000;
                      else
                         Fig = Resources.GRASS3_000;
@@ -722,11 +730,11 @@ namespace MarioPort
 
                case 'ð':
                {
-                  switch (Options.Design)
+                  switch (Buffers.Options.Design)
                   {
                      case 1:
                      {
-                        if ( WorldMap[X, Y - 1] != Ch )
+                        if ( Buffers.WorldMap[X, Y - 1] != Ch )
                            Fig = Resources.FENCE_001;
                         else
                            Fig = Resources.FENCE_000;
@@ -734,108 +742,117 @@ namespace MarioPort
                      }
                      case 2:
                      {
-                        if ( WorldMap[X, Y - 1] != Ch )
+                        if ( Buffers.WorldMap[X, Y - 1] != Ch )
                            Fig = Resources.SMTREE_000;
                         else
                            Fig = Resources.SMTREE_001;
+                        break;
                      }
                   }
                   break;
                }
                case 'ö':
                {
-                  switch (Options.Design)
+                  switch (Buffers.Options.Design)
                   {
                      case 1: Fig = Resources.WPALM_000;
+                        break;
                   }
+                  break;
                }
                case 'ú':
                {
-                  switch (Options.Design)
+                  switch (Buffers.Options.Design)
                   {
                      case 1:
                      {
-                        if ( WorldMap[X - 1, Y] == 'ù' )
+                        if ( Buffers.WorldMap[X - 1, Y] == 'ù' )
                         {
                           Fig = Resources.PALM3_000;
-                          DrawImage(XPos, YPos, W, H, Fig);
+                          FormMarioPort.formRef.DrawImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                         }
                         else
                         {
-                           if ( WorldMap[X + 1, Y] == 'ù' )
+                           if ( Buffers.WorldMap[X + 1, Y] == 'ù' )
                            {
                               Fig = Resources.PALM1_000;
-                              DrawImage(XPos, YPos, W, H, Fig);
+                              FormMarioPort.formRef.DrawImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                            }
                         }
-                        Fig = Resources.Palm0_000;
+                        Fig = Resources.PALM0_000;
+                        break;
                      }
                   }
                   break;
                }
                case 'ô': 
                {
-                  switch (Options.Design)
+                  switch (Buffers.Options.Design)
                   {
                      case 1:
                      {
-                        if ( WorldMap[X, Y + 1] == 'ö' )
+                        if ( Buffers.WorldMap[X, Y + 1] == 'ö' )
                         {
                            Fig = Resources.WPALM_000;
-                           DrawImage(XPos, YPos, W, H, Fig);
+                           FormMarioPort.formRef.DrawImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                         }
                         Fig = Resources.PALM1_000;
+                        break;
                       }
                   }
                   break;
                }
                case 'ù':
                {
-                  switch (Options.Design)
+                  switch (Buffers.Options.Design)
                   {
                      case 1:
                         Fig = Resources.PALM2_000;
+                        break;
                   }
+                  break;
                }
                case 'õ':
                {
-                  switch (Options.Design)
+                  switch (Buffers.Options.Design)
                   {
                      case 1:
                      {
-                        if ( WorldMap[X, Y + 1] == 'ö' )
+                        if ( Buffers.WorldMap[X, Y + 1] == 'ö' )
                         {
                            Fig = Resources.WPALM_000;
-                           DrawImage(XPos, YPos, W, H, Fig);
+                           FormMarioPort.formRef.DrawImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                         }
                         Fig = Resources.PALM3_000;
+                        break;
                      }
                   }
                   break;
                }
                case '#':
                {
-                  switch (Options.Design)
+                  switch (Buffers.Options.Design)
                   {
                      case 1:
                         Fig = Resources.FALL_000;
                         break;
                      case 2:
                      {
-                        switch (WorldMap[X, Y - 1])
+                        switch ((char)Buffers.WorldMap[X, Y - 1])
                         {
                            case '#':
-                              PutImage(XPos, YPos, W, H, Resources.TREE_001);
+                              FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Resources.TREE_001);
                               break;
                            case '%':
                            {
                                Fig = Resources.TREE_000;
-                               PutImage(XPos, YPos, W, H, Fig);
+                               FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                                Fig = Resources.TREE_003;
                                break;
                            }
                            default:
                               Fig = Resources.TREE_003;
+                              break;
                         }
                         break;
                      }
@@ -846,45 +863,47 @@ namespace MarioPort
                         Fig = Resources.LAVA_000;
                         break;
                      case 5:
-                        Fill (XPos, YPos, W, H, 5);
+                        FormMarioPort.formRef.Fill (XPos, YPos, Buffers.W, Buffers.H, 5);
+                        break;
                   }
                   break;
                }
                case '%': 
                {
-                  switch (Options.Design)
+                  switch (Buffers.Options.Design)
                   {
                      case 1:
                         Fig = Resources.FALL_001;
                         break;
                      case 2: 
                      {
-                        switch (WorldMap[X, Y - 1])
+                        switch ((char)Buffers.WorldMap[X, Y - 1])
                         {
                            case '%':
-                              PutImage(XPos, YPos, W, H, Resources.TREE_000);
+                              FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Resources.TREE_000);
                               break;
                            case '#':
                            {
                                Fig = Resources.TREE_001;
-                               PutImage(XPos, YPos, W, H, Fig);
+                               FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                                Fig = Resources.TREE_002;
                                break;
                            }
                            default:
                              Fig = Resources.TREE_002;
+                             break;
                         }
                         break;
                      }
                      case 3:
-                        Fig = WINDOW_000;
+                        Fig = Resources.WINDOW_000;
                         break;
                      case 4:
                         Fig = Resources.LAVA_001;
                         break;
                      case 5:
                      {
-                        switch ((X + LavaCounter / 8) % 5)
+                        switch ((X + Buffers.LavaCounter / 8) % 5)
                         {
                            case 0:
                               Fig = Resources.LAVA2_001;
@@ -900,6 +919,7 @@ namespace MarioPort
                               break;
                            case 4:
                               Fig = Resources.LAVA2_005;
+                              break;
                         }
                         break;
                      }
@@ -910,12 +930,12 @@ namespace MarioPort
             }
             
             if ( Fig != null )
-               DrawImage(XPos, YPos, W, H, Fig);
+               FormMarioPort.formRef.DrawImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
          }
       }
       
       // Impl  } of BuildWall *moved
-      private static void BuildWorld()
+      public static void BuildWorld()
       {
 //      var
 //        AB,
@@ -929,30 +949,30 @@ namespace MarioPort
 //        i, j, k, l: Integer;
 //
 //      {  { BuildWorld }
-//        for i = 0 to Options.XSize - 1 do
+//        for i = 0 to Buffers.Options.XSize - 1 do
 //          for j = 0 to NV - 1 do
-//            case WorldMap[i, j] of
+//            case Buffers.WorldMap[i, j] of
 //              'ý': {
-//                     WorldMap[i, j - 5] = '?';
-//                     WorldMap[i, j - 6] = 'á';
-//                     WorldMap[i, j] = ' ';
+//                     Buffers.WorldMap[i, j - 5] = '?';
+//                     Buffers.WorldMap[i, j - 6] = 'á';
+//                     Buffers.WorldMap[i, j] = ' ';
 //                   }
 //              'ü': {
-//                     WorldMap[i, j - 2] = '*';
-//                     WorldMap[i, j] = ' ';
+//                     Buffers.WorldMap[i, j - 2] = '*';
+//                     Buffers.WorldMap[i, j] = ' ';
 //                   }
 //              '­': {
 //                     k = j + 1;
 //                     for l = j downto -1 do
-//                       WorldMap[i, l] = WorldMap[i, k];
+//                       Buffers.WorldMap[i, l] = Buffers.WorldMap[i, k];
 //                   }
 //              '®': {
-//                     WorldMap[i, j] = WorldMap[i, j - 1];
-//                     WorldMap[i, NV] = (char)254;
+//                     Buffers.WorldMap[i, j] = Buffers.WorldMap[i, j - 1];
+//                     Buffers.WorldMap[i, NV] = (char)254;
 //                   }
 //              '¯': {
-//                     WorldMap[i, j] = WorldMap[i, j - 1];
-//                     WorldMap[i, NV] = (char)255;
+//                     Buffers.WorldMap[i, j] = Buffers.WorldMap[i, j - 1];
+//                     Buffers.WorldMap[i, NV] = (char)255;
 //                   }
 //            }
 //
@@ -960,12 +980,12 @@ namespace MarioPort
 //        LastCD = ' ';
 //        LastEF = ' ';
 //
-//        with Options do
+//        with Buffers.Options do
 //          BuildWall = (WallType1 < 100);
 //
-//        if Options.BuildWall )
+//        if Buffers.Options.BuildWall )
 //        {
-//          for i = 0 to Options.XSize - 1 do
+//          for i = 0 to Buffers.Options.XSize - 1 do
 //          {
 //            for j = 0 to NV - 1 do
 //              BuildWall (i, j);
@@ -976,7 +996,7 @@ namespace MarioPort
 //          }
 //        }
 //        else
-//          with Options do
+//          with Buffers.Options do
 //          {
 //            case WallType1 of
 //              100:
@@ -1009,9 +1029,9 @@ namespace MarioPort
 //        ConvertGrass (@Palm2000, Palm2001, Palm2002);
 //        ConvertGrass (@PALM3_000, Palm3001, Palm3002);
 //
-//        Recolor (@Block001, Resources.BLOCK_001, Options.BrickColor);
-//        Recolor (@Wood000, Resources.WOOD_000, Options.WoodColor);
-//        Recolor (@XBlock000, Resources.XBLOCK_000, Options.XBlockColor);
+//        Recolor (@Block001, Resources.BLOCK_001, Buffers.Options.BrickColor);
+//        Recolor (@Wood000, Resources.WOOD_000, Buffers.Options.WoodColor);
+//        Recolor (@XBlock000, Resources.XBLOCK_000, Buffers.Options.XBlockColor);
 //
 //      }
       }
@@ -1026,7 +1046,7 @@ namespace MarioPort
 //        C: Char;
 //        Ch, ChLeft: Set of Char;
 //      {
-//        C = WorldMap[X, Y];
+//        C = Buffers.WorldMap[X, Y];
 //        case C of
 //          'A', 'B': {
 //                      AB = C;
@@ -1045,44 +1065,44 @@ namespace MarioPort
 //                    }
 //          else Exit;
 //        }
-//        A = 1 - Byte ((WorldMap[X, Y - 1] in (Ch - IgnoreAbove)) || (Y = 0));
-//        B = 2 * Byte (Not ((Y = NV - 1) || (WorldMap[X, Y + 1] in Ch)));
-//        L = 4 * Byte (Not ((X = 0) || (WorldMap[X - 1, Y] in ChLeft)));
-//        R = 8 * Byte (Not ((X = Options.XSize - 1) || (WorldMap[X + 1, Y] in Ch)));
+//        A = 1 - Byte ((Buffers.WorldMap[X, Y - 1] in (Ch - IgnoreAbove)) || (Y = 0));
+//        B = 2 * Byte (Not ((Y = NV - 1) || (Buffers.WorldMap[X, Y + 1] in Ch)));
+//        L = 4 * Byte (Not ((X = 0) || (Buffers.WorldMap[X - 1, Y] in ChLeft)));
+//        R = 8 * Byte (Not ((X = Buffers.Options.XSize - 1) || (Buffers.WorldMap[X + 1, Y] in Ch)));
 //        case A + B + L + R of
 //          0: {
 //               if (X > 0) && (Y > 0) )
-//                 if ( !(WorldMap[X - 1, Y - 1] in Ch)) )
-//                   { WorldMap[X, Y] = Chr (10 + N); Exit }
-//               if (X < Options.XSize - 1) && (Y > 0) )
-//                 if  !(WorldMap[X + 1, Y - 1] in Ch) )
-//                   { WorldMap[X, Y] = Chr (11 + N); Exit }
+//                 if ( !(Buffers.WorldMap[X - 1, Y - 1] in Ch)) )
+//                   { Buffers.WorldMap[X, Y] = Chr (10 + N); Exit }
+//               if (X < Buffers.Options.XSize - 1) && (Y > 0) )
+//                 if  !(Buffers.WorldMap[X + 1, Y - 1] in Ch) )
+//                   { Buffers.WorldMap[X, Y] = Chr (11 + N); Exit }
 //               if (X > 0) && (Y < NV - 1) )
-//                 if  !(WorldMap[X - 1, Y + 1] in Ch) )
-//                   { WorldMap[X, Y] = Chr (12 + N); Exit }
-//               if (X < Options.XSize - 1) && (Y < NV - 1) )
-//                 if  !(WorldMap[X + 1, Y + 1] in Ch) )
-//                   { WorldMap[X, Y] = Chr (13 + N); Exit }
-//               WorldMap[X, Y] = Chr (5 + N);
+//                 if  !(Buffers.WorldMap[X - 1, Y + 1] in Ch) )
+//                   { Buffers.WorldMap[X, Y] = Chr (12 + N); Exit }
+//               if (X < Buffers.Options.XSize - 1) && (Y < NV - 1) )
+//                 if  !(Buffers.WorldMap[X + 1, Y + 1] in Ch) )
+//                   { Buffers.WorldMap[X, Y] = Chr (13 + N); Exit }
+//               Buffers.WorldMap[X, Y] = Chr (5 + N);
 //             }
-//          1: WorldMap[X, Y] = Chr (2 + N);
-//          2: WorldMap[X, Y] = Chr (8 + N);
-//          4: WorldMap[X, Y] = Chr (4 + N);
-//          8: WorldMap[X, Y] = Chr (6 + N);
+//          1: Buffers.WorldMap[X, Y] = Chr (2 + N);
+//          2: Buffers.WorldMap[X, Y] = Chr (8 + N);
+//          4: Buffers.WorldMap[X, Y] = Chr (4 + N);
+//          8: Buffers.WorldMap[X, Y] = Chr (6 + N);
 //
-//          5: WorldMap[X, Y] = Chr (1 + N);
-//          6: WorldMap[X, Y] = Chr (7 + N);
-//          9: WorldMap[X, Y] = Chr (3 + N);
-//         10: WorldMap[X, Y] = Chr (9 + N);
+//          5: Buffers.WorldMap[X, Y] = Chr (1 + N);
+//          6: Buffers.WorldMap[X, Y] = Chr (7 + N);
+//          9: Buffers.WorldMap[X, Y] = Chr (3 + N);
+//         10: Buffers.WorldMap[X, Y] = Chr (9 + N);
 //
-//          else WorldMap[X, Y] = Chr (5 + N);
+//          else Buffers.WorldMap[X, Y] = Chr (5 + N);
 //        }
 //
 //      }
 //
 
       }
-*/
+
 
    }
 }

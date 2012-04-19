@@ -44,9 +44,9 @@ namespace MarioPort
       public static int Small;
 
       //// implementation ////
-      /*
-            private const int Safe = EY1;
-            private const int HSafe = H * Safe;
+      
+            private const int Safe = Buffers.EY1;
+            private const int HSafe = Buffers.H * Safe;
 
             private static bool keyLeft;
             private static bool keyRight;
@@ -58,15 +58,26 @@ namespace MarioPort
             private static bool keyRightShift;
             private static bool keySpace;
 
-            struct ScreenRec
+            public class ScreenRec
             {
-               public static bool Visible;
-               public static int XPos;
-               public static int YPos;
+               public bool Visible;
+               public int XPos;
+               public int YPos;
                public uint BackGrAddr;
+
+               public ScreenRec()
+               {
+
+               }
+
+               //public ScreenRec Create()
+               //{
+               //   //return ScreenRec 
+               //   return this;
+               //}
             }
-      
-            private static ScreenRec[] SaveScreen = new ScreenRec[MAX_PAGE + 1];
+
+            private static ScreenRec[] SaveScreen = new ScreenRec[FormMarioPort.MAX_PAGE + 1];
 
             private static int X;
             private static int Y;
@@ -104,7 +115,7 @@ namespace MarioPort
       //      private static void HighMirror (P1, P2: Pointer)
       //      {
       //        type
-      //          PlaneBuffer = array[0..2 * H - 1, 0..W / 4 - 1] of Byte;
+      //          PlaneBuffer = array[0..2 * Buffers.H - 1, 0..Buffers.W / 4 - 1] of Byte;
       //          PlaneBufferArray = array[0..3] of PlaneBuffer;
       //          PlaneBufferArrayPtr = ^PlaneBufferArray;
       //        var
@@ -113,11 +124,11 @@ namespace MarioPort
       //          var
       //            i, j: Byte;
       //        {
-      //          for j = 0 to 2 * H - 1 do
-      //            for i = 0 to W / 4 - 1 do
+      //          for j = 0 to 2 * Buffers.H - 1 do
+      //            for i = 0 to Buffers.W / 4 - 1 do
       //            {
-      //              Dest^[Plane2, j, i] = Source^[Plane1, j, W / 4 - 1 - i];
-      //              Dest^[Plane1, j, i] = Source^[Plane2, j, W / 4 - 1 - i];
+      //              Dest^[Plane2, j, i] = Source^[Plane1, j, Buffers.W / 4 - 1 - i];
+      //              Dest^[Plane1, j, i] = Source^[Plane2, j, Buffers.W / 4 - 1 - i];
       //            }
       //        }
       //      {
@@ -129,7 +140,7 @@ namespace MarioPort
       //      }
 
             // NOTE: I'm guessing that "Mirror" means flip over Y axis
-            **/
+            
       private static void HighMirror(Bitmap from, ref Bitmap to)
       {
          
@@ -194,9 +205,9 @@ namespace MarioPort
             SaveScreen[i].Visible = false;
          
          PlayerX1 = X;
-         PlayerX2 = X + W - 1;
-         PlayerY1 = Y + H;
-         PlayerY2 = Y + 2 * H - 1;
+         PlayerX2 = X + Buffers.W - 1;
+         PlayerY1 = Y + Buffers.H;
+         PlayerY2 = Y + 2 * Buffers.H - 1;
          PlayerXVel = XVel;
          PlayerYVel = YVel;
          Blinking = false;
@@ -205,38 +216,38 @@ namespace MarioPort
          EarthQuake = false;
          **/
       }
-      /**
+      
       private static void DrawDemo()
       {
          int i, j;
          
-//         with SaveScreen[CurrentPage] do
-//         GetImage (X, Y, W, 2 * H, Buffer );
-         SaveScreen[CurrentPage].BackGrAddr = PushBackGr (X, Y, W + 4, 2 * H );
-         SaveScreen[CurrentPage].XPos = X;
-         SaveScreen[CurrentPage].YPos = Y;
-         SaveScreen[CurrentPage].Visible = true;
+//         with SaveScreen[FormMarioPort.formRef.CurrentPage()] do
+//         GetImage (X, Y, Buffers.W, 2 * Buffers.H, Buffer );
+         SaveScreen[FormMarioPort.formRef.CurrentPage()].BackGrAddr = FormMarioPort.formRef.PushBackGr(X, Y, Buffers.W + 4, 2 * Buffers.H);
+         SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos = X;
+         SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos = Y;
+         SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible = true;
          
 //         case Demo of
-         switch (Demo)
-         {         
-            case dmDownInToPipe:
-            case dmUpOutOfPipe:
+         switch (Buffers.Demo)
+         {
+            case Buffers.dmDownInToPipe:
+            case Buffers.dmUpOutOfPipe:
             {
-               DrawPart( X, Y + DemoY, W, 2 * H, 0, 2 * H - DemoY - 1, Pictures[Player, Data.mode[Player], Walkingmode, Direction] );
+               FormMarioPort.formRef.DrawPart(X, Y + DemoY, Buffers.W, 2 * Buffers.H, 0, 2 * Buffers.H - DemoY - 1, Buffers.Pictures[Buffers.Player, Buffers.data.mode[Buffers.Player], Walkingmode, Direction]);
                break;
             }
-            case dmUpInToPipe:
-            case dmDownOutOfPipe:
+            case Buffers.dmUpInToPipe:
+            case Buffers.dmDownOutOfPipe:
             {
-               DrawPart( X, Y + DemoY, W, 2 * H, -DemoY, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction] );
-               Redraw( MapX, MapY - 1 );
-               Redraw( MapX + 1, MapY - 1 );
+               FormMarioPort.formRef.DrawPart(X, Y + DemoY, Buffers.W, 2 * Buffers.H, -DemoY, 2 * Buffers.H, Buffers.Pictures[Buffers.Player, Buffers.data.mode[Buffers.Player], Walkingmode, Direction]);
+               Figures.Redraw( MapX, MapY - 1 );
+               Figures.Redraw(MapX + 1, MapY - 1);
                break;
             }
-            case dmDead:
+            case Buffers.dmDead:
             {
-               DrawImage( X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction] );
+               FormMarioPort.formRef.DrawImage(X, Y, Buffers.W, 2 * Buffers.H, Buffers.Pictures[Buffers.Player, Buffers.data.mode[Buffers.Player], Walkingmode, Direction]);
                break;
             }
          }
@@ -246,33 +257,33 @@ namespace MarioPort
       
       public static void DrawPlayer()
       {
-         if ( Demo != dmNoDemo )
+         if (Buffers.Demo != Buffers.dmNoDemo)
          {
-            DrawDemo;
+            DrawDemo();
             return;
          }
          if ( !Blinking || (BlinkCounter % 2 == 0) )
          {
 //            with SaveScreen [CurrentPage] do
 //            {
-//               { GetImage (X, Y, W, 2 * H, Buffer ); }
-            SaveScreen[CurrentPage].BackGrAddr = PushBackGr (X, Y, W + 4, 2 * H );
-            SaveScreen[CurrentPage].XPos = X;
-            SaveScreen[CurrentPage].YPos = Y;
-            Visible = true;
+//               { GetImage (X, Y, Buffers.W, 2 * Buffers.H, Buffer ); }
+            SaveScreen[FormMarioPort.formRef.CurrentPage()].BackGrAddr = FormMarioPort.formRef.PushBackGr(X, Y, Buffers.W + 4, 2 * Buffers.H);
+            SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos = X;
+            SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos = Y;
+            SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible = true;
 //            }
-            if ((Data.mode[Player] == mdFire) && keySpace && (FireCounter < 7))
+            if ((Buffers.data.mode[Buffers.Player] == Buffers.mdFire) && keySpace && (FireCounter < 7))
             {
                FireCounter++;
-               DrawPart(X, Y + 1, W, 2 * H, 0, 20, Pictures[Player, mdFire, 1, Direction]);
-               DrawPart(X, Y, W, 2 * H, 21, 2 * H, Pictures[Player, mdFire, 0, Direction]);
+               FormMarioPort.formRef.DrawPart(X, Y + 1, Buffers.W, 2 * Buffers.H, 0, 20, Buffers.Pictures[Buffers.Player, Buffers.mdFire, 1, Direction]);
+               FormMarioPort.formRef.DrawPart(X, Y, Buffers.W, 2 * Buffers.H, 21, 2 * Buffers.H, Buffers.Pictures[Buffers.Player, Buffers.mdFire, 0, Direction]);
             }
             else
                if (Star || Growing)
-                  RecolorImage(X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction], ((GrowCounter + StarCounter) && 1) >> 4 -
+                  FormMarioPort.formRef.RecolorImage(X, Y, Buffers.W, 2 * Buffers.H, Buffers.Pictures[Buffers.Player, Buffers.data.mode[Buffers.Player], Walkingmode, Direction], ((GrowCounter + StarCounter) && 1) >> 4 -
                         (byte)((GrowCounter + StarCounter) && 0xF < 8));
                else
-                  DrawImage(X, Y, W, 2 * H, Pictures[Player, Data.mode[Player], Walkingmode, Direction]);
+                  FormMarioPort.formRef.DrawImage(X, Y, Buffers.W, 2 * Buffers.H, Buffers.Pictures[Buffers.Player, Buffers.data.mode[Buffers.Player], Walkingmode, Direction]);
             OldX = X;
             OldY = Y;
          }
@@ -280,38 +291,38 @@ namespace MarioPort
       
       public static void ErasePlayer()
       {
-         if ( !SaveScreen[CurrentPage].Visible )
-            return;
-         
-         PutImage (XPos, YPos, W, 2 * H, Buffer );
-         PopBackGr (XPos, YPos, W + 4, 2 * H, BackGrAddr );
-         Visible = false;
+         //if ( !SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible )
+         //   return;
+
+         //FormMarioPort.PutImage(SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos, SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos, Buffers.W, 2 * Buffers.H, Buffer);
+         //FormMarioPort.PopBackGr(SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos, SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos, Buffers.W + 4, 2 * Buffers.H, BackGrAddr);
+         //SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible = false;
       }
 
       public static void DoDemo()
       {
-         Small = 9 * (byte)(Data.mode[Player] == mdSmall );
-         switch(Demo)
+         Small = 0;// TODO 9 * (byte)(Buffers.data.mode[Buffers.Player] == Buffers.mdSmall);
+         switch(Buffers.Demo)
          {
-            case dmDownInToPipe:
-            case dmUpOutOfPipe:
+            case Buffers.dmDownInToPipe:
+            case Buffers.dmUpOutOfPipe:
             {
                if ( PipeCode[1] == 'ç' )
                {
-                  if ( !Passed )
+                  if ( !Mario.Passed )
                   {
-                     Passed = true;
-                     TextCounter = 0;
+                     Mario.Passed = true;
+                     Buffers.TextCounter = 0;
                   }
                }
 
                DemoCounter1++;
                if ( DemoCounter1 % 3 == 0 )
                {
-                  if ( Demo == dmDownInToPipe )
+                  if (Buffers.Demo == Buffers.dmDownInToPipe)
                   {
                      DemoY++;
-                     if ( (DemoY > 2 * H - Small) )
+                     if ( (DemoY > 2 * Buffers.H - Small) )
                      {
                         DemoCounter2++;
                         DemoY--;
@@ -325,31 +336,31 @@ namespace MarioPort
                      if ( (DemoY < 0) )
                      {
                         DemoY++;
-                        Demo = dmNoDemo;
+                        Buffers.Demo = Buffers.dmNoDemo;
                      }
                   }
                }
                break;
             }
-            case dmUpInToPipe:
-            case dmDownOutOfPipe:
+            case Buffers.dmUpInToPipe:
+            case Buffers.dmDownOutOfPipe:
             {
                DemoCounter1++;
                if ( DemoCounter1 % 3 == 0 )
                {
-                  if ( Demo == dmDownOutOfPipe )
+                  if (Buffers.Demo == Buffers.dmDownOutOfPipe)
                   {
                      DemoY++;
                      if ( DemoY > - Small )
                      {
-                        Demo = dmNoDemo;
+                        Buffers.Demo = Buffers.dmNoDemo;
                         DemoY--;
                      }
                   }
                   else
                   {
                      DemoY--;
-                     if ( (DemoY < -2 * H + Small) )
+                     if ( (DemoY < -2 * Buffers.H + Small) )
                      {
                         DemoCounter2++;
                         DemoY++;
@@ -361,14 +372,14 @@ namespace MarioPort
                break;
             }
 
-            case dmDead:
+            case Buffers.dmDead:
             {
                DemoCounter1++;
                if ( DemoCounter1 % 7 == 0 )
                   YVel++;
                Y = Y + YVel;
-               if ( Y > NV * H )
-                  GameDone = true;
+               if (Y > Buffers.NV * Buffers.H)
+                  Buffers.GameDone = true;
                break;
             }
          }
@@ -376,7 +387,7 @@ namespace MarioPort
       
       private static void StartDemo (int dm)
       {
-         Demo = dm;
+         Buffers.Demo = dm;
          DemoCounter1 = 0;
          DemoCounter2 = 0;
          DemoX = 0;
@@ -385,25 +396,25 @@ namespace MarioPort
          Below2 = ' ';
          AtCh1 = ' ';
          AtCh2 = ' ';
-         
-         if ( dm == dmDownInToPipe || dm == dmUpInToPipe || dm == dmDownOutOfPipe || dm == dmUpOutOfPipe )
-            StartMusic (PipeMusic);
+
+         if (dm == Buffers.dmDownInToPipe || dm == Buffers.dmUpInToPipe || dm == Buffers.dmDownOutOfPipe || dm == Buffers.dmUpOutOfPipe)
+            //Music.StartMusic (PipeMusic);
          
          switch (dm)
          {
-            case dmUpOutOfPipe:
-               DemoY = 2 * H - 9 * (byte)(Data.mode[Player] == mdSmall );
+            case Buffers.dmUpOutOfPipe:
+               DemoY = 2 * Buffers.H - 9 * (byte)(Buffers.data.mode[Buffers.Player] == Buffers.mdSmall);
                break;
-            case dmDownOutOfPipe:
+            case Buffers.dmDownOutOfPipe:
             {
-               DemoY = -2 * H;
-               Y += H - 7 * (byte)(Data.mode[Player] == mdSmall) - 2;
+               DemoY = -2 * Buffers.H;
+               Y += Buffers.H - 7 * (byte)(Buffers.data.mode[Buffers.Player] == Buffers.mdSmall) - 2;
                break;
             }
-            case dmDead:
+            case Buffers.dmDead:
             {
               YVel = -3;
-              Beep (220 );
+              //Beep (220 );
               break;
             }
          }
@@ -413,35 +424,35 @@ namespace MarioPort
       private static void CheckPipeBelow()
       {
          int Mo;
-         if ( (XVel != 0) || (YVel != 0) || (Y % H != 0) )
+         if ( (XVel != 0) || (YVel != 0) || (Y % Buffers.H != 0) )
             return;
-         Mo = X % W;
-//         if ( !(Mo in [4 .. W - 4]) )
-         if ( Mo >= 4 && Mo <= W - 4 )
+         Mo = X % Buffers.W;
+//         if ( !(Mo in [4 .. Buffers.W - 4]) )
+         if ( Mo >= 4 && Mo <= Buffers.W - 4 )
             return;
          if ( (Below1 != '0') || (Below2 != '1') || (!(AtCh1 >= 'à' && AtCh1 <= 'ç')) // $E0..$E7: Enter pipe
                || (!(AtCh2 >= 'à' && AtCh2 <= 'ï')) )
             return;
          PipeCode[1] = AtCh1;
          PipeCode[2] = AtCh2;
-         StartDemo (dmDownInToPipe );
+         StartDemo(Buffers.dmDownInToPipe);
       }
       
       private static void CheckPipeAbove (char C1, char C2)
       {
-         Mo = X % W;
-         if ( !(Mo >= 4 && Mo <= W - 4) )
+         Mo = X % Buffers.W;
+         if ( !(Mo >= 4 && Mo <= Buffers.W - 4) )
             return;
          if ( (C1 != '0') || (C2 != '1') )
             return;
-         MapX = X / W;
-         MapY = Y / H + 1;
-         if ( (!(WorldMap[MapX, MapY] >= 'à' && WorldMap[MapX, MapY] <= 'ç')) // $E0..$E7: Enter pipe
-                  || (!(WorldMap[MapX + 1, MapY] >= 'à' && WorldMap[MapX + 1, MapY] <= 'ï')) )
+         MapX = X / Buffers.W;
+         MapY = Y / Buffers.H + 1;
+         if ( (!(Buffers.WorldMap[MapX, MapY] >= 'à' && Buffers.WorldMap[MapX, MapY] <= 'ç')) // $E0..$E7: Enter pipe
+                  || (!(Buffers.WorldMap[MapX + 1, MapY] >= 'à' && Buffers.WorldMap[MapX + 1, MapY] <= 'ï')) )
             return;
-         PipeCode[1] = WorldMap[MapX, MapY];
-         PipeCode[2] = WorldMap[MapX + 1, MapY];
-         StartDemo (dmUpInToPipe );
+         PipeCode[1] = (char)Buffers.WorldMap[MapX, MapY];
+         PipeCode[2] = (char)Buffers.WorldMap[MapX + 1, MapY];
+         StartDemo(Buffers.dmUpInToPipe);
       }
       
       
@@ -456,35 +467,35 @@ namespace MarioPort
          NewCh2 = ' ';
          NewCh3 = ' ';
 
-         Side = (byte)(XVel > 0) * (W - 1);
-         NewX1 = (X + Side) / W;
-         NewX2 = (X + Side + XVel) / W;
-         Small = Data.mode[Player] == mdSmall;
+         Side = 0;// TODO (byte)(XVel > 0) * (Buffers.W - 1);
+         NewX1 = (X + Side) / Buffers.W;
+         NewX2 = (X + Side + XVel) / Buffers.W;
+         Small = Buffers.data.mode[Buffers.Player] == Buffers.mdSmall;
 
          if ( NewX1 != NewX2 )
          {
-            Y1 = (Y + HSafe + (4)) / H - Safe;
-            Y2 = (Y + HSafe + H) / H - Safe;
-            Y3 = (Y + HSafe + 2 * H - 1) / H - Safe;
-            NewCh1 = WorldMap[NewX2, Y1];
-            NewCh2 = WorldMap[NewX2, Y2];
-            NewCh3 = WorldMap[NewX2, Y3];
+            Y1 = (Y + HSafe + (4)) / Buffers.H - Safe;
+            Y2 = (Y + HSafe + Buffers.H) / Buffers.H - Safe;
+            Y3 = (Y + HSafe + 2 * Buffers.H - 1) / Buffers.H - Safe;
+            NewCh1 = (char)Buffers.WorldMap[NewX2, Y1];
+            NewCh2 = (char)Buffers.WorldMap[NewX2, Y2];
+            NewCh3 = (char)Buffers.WorldMap[NewX2, Y3];
 
             if ( NewCh3 == '*' )
-               HitCoin (NewX2 * W, Y3 * H, false );
+               TmpObj.HitCoin(NewX2 * Buffers.W, Y3 * Buffers.H, false);
             
             if ( NewCh2 == '*' )
-               HitCoin (NewX2 * W, Y2 * H, false ); 
+               TmpObj.HitCoin(NewX2 * Buffers.W, Y2 * Buffers.H, false); 
             else if ( NewCh2 == 'z' )
                Turbo = true;
 
 
          	if (!Small && NewCh1 == '*' )
-               HitCoin (NewX2 * W, Y1 * H, false );
+               TmpObj.HitCoin(NewX2 * Buffers.W, Y1 * Buffers.H, false );
 
-            Hold1 = ( CanHoldYou(NewCh1) ) && (!Small );
-            Hold2 = ( CanHoldYou(NewCh2) );
-            Hold3 = ( CanHoldYou(NewCh3) );
+            Hold1 = ( Buffers.CanHoldYou(NewCh1) ) && (!Small );
+            Hold2 = ( Buffers.CanHoldYou(NewCh2) );
+            Hold3 = ( Buffers.CanHoldYou(NewCh3) );
 
             if ( Hold1 || Hold2 || Hold3 )
             {
@@ -493,20 +504,20 @@ namespace MarioPort
             }
          }
 
-         NewX1 = (X + XVel) / W;
-         NewX2 = (X + XVel + W - 1) / W;
+         NewX1 = (X + XVel) / Buffers.W;
+         NewX2 = (X + XVel + Buffers.W - 1) / Buffers.W;
 
          if ( cdEnemy != 0 )
             CheckJump;
 
          if ( (Status == stJumping) )
-            NewY = (Y + 1 + (4) + (H - 1 - (4)) * (byte)(Small) + YVel + HSafe) / H - Safe;
+            NewY = (Y + 1 + (4) + (Buffers.H - 1 - (4)) * (byte)(Small) + YVel + HSafe) / Buffers.H - Safe;
          else
-            NewY = (Y + 1 + 2 * H + YVel + HSafe) / H - Safe;
+            NewY = (Y + 1 + 2 * Buffers.H + YVel + HSafe) / Buffers.H - Safe;
 
-         NewCh1 = WorldMap[NewX1, NewY];
-         NewCh2 = WorldMap[NewX2, NewY];
-         NewCh3 = WorldMap[(X + XVel + W / 2) / W, NewY];
+         NewCh1 = Buffers.WorldMap[NewX1, NewY];
+         NewCh2 = Buffers.WorldMap[NewX2, NewY];
+         NewCh3 = Buffers.WorldMap[(X + XVel + Buffers.W / 2) / Buffers.W, NewY];
          Hold1 = ( CanHoldYou(NewCh1) || CanStandOn(NewCh1)  );
          Hold2 = ( CanHoldYou(NewCh2) || CanStandOn(NewCh2)  );
          Hold3 = ( CanHoldYou(NewCh3) || CanStandOn(NewCh3)  );
@@ -539,14 +550,14 @@ namespace MarioPort
                            Below2 = NewCh2;
                         	MapX = NewX1;  //Codes for pipes
                            MapY = NewY - 1;
-                        	AtCh1 = WorldMap[MapX, MapY];
-                        	AtCh2 = WorldMap[MapX + 1, MapY];
+                        	AtCh1 = Buffers.WorldMap[MapX, MapY];
+                        	AtCh2 = Buffers.WorldMap[MapX + 1, MapY];
 
-                           //Mo = (X + XVel) % W;
-                           Mo = (X) % W;
+                           //Mo = (X + XVel) % Buffers.W;
+                           Mo = (X) % Buffers.W;
                            if ( !Hold1 && (Mo >= 1 && Mo <= 5) )
                               XVel--;
-                           if ( !Hold2 && (Mo >= W - 5 && Mo <= W - 1) )
+                           if ( !Hold2 && (Mo >= Buffers.W - 5 && Mo <= Buffers.W - 1) )
                               XVel++;
                         }
                      }
@@ -570,25 +581,25 @@ namespace MarioPort
                Hit = (Hold1 || Hold2 );
                if ( Hit )
                {
-                  Mo = (X + XVel) % W;
-                  if ( (Mo >= 1 && Mo <= 4 && Mo >= W - 4 && Mo <= W - 1) && (!Hold3) )
+                  Mo = (X + XVel) % Buffers.W;
+                  if ( (Mo >= 1 && Mo <= 4 && Mo >= Buffers.W - 4 && Mo <= Buffers.W - 1) && (!Hold3) )
                   {
                      if ( !(( NewCh1 == Buffers.Hidden ) && ( NewCh2 == Buffers.Hidden )) )
                         Hit = false;
-                     if ( (Mo < W / 2) && (!( NewCh2 == Buffers.Hidden )) )
+                     if ( (Mo < Buffers.W / 2) && (!( NewCh2 == Buffers.Hidden )) )
                         X -= Mo;
                      else
-                        if ( (Mo >= W / 2) && (!( NewCh1 == Buffers.Hidden )) )
-                           X += W - Mo;
+                        if ( (Mo >= Buffers.W / 2) && (!( NewCh1 == Buffers.Hidden )) )
+                           X += Buffers.W - Mo;
                   }
                }
                if ( !Hit )
                {
                   if ( newCh1 == '*' )
-                     HitCoin (NewX1 * W, NewY * H, false );
+                     HitCoin (NewX1 * Buffers.W, NewY * Buffers.H, false );
                   
                   if ( NewCh1 == '*' )
-                     HitCoin (NewX2 * W, NewY * H, false );
+                     HitCoin (NewX2 * Buffers.W, NewY * Buffers.H, false );
                 
                   if ( (Counter % (JumpDelay + Byte(HighJump)) = 0) || ((!keyAlt) && (!HitEnemy)) )
                      YVel++;
@@ -605,7 +616,7 @@ namespace MarioPort
 
                   //switch (Mo)
                   //{
-                  if (Mo >= 0 && Mo <= (W / 2 - 1))
+                  if (Mo >= 0 && Mo <= (Buffers.W / 2 - 1))
                   {
                      if (  CanHoldYou(NewCh1) || CanStandOn(NewCh1)  )
                      {
@@ -615,7 +626,7 @@ namespace MarioPort
                      else
                         Ch = NewCh2;
                   }
-                  else if (Mo >= (W / 2) && Mo <= W - 1)
+                  else if (Mo >= (Buffers.W / 2) && Mo <= Buffers.W - 1)
                   {
                      Ch = NewCh2;
                      if ( !( CanHoldYou(Ch) || Ch == Buffers.Hidden ) )
@@ -642,14 +653,14 @@ namespace MarioPort
                      {
                         Mo = 0;
 
-                        if ( WorldMap[NewX2, NewY - 1] >= 'à' && WorldMap[NewX2, NewY - 1] <= 'â' )
+                        if ( Buffers.WorldMap[NewX2, NewY - 1] >= 'à' && Buffers.WorldMap[NewX2, NewY - 1] <= 'â' )
                         {
-                           WorldMap[NewX2, NewY] = '?';
+                           Buffers.WorldMap[NewX2, NewY] = '?';
                            Ch = '?';
                         }
-                        else if ( WorldMap[NewX2, NewY - 1] == 'ï' )
+                        else if ( Buffers.WorldMap[NewX2, NewY - 1] == 'ï' )
                         {
-                           WorldMap[NewX2, NewY] = 'K';
+                           Buffers.WorldMap[NewX2, NewY] = 'K';
                            Ch = 'K';
                         }
                         else
@@ -664,40 +675,40 @@ namespace MarioPort
 
                         if ( Mo == 0 )
                         {
-                           BumpBlock (NewX2 * W, NewY * H );
+                           BumpBlock (NewX2 * Buffers.W, NewY * Buffers.H );
                            Beep (110 );
                         }
 
-                        if (WorldMap[NewX2, NewY - 1] >= 'ã' && WorldMap[NewX2, NewY - 1] <= 'ì')
+                        if (Buffers.WorldMap[NewX2, NewY - 1] >= 'ã' && Buffers.WorldMap[NewX2, NewY - 1] <= 'ì')
                         {
                            if ( !(Ch == 'J' || Ch == 'K') )
                            {
-                              HitCoin (NewX2 * W, NewY * H, true );
-                              if ( WorldMap[NewX2, NewY - 1] != ' ' )
+                              HitCoin (NewX2 * Buffers.W, NewY * Buffers.H, true );
+                              if ( Buffers.WorldMap[NewX2, NewY - 1] != ' ' )
                               {
-                                 WorldMap[NewX2, NewY - 1] = Succ (WorldMap[NewX2, NewY - 1] );
-                                 if ( WorldMap[NewX2, NewY] = '$' )
+                                 Buffers.WorldMap[NewX2, NewY - 1] = Succ (Buffers.WorldMap[NewX2, NewY - 1] );
+                                 if ( Buffers.WorldMap[NewX2, NewY] = '$' )
                                  {
-                                    Remove (NewX2 * W, NewY * H, W, H, 2 );
-                                    WorldMap[NewX2, NewY] = '?';
+                                    Remove (NewX2 * Buffers.W, NewY * Buffers.H, Buffers.W, Buffers.H, 2 );
+                                    Buffers.WorldMap[NewX2, NewY] = '?';
                                  }
                               }
                            }
                         }
-                        else if (WorldMap[NewX2, NewY - 1] == 'à')
+                        else if (Buffers.WorldMap[NewX2, NewY - 1] == 'à')
                         {
-                           if ( Data.mode[Player] = mdSmall )
+                           if ( Buffers.data.mode[Buffers.Player] = Buffers.mdSmall )
                               NewEnemy (tpRisingChamp, 0, NewX2, NewY, 0, -1, 2);
                            else
                               NewEnemy (tpRisingFlower, 0, NewX2, NewY, 0, -1, 2 );
                         }
-                        else if (WorldMap[NewX2, NewY - 1] == 'á')
+                        else if (Buffers.WorldMap[NewX2, NewY - 1] == 'á')
                            NewEnemy (tpRisingLife, 0, NewX2, NewY, 0, -1, 2 );
-                        else if (WorldMap[NewX2, NewY - 1] == 'â')
+                        else if (Buffers.WorldMap[NewX2, NewY - 1] == 'â')
                            NewEnemy (tpRisingStar, 0, NewX2, NewY, 0, -1, 1 );
-                        else if (WorldMap[NewX2, NewY - 1] == '*') 
-                           HitCoin (NewX2 * W, (NewY - 1) * H, false );
-                        else if (WorldMap[NewX2, NewY - 1] == 'í') 
+                        else if (Buffers.WorldMap[NewX2, NewY - 1] == '*') 
+                           HitCoin (NewX2 * Buffers.W, (NewY - 1) * Buffers.H, false );
+                        else if (Buffers.WorldMap[NewX2, NewY - 1] == 'í') 
                            NewEnemy (tpRisingChamp, 1, NewX2, NewY, 0, -1, 2 );
 
 
@@ -705,16 +716,16 @@ namespace MarioPort
                         HitAbove (NewX2, NewY - 1 );
                         if ( Ch == 'K' )
                         {
-                           Remove (NewX2 * W, NewY * H, W, H, tpNote );
-                           WorldMap[NewX2, NewY] = 'K';
+                           Remove (NewX2 * Buffers.W, NewY * Buffers.H, Buffers.W, Buffers.H, tpNote );
+                           Buffers.WorldMap[NewX2, NewY] = 'K';
                         }
                         else
                         {
                            if (Ch != 'J')
-                              if (!(WorldMap[NewX2, NewY - 1] >= 'ã' && WorldMap[NewX2, NewY - 1] <= 'ì'))
+                              if (!(Buffers.WorldMap[NewX2, NewY - 1] >= 'ã' && Buffers.WorldMap[NewX2, NewY - 1] <= 'ì'))
                               {
-                                 Remove (NewX2 * W, NewY * H, W, H, 1 );
-                                 WorldMap[NewX2, NewY] = '@';
+                                 Remove (NewX2 * Buffers.W, NewY * Buffers.H, Buffers.W, Buffers.H, 1 );
+                                 Buffers.WorldMap[NewX2, NewY] = '@';
                               }
                         }
                      }
@@ -722,7 +733,7 @@ namespace MarioPort
                         Beep (30);
                   }
                   
-                  if ( (Ch != 'J') || (Data.mode[Player] == mdSmall) )
+                  if ( (Ch != 'J') || (Buffers.data.mode[Buffers.Player] == Buffers.mdSmall) )
                   {
                      YVel = 0;
                      Status = stFalling;
@@ -739,10 +750,10 @@ namespace MarioPort
          if ( !(Hold1 || Hold2) )
          {
             if ( NewCh1 == '*' )
-               HitCoin( NewX1 * W, NewY * H, false );
+               HitCoin( NewX1 * Buffers.W, NewY * Buffers.H, false );
             
             if ( NewCh1 == '*' )
-               HitCoin( NewX2 * W, NewY * H, false );
+               HitCoin( NewX2 * Buffers.W, NewY * Buffers.H, false );
                
             if ( Counter % JumpDelay == 0 )
                YVel++;
@@ -755,8 +766,8 @@ namespace MarioPort
             if ( (NewCh1 == '=') || (NewCh2 == '=') )
                cdHit = 1;
 
-            Mo = (X + XVel) % W;
-            Y = ((Y + YVel + 1 + HSafe) / H - Safe) * H;
+            Mo = (X + XVel) % Buffers.W;
+            Y = ((Y + YVel + 1 + HSafe) / Buffers.H - Safe) * Buffers.H;
             YVel = 0;
             Status = stOnTheGround;
             Jumped = true;
@@ -766,15 +777,15 @@ namespace MarioPort
                StartMusic ( NoteMusic );
                if ( NewCh1 == 'K' )
                {
-                  BumpBlock ( NewX1 * W, NewY * H );
-                  Remove ( NewX1 * W, NewY * H, W, H, tpNote );
-                  WorldMap[NewX1, NewY] = 'K';
+                  BumpBlock ( NewX1 * Buffers.W, NewY * Buffers.H );
+                  Remove ( NewX1 * Buffers.W, NewY * Buffers.H, Buffers.W, Buffers.H, tpNote );
+                  Buffers.WorldMap[NewX1, NewY] = 'K';
                }
                if ( NewCh2 == 'K' )
                {
-                  BumpBlock (NewX2 * W, NewY * H );
-                  Remove (NewX2 * W, NewY * H, W, H, tpNote );
-                  WorldMap[NewX2, NewY] = 'K';
+                  BumpBlock (NewX2 * Buffers.W, NewY * Buffers.H );
+                  Remove (NewX2 * Buffers.W, NewY * Buffers.H, Buffers.W, Buffers.H, tpNote );
+                  Buffers.WorldMap[NewX2, NewY] = 'K';
                }
                Counter = 0;
                Status = stJumping;
@@ -785,7 +796,7 @@ namespace MarioPort
             }
          }
          
-         if ( Mo >= 0 && Mo <= W / 2 - 1 )
+         if ( Mo >= 0 && Mo <= Buffers.W / 2 - 1 )
          {
             if ( Hold1 )
             {
@@ -795,7 +806,7 @@ namespace MarioPort
             else
                Ch = NewCh2;
          }
-         else if ( Mo >= W / 2 && Mo <= W )
+         else if ( Mo >= Buffers.W / 2 && Mo <= Buffers.W )
          {
             if ( Hold2 )
                Ch = NewCh2;
@@ -837,19 +848,19 @@ namespace MarioPort
        
          if (InPipe)
          {
-            if ( WorldMap[MapX, MapY + 1] == '0' )
+            if ( Buffers.WorldMap[MapX, MapY + 1] == '0' )
                StartDemo (dmUpOutOfPipe );
             else
-               if ( WorldMap[MapX, MapY - 1] == '0' )
+               if ( Buffers.WorldMap[MapX, MapY - 1] == '0' )
                   StartDemo (dmDownOutOfPipe );
             return;
          }
 
          if (cdChamp != 0)
          {
-            if ( Data.mode[Player] == mdSmall )
+            if ( Buffers.data.mode[Buffers.Player] == Buffers.mdSmall )
             {
-               Data.mode[Player] = mdLarge;
+               Buffers.data.mode[Buffers.Player] = mdLarge;
                Growing = true;
                GrowCounter = 0;
             }
@@ -864,7 +875,7 @@ namespace MarioPort
          }
          if (cdFlower != 0)
          {
-            Data.mode[Player] = mdFire;
+            Buffers.data.mode[Buffers.Player] = mdFire;
             Fired = true;
             FireCounter = 0;
             StartMusic (GrowMusic );
@@ -877,9 +888,9 @@ namespace MarioPort
          {
             if ( cdHit != 0 )
 
-            switch (Data.mode[Player])
+            switch (Buffers.data.mode[Buffers.Player])
             {
-               case mdSmall:
+               case Buffers.mdSmall:
                {
                   BlinkCounter = 0;
                   Blinking = true;
@@ -890,7 +901,7 @@ namespace MarioPort
                case mdLarge:
                case mdFire:
                {
-                  Data.mode[Player] = mdSmall;
+                  Buffers.data.mode[Buffers.Player] = Buffers.mdSmall;
                   BlinkCounter = 0;
                   Blinking = true;
                   StartMusic (HitMusic );
@@ -925,7 +936,7 @@ namespace MarioPort
             if ( StarCounter >= StarTime )
                Star = false;
             if ( StarCounter % 3 == 0 )
-               StartGlitter (X, Y + 11 * (byte)(Data.mode[Player] = mdSmall), W, H + 3 + 11 * (byte)(Data.mode[Player] != mdSmall) );
+               StartGlitter (X, Y + 11 * (byte)(Buffers.data.mode[Buffers.Player] = Buffers.mdSmall), Buffers.W, Buffers.H + 3 + 11 * (byte)(Buffers.data.mode[Buffers.Player] != Buffers.mdSmall) );
             cdStar = 0;
          }
 
@@ -972,10 +983,10 @@ namespace MarioPort
          if ( Fired && (!keySpace) )
             Fired = false;
 
-         if ( keySpace && (!Fired) && (Data.mode[Player] == mdFire) )
+         if ( keySpace && (!Fired) && (Buffers.data.mode[Buffers.Player] == mdFire) )
          {
             FireCounter = 0;
-            NewEnemy (tpFireBall, 0, X / W + Direction, (Y + H) / H,
+            NewEnemy (tpFireBall, 0, X / Buffers.W + Direction, (Y + Buffers.H) / Buffers.H,
                10 * (-1 + 2 * Direction), 3 + 3 * ((byte)(keyDown) - (byte)(keyUp)), 2 );
             Fired = true;
          }
@@ -1037,7 +1048,7 @@ namespace MarioPort
             XVel = OldXVel;
          }
 
-         if ( Y + YVel >= NV * H )
+         if ( Y + YVel >= NV * Buffers.H )
          {
             GameDone = true;
             StartMusic (DeadMusic );
@@ -1076,42 +1087,42 @@ namespace MarioPort
          X += XVel;
          Y += YVel;
 
-         OldXView = XView;
-         XView = XView - (Word)(kbLeftShift) + (Word)(kbRightShift );
-         if ( X + W + SCROLL_AT > XView + 320 )
-            XView = X + W + SCROLL_AT - 320;
-         if ( X < XView + SCROLL_AT )
-            XView = X - SCROLL_AT;
-         if ( XView - OldXView > MAX_SPEED + (byte)(Turbo) )
-            XView = OldXView + MAX_SPEED + (byte)(Turbo );
-         if ( XView - OldXView < -MAX_SPEED - (byte)(Turbo) )
-            XView = OldXView - MAX_SPEED - (byte)(Turbo );
-         if ( XView < 0 )
+         OldXView = Buffers.XView;
+         Buffers.XView = Buffers.XView - (Word)(kbLeftShift) + (Word)(kbRightShift );
+         if ( X + Buffers.W + SCROLL_AT > Buffers.XView + 320 )
+            Buffers.XView = X + Buffers.W + SCROLL_AT - 320;
+         if ( X < Buffers.XView + SCROLL_AT )
+            Buffers.XView = X - SCROLL_AT;
+         if ( Buffers.XView - OldXView > MAX_SPEED + (byte)(Turbo) )
+            Buffers.XView = OldXView + MAX_SPEED + (byte)(Turbo );
+         if ( Buffers.XView - OldXView < -MAX_SPEED - (byte)(Turbo) )
+            Buffers.XView = OldXView - MAX_SPEED - (byte)(Turbo );
+         if ( Buffers.XView < 0 )
          {
-            XView = 0;
+            Buffers.XView = 0;
             if ( X < 0 ) X = 0;
          }
 
 //        with Options do
-         if ( XView > (Options.XSize - NH) * W )
-            XView = (Options.XSize - NH) * W;
-         if ( XView < OldXView )
-            if ( (WorldMap[XView / W, NV] == 254) )
-               if ( (WorldMap[(XView / W), Math.Round(PlayerY1 / H, 1)] != ' ') )
-                  XView = OldXView;
-         if ( XView > OldXView )
-            if ( (WorldMap[((XView - 1) / W + NH), NV] == 255) )
-               if ( (WorldMap[((XView - 1) / W + NH), Math.Round(PlayerY1 / H, 1)] != ' ') )
-                  XView = OldXView;
+         if ( Buffers.XView > (Buffers.Options.XSize - NH) * Buffers.W )
+            Buffers.XView = (Buffers.Options.XSize - NH) * Buffers.W;
+         if ( Buffers.XView < OldXView )
+            if ( (Buffers.WorldMap[Buffers.XView / Buffers.W, NV] == 254) )
+               if ( (Buffers.WorldMap[(Buffers.XView / Buffers.W), Math.Round(PlayerY1 / Buffers.H, 1)] != ' ') )
+                  Buffers.XView = OldXView;
+         if ( Buffers.XView > OldXView )
+            if ( (Buffers.WorldMap[((Buffers.XView - 1) / Buffers.W + NH), NV] == 255) )
+               if ( (Buffers.WorldMap[((Buffers.XView - 1) / Buffers.W + NH), Math.Round(PlayerY1 / Buffers.H, 1)] != ' ') )
+                  Buffers.XView = OldXView;
                   
          PlayerX1 = X + XVel;
-         PlayerX2 = PlayerX1 + W - 1;
+         PlayerX2 = PlayerX1 + Buffers.W - 1;
          PlayerY1 = Y;
-         if (Data.mode[Player] == mdSmall)
-            PlayerY1 = Y + H;
+         if (Buffers.data.mode[Buffers.Player] == Buffers.mdSmall)
+            PlayerY1 = Y + Buffers.H;
          else
             PlayerY1 = Y;
-         PlayerY2 = Y + 2 * H - 1;
+         PlayerY2 = Y + 2 * Buffers.H - 1;
          PlayerXVel = XVel;
          PlayerYVel = YVel;
 
@@ -1122,7 +1133,7 @@ namespace MarioPort
          }
       }
       
-*/
+
 
    } // end class Players
 } // end namespace MarioPort

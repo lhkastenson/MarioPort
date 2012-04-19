@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace MarioPort
 {
@@ -70,13 +71,17 @@ namespace MarioPort
       byte OldScreenMode;
       //OldExitProc: Pointer;
 
+      Thread thread;
+
       public FormMarioPort()
       {
          InitializeComponent();
          formRef = this;
          graphics = CreateGraphics();
          //Buffers.data = Buffers.GameData.Create();
-         Mario.main(new string[0]);
+         thread = new Thread(new ThreadStart(Mario.main));
+         thread.Start();
+         //Mario.main(new string[0]);
       }
 
       public void PutImage(int XPos, int YPos, int Width, int Height, Bitmap bitmap)
@@ -534,6 +539,16 @@ namespace MarioPort
       public void DrawBitmap(int x, int y, Bitmap var, byte attr)
       {
            //graphics.DrawImage(var, x, y);
+      }
+
+      private void FormMarioPort_Load(object sender, EventArgs e)
+      {
+
+      }
+
+      private void FormMarioPort_FormClosing(object sender, FormClosingEventArgs e)
+      {
+         thread.Abort();
       }
    }
 }

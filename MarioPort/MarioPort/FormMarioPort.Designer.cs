@@ -37,6 +37,8 @@
          this.ClientSize = new System.Drawing.Size(292, 266);
          this.Name = "FormMarioPort";
          this.Text = "MarioPort";
+         this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMarioPort_FormClosing);
+         this.Load += new System.EventHandler(this.FormMarioPort_Load);
          this.ResumeLayout(false);
 
       }

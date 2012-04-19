@@ -123,9 +123,9 @@ namespace MarioPort
 
       public static bool GameDone;
       public static bool Passed;
-      public static byte[,] WorldBuffer = new byte[MaxWorldSize + EX, NV + EY2];
-      public static byte[,] WorldMap = new byte[MaxWorldSize, NV];
-      public static byte[,] SaveWorldMap = new byte[MaxWorldSize, NV];
+      public static byte[,] WorldBuffer = new byte[MaxWorldSize + 2 * EX, NV + EY2 + EY1];
+      public static byte[,] WorldMap = new byte[MaxWorldSize + 2 * EX, NV + EY2 + EY1];
+      public static byte[,] SaveWorldMap = new byte[MaxWorldSize + 2 * EX, NV + EY2 + EY1];
       public static WorldOptions Options = new WorldOptions();
       public static WorldOptions SaveOptions;
       public static int XView;
@@ -148,29 +148,31 @@ namespace MarioPort
 
       public static void ReadWorld(byte[,] M, ref byte[,] W, WorldOptions Opt)
       {
+         Console.WriteLine("Reading the world");
          //MapBuffer M;
          int x;
-         //Move(Opt, Options, Options.SizeOf());
+         //Move(Opt, Buffers.Options, Buffers.Options.SizeOf());
          //M = Map;
          //FillChar(W, W.size(), ' ');
          for (int i = 0; i < W.GetLength(0); i++)
-            W[i,0] = (byte)' ';
-         for (int i = -EX; i < -1; i++)
-      	   for (int j = -EY1; j < NV - 1 + EY2; j++)
+            for (int j = 0; j < W.GetLength(1); j++)
+               W[i,j] = (byte)' ';
+         for (int i = 0; i < EX - 1; i++)
+      	   for (int j = 0; j < NV - 1 + EY2 + EY1; j++)
       		   W[i,j] = (byte)'@';
          x = 0;
       
          while (M[x,0] != (0) && (x < MaxWorldSize))
          {
       	   for (int i = 0; i < NV; i++)
-      		   W[x,NV-i] = M[x,i];
-      	   W[x,-EY1] = (0);
-      	   for (int i = 1; i < EY2; i++)
+      		   W[x, NV - i - 1] = M[x,i];
+      	   W[x,EY1] = (0);
+      	   for (int i = 1; i < EY2 + EY1; i++)
       		   W[x,NV-1+i] = W[x,NV-1];
       	   x++;
          }
       
-         Options.XSize = x;
+         Buffers.Options.XSize = x;
          for (int i = x; i < x + EX - 1; i++)
       	   for (int j = EY1; j < (NV - 1 + EY2); j++)
       		   W[i,j] = (byte)'@';
@@ -181,10 +183,10 @@ namespace MarioPort
          WorldOptions TempOptions;
          byte C;
          //Move(Options, TempOptions, TempOptions.SizeOf());
-         //Move(SaveOptions, Options, Options.SizeOf());
+         //Move(SaveOptions, Buffers.Options, Buffers.Options.SizeOf());
          //Move(TempOptions, SaveOptions, SaveOptions.SizeOf());
-         for (int i = -EX; i < MaxWorldSize - 1 + EX; i++)
-      	   for (int j = -EY1; j < NV -1 + EY2; j++)
+         for (int i = EX; i < MaxWorldSize - 1 + EX; i++)
+      	   for (int j = EY1; j < NV -1 + EY2; j++)
       	   {
       		   C = WorldMap[i,j];
                WorldMap[i, j] = SaveWorldMap[i, j];
