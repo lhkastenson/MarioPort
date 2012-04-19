@@ -43,7 +43,7 @@ namespace MarioPort
 
         public static void ClearGlitter()
         {
-           for (int i = 0; i <= MaxGlitter; i++)
+           for (int i = 0; i < MaxGlitter; i++)
            {
               Count[i] = "0";
               //FillChar(Count, SizeOf(Count), 0);

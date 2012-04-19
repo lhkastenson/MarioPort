@@ -113,7 +113,7 @@ namespace MarioPort
 
       public int CenterX(string s)
       {
-          return FormMarioPort.xView + (FormMarioPort.screenWidth - TextWidth(s)) >> 1;
+          return FormMarioPort.xView + (FormMarioPort.SCREEN_WIDTH - TextWidth(s)) >> 1;
       }
 
       public void CenterText(int y, string s, byte attr)

@@ -14,14 +14,14 @@ namespace MarioPort
 
       public static int CheatsUsed = 0;
 
-      public static bool PlayWorld(char N1, char N2, byte[,] Map1, Buffers.WorldOptions Opt1, Buffers.WorldOptions Opt1b, 
-						  byte[,] Map2, Buffers.WorldOptions Opt2, Buffers.WorldOptions Opt2b, byte Player)
+      private static bool TextStatus, OnlyDraw = false;
+      public static bool PlayWorld(char N1, char N2, char[,] Map1, Buffers.WorldOptions Opt1, Buffers.WorldOptions Opt1b, 
+						  char[,] Map2, Buffers.WorldOptions Opt2, Buffers.WorldOptions Opt2b, byte Player)
 	   {
 		   int j, k, x, y;
          bool Waiting;
-	      bool TextStatus;
 	      int[] TotalBackGrAddr = new int[FormMarioPort.MAX_PAGE];
-	      bool ShowScore, CountingScore, ShowObjects, OnlyDraw;
+	      bool ShowScore, CountingScore, ShowObjects;
          //PlayWorld = false;
          //Keyboard.Key = 0;
 
@@ -404,38 +404,38 @@ namespace MarioPort
 		
 		static void Restart()
 		{
-      //   ResetStack();
+         FormMarioPort.formRef.ResetStack();
 			
-      //   TextStatus = false;
-      //   InitStatus();
+         TextStatus = false;
+         //InitStatus();
 			
-      //   InitBlocks();
-      //   InitTempObj();
-      //   ClearGlitter();
-      //   ClearEnemies();
-			
-      //   ShowPage();
-			
-      //   GameDone = false;
-      //   Passed = false;
-			
-      //   for (int i = StartEnemiesAt * -1; i < NH + StartEnemiesAt; i++)
-      //   {
-      //      j = (XView / W) + i;
-      //      StartEnemies (j, 1 - 2 * System.Text.ASCIIEncoding.GetBytes(j > MapX));
-      //   }
+         Blocks.InitBlocks();
+         TmpObj.InitTempObj();
+         Glitter.ClearGlitter();
+         Enemies.ClearEnemies();
+
+         FormMarioPort.formRef.ShowPage();
+
+         Buffers.GameDone = false;
+         Buffers.Passed = false;
+
+         for (int i = Enemies.StartEnemiesAt * -1; i < Buffers.NH + Enemies.StartEnemiesAt; i++)
+         {
+            int j = (Buffers.XView / Buffers.W) + i;
+            Enemies.StartEnemies(j, (short)(1 - 2 * System.Convert.ToByte(j > Players.MapX)));
+         }
 			
       //   SetYOffset (YBase);
 			
-      //   for (int i = 0; i < MAX_PAGE; i++)
-      //   {
+         for (int i = 0; i < FormMarioPort.MAX_PAGE; i++)
+         {
       //      DrawSky (XView, 0, NH * W, NV * H);
 				
       //      StartClouds();
-				
-      //      for (int x = XView / W - 1; x < XView / W + NH; x++)
-      //         for (int y = 0; y < NV - 1; y++)
-      //            Redraw (x, y);
+
+            for (int x = Buffers.XView / Buffers.W; x < Buffers.XView / Buffers.W + Buffers.NH; x++)
+               for (int y = 0; y < Buffers.NV - 1; y++)
+                  Figures.Redraw(x, y);
 					
       //      DrawBackGr(true);
       //      ReadColorMap();
@@ -443,11 +443,12 @@ namespace MarioPort
       //      if (Options.Stars != 0)
       //         ShowStars();
 					
-      //      ShowEnemies(0;
-      //      if (! OnlyDraw)
-      //         DrawPlayer();
-      //      ShowPage();				
-      //   }
+            Enemies.ShowEnemies();
+            if (!OnlyDraw)
+               Players.DrawPlayer();
+
+            FormMarioPort.formRef.ShowPage();				
+         }
 			
       //   Demo = dmNoDemo;
       //   Waiting = false;
@@ -463,259 +464,260 @@ namespace MarioPort
       //   DrawPalBackGr();
       //   InitGrass();
 			
-      //   if (OnlyDraw)
-      //      Exit();
+         if (OnlyDraw)
+            return;
 				
       //   UnLockPal();
       //   FadeUp (64);
       //   Palettes.ReadPalette (Palette);
 			
       //   TextStatus = (Stat && !PlayingMacro);
-			
-      //   do //until gamedone
-      //   {
-      //      if (!PlayingMacro)
-      //      {
-      //         if (Key = 31) //'S'
-      //         {
-      //            Stat = !Stat;
-      //            TextStatus = Stat;
-      //            Key = 255;
-      //         }
-      //         if (Key = 16) //'Q'
-      //         {
-      //            if (BeeperSound)
-      //               BeeperOff();
-      //            else
-      //            {
-      //               BeeperOn();
-      //               Beep (80);
-      //            }
-      //            Key = 255;
-      //         }
-					
-      //         if (Key == 197 || Key == 198) //Pause/Break
-      //         {
-      //            PauseMusic();
-      //            do
-      //            {
-      //               while (Key = 197) {} //busy wait of some sort?
-      //            } while kbHit;
-      //         }
-      //         else
-      //         {
-      //            if (Key != 0)
-      //            {
-      //               GameDone = true;
-      //               Passed = true;
-      //            }
-      //         }
-					
-      //         if (TextCounter) //in 40..40+MAX_PAGE
-      //            ShowObjects = false;
-						
-      //         HideGlitter();
-      //         if (Options.Stars != 0)
-      //            HideStars();
-      //         if (ShowObjects)
-      //            HideTempObj();
-      //         if (ShowScore)
-      //            HideTotalBack();
-      //         ErasePlayer();
-      //         if (ShowObjects)
-      //         {
-      //            HideEnemies();
-      //            EraseBlocks();
-      //         }
-      //      }
-				
-      //      // { Fade }; 
-      //      LavaCounter++;
-				
-      //      if (!Waiting)
-      //         if (Demo == dmNoDemo)
-      //         {
-      //            MoveEnemies();
-      //            MovePlayer();
-      //         }
-      //         else
-      //            DoDemo();
-				
-      //      if (!Waiting)
-      //      {
-      //         if (Passed)
-      //         {
-      //            if (Demo = dmNoDemo || InPipe)
-      //            {
-      //               Waiting = true;
-      //               TextCounter = 0;
-      //            }
-      //            TextCounter++;
-      //            if (!ShowScore && (TextCounter)) //in 50..50 + MAX_PAGE
-      //            {
-      //               //SetFont (0, Bold + Shadow);
-      //               CenterText (20, PlayerName [Player], 30.ToString("X"));
-      //               //SetFont(1, Bold + Shadow);
-      //               CenterText (40, "STAGE CLEAR!", 31);
-      //               if (TextCounter = 50 + MAX_PAGE)
-      //                  ShowScore = true;
-      //            }
-      //         }
-      //         else
-      //            if (GameDone)
-      //            {
-      //               Data.Lives[Player]--;
-      //               Data.Mode[Player = mdSmall;
-      //               TextCounter = 0;
-      //               Data.Score[Player] += LevelScore;
-      //               Waiting = true;
-      //               GameDone = false;
-      //            }
-      //      }
-				
-      //      if (Key = 25) //P
-      //         Pause();
-					
-      //      if (ShowScore && (TextCounter == 120) && (LevelScore > 0))
-      //      {
-      //         i = LevelScore - 50;
-      //         if (i < 0)
-      //            i = 0;
-      //         Data.Score[Player] += LevelScore - 1;
-      //         LevelScore = i;
-      //         TextCounter = 119;
-      //         CountingScore = true;
-      //      }
-      //      else
-      //         CountingScore = false;
-				
-      //      if (Waiting)
-      //      {
-      //         TextCounter++;
-      //         if (Data.Lives[Player] == 0)
-      //         {
-      //            if (TextCounter) //in 100..100 + MAX_PAGE
-      //            {
-      //               //SetFont (0, Bold + Shadow);
-      //               CenterText (20, PlayerName[Player], 30.ToString("X"));
-      //               //SetFont (1, Bold + Shadow);
-      //               CenterText (40, "GAME OVER", 31);
-      //               ShowScore = true;
-      //            }
-      //            if (TextCounter > 350)
-      //               GameDone = true;
-      //         }
-      //         else
-      //            if (Passed)
-      //            {
-      //               if (TextCounter > 250)
-      //                  Waiting = false;
-      //            }
-      //            else
-      //               if (TextCounter > 100)
-      //                  GameDone = true;
-      //      }
-      //      MoveTempObj();
-      //      MoveBlocks();
-				
-      //      if (Key == kbEsc || Key == 129)
-      //         QuitGame = true;
-					
-      //      MoveScreen();
-      //      RunRemove();
-				
-      //      if (Options.Horizon < NV)
-      //      {
-      //         j = Buffers.Options.Horizon - 1;
-      //         for (int i = 0 / W; i < NH; i++)
-      //         {
-      //            k = XView / W + (i + LavaCounter / 8) % (NH + 1);
-      //            if (WorldMap * [k, j] = '%')
-      //               Redraw(k, j);
-      //         }
-      //      }
-				
-      //      ResetStack();
-				
-      //      if (ShowObjects)
-      //      {
-      //         DrawBlocks();
-      //         ShowEnemies();
-      //      }
-      //      DrawPlayer();
-				
-      //      if (ShowScore)
-      //         ShowTotalBack();
-      //      if (TextStatus)
-      //         ShowStatus();
-      //      if (ShowObjects)
-      //         ShowTempObj();
-      //      if (Options.Stars != 0)
-      //         ShowStars();
-      //      ShowGlitter();
-				
-      //      LastXView[CurrentPage] = XView;
-				
-      //      if (ShowRetrace)
-      //         SetPalette(0, 0, 0, 0);
-					
-      //      ShowPage();
-				
-      //      if (ShowRetrace)
-      //         SetPalette( 0, 63, 63, 63);
-					
-      //      DrawPalBackGr();
-				
-      //      BlinkPalette();
-				
-      //      PlayMusic();
-				
-      //      if (InPipe && PlayingMacro)
-      //         GameDone = true;
-					
-      //      if (InPipe && !GameDone && !Waiting)
-      //      {
-      //         StopEnemies();
-      //         ClearGlitter();
-      //         FadeDown(64);
-      //         ClearPalette();
-      //         LockPal();
-      //         ClearVGAMem();
-					
-      //         switch (PipeCode[1])
-      //         {
-      //            case 'à'
-      //               FindPipeExit();
-      //               Delay(100);
-      //               break;
-      //            case 'á'
-      //               Swap();
-      //               FindPipeExit();
-      //               break;
-      //            case 'ç'
-      //               GameDone = true;
-      //               PlayWorld = true;
-      //               break;
-      //         }
-					
-      //         InitPlayer (MaxX * W + W / 2, (MapY - 1) * H, Player);
-					
-      //         SetView (XView, YView);
-      //         SetYOffset (YBase);
-					
-      //         for (int i = 0; i < MAX_PAGE); i++)
-      //            LastXView[i] = XView;
-						
-      //         if PipeCode[1] == 'à'
-      //            Restart();
-      //         else
-      //            if (PipeCode[1] == 'á')
-      //               BuildLevel();
-					
-      //      }
-				
-				
-      //   } while (GameDone || QuitGame)
+
+         do //until gamedone
+         {
+            Console.WriteLine("Restart Loop");
+            //      if (!PlayingMacro)
+            //      {
+            //         if (Key = 31) //'S'
+            //         {
+            //            Stat = !Stat;
+            //            TextStatus = Stat;
+            //            Key = 255;
+            //         }
+            //         if (Key = 16) //'Q'
+            //         {
+            //            if (BeeperSound)
+            //               BeeperOff();
+            //            else
+            //            {
+            //               BeeperOn();
+            //               Beep (80);
+            //            }
+            //            Key = 255;
+            //         }
+
+            //         if (Key == 197 || Key == 198) //Pause/Break
+            //         {
+            //            PauseMusic();
+            //            do
+            //            {
+            //               while (Key = 197) {} //busy wait of some sort?
+            //            } while kbHit;
+            //         }
+            //         else
+            //         {
+            //            if (Key != 0)
+            //            {
+            //               GameDone = true;
+            //               Passed = true;
+            //            }
+            //         }
+
+            //         if (TextCounter) //in 40..40+MAX_PAGE
+            //            ShowObjects = false;
+
+            //         HideGlitter();
+            //         if (Options.Stars != 0)
+            //            HideStars();
+            //         if (ShowObjects)
+            //            HideTempObj();
+            //         if (ShowScore)
+            //            HideTotalBack();
+            //         ErasePlayer();
+            //         if (ShowObjects)
+            //         {
+            //            HideEnemies();
+            //            EraseBlocks();
+            //         }
+            //      }
+
+            //      // { Fade }; 
+            //      LavaCounter++;
+
+            //      if (!Waiting)
+            //         if (Demo == dmNoDemo)
+            //         {
+                        Enemies.MoveEnemies();
+                        Players.MovePlayer();
+            //         }
+            //         else
+            //            DoDemo();
+
+            //      if (!Waiting)
+            //      {
+            //         if (Passed)
+            //         {
+            //            if (Demo = dmNoDemo || InPipe)
+            //            {
+            //               Waiting = true;
+            //               TextCounter = 0;
+            //            }
+            //            TextCounter++;
+            //            if (!ShowScore && (TextCounter)) //in 50..50 + MAX_PAGE
+            //            {
+            //               //SetFont (0, Bold + Shadow);
+            //               CenterText (20, PlayerName [Player], 30.ToString("X"));
+            //               //SetFont(1, Bold + Shadow);
+            //               CenterText (40, "STAGE CLEAR!", 31);
+            //               if (TextCounter = 50 + MAX_PAGE)
+            //                  ShowScore = true;
+            //            }
+            //         }
+            //         else
+            //            if (GameDone)
+            //            {
+            //               Data.Lives[Player]--;
+            //               Data.Mode[Player = mdSmall;
+            //               TextCounter = 0;
+            //               Data.Score[Player] += LevelScore;
+            //               Waiting = true;
+            //               GameDone = false;
+            //            }
+            //      }
+
+            //      if (Key = 25) //P
+            //         Pause();
+
+            //      if (ShowScore && (TextCounter == 120) && (LevelScore > 0))
+            //      {
+            //         i = LevelScore - 50;
+            //         if (i < 0)
+            //            i = 0;
+            //         Data.Score[Player] += LevelScore - 1;
+            //         LevelScore = i;
+            //         TextCounter = 119;
+            //         CountingScore = true;
+            //      }
+            //      else
+            //         CountingScore = false;
+
+            //      if (Waiting)
+            //      {
+            //         TextCounter++;
+            //         if (Data.Lives[Player] == 0)
+            //         {
+            //            if (TextCounter) //in 100..100 + MAX_PAGE
+            //            {
+            //               //SetFont (0, Bold + Shadow);
+            //               CenterText (20, PlayerName[Player], 30.ToString("X"));
+            //               //SetFont (1, Bold + Shadow);
+            //               CenterText (40, "GAME OVER", 31);
+            //               ShowScore = true;
+            //            }
+            //            if (TextCounter > 350)
+            //               GameDone = true;
+            //         }
+            //         else
+            //            if (Passed)
+            //            {
+            //               if (TextCounter > 250)
+            //                  Waiting = false;
+            //            }
+            //            else
+            //               if (TextCounter > 100)
+            //                  GameDone = true;
+            //      }
+            //      MoveTempObj();
+            //      MoveBlocks();
+
+            //      if (Key == kbEsc || Key == 129)
+            //         QuitGame = true;
+
+            //      MoveScreen();
+            //      RunRemove();
+
+            //      if (Options.Horizon < NV)
+            //      {
+            //         j = Buffers.Options.Horizon - 1;
+            //         for (int i = 0 / W; i < NH; i++)
+            //         {
+            //            k = XView / W + (i + LavaCounter / 8) % (NH + 1);
+            //            if (WorldMap * [k, j] = '%')
+            //               Redraw(k, j);
+            //         }
+            //      }
+
+            //      ResetStack();
+
+            //      if (ShowObjects)
+            //      {
+                     Blocks.DrawBlocks();
+                     Enemies.ShowEnemies();
+            //      }
+                  Players.DrawPlayer();
+
+            //      if (ShowScore)
+            //         ShowTotalBack();
+            //      if (TextStatus)
+            //         ShowStatus();
+            //      if (ShowObjects)
+            //         ShowTempObj();
+            //      if (Options.Stars != 0)
+            //         ShowStars();
+            //      ShowGlitter();
+
+            //      LastXView[CurrentPage] = XView;
+
+            //      if (ShowRetrace)
+            //         SetPalette(0, 0, 0, 0);
+
+            //      ShowPage();
+
+            //      if (ShowRetrace)
+            //         SetPalette( 0, 63, 63, 63);
+
+            //      DrawPalBackGr();
+
+            //      BlinkPalette();
+
+            //      PlayMusic();
+
+            //      if (InPipe && PlayingMacro)
+            //         GameDone = true;
+
+            //      if (InPipe && !GameDone && !Waiting)
+            //      {
+            //         StopEnemies();
+            //         ClearGlitter();
+            //         FadeDown(64);
+            //         ClearPalette();
+            //         LockPal();
+            //         ClearVGAMem();
+
+            //         switch (PipeCode[1])
+            //         {
+            //            case 'à'
+            //               FindPipeExit();
+            //               Delay(100);
+            //               break;
+            //            case 'á'
+            //               Swap();
+            //               FindPipeExit();
+            //               break;
+            //            case 'ç'
+            //               GameDone = true;
+            //               PlayWorld = true;
+            //               break;
+            //         }
+
+            //         InitPlayer (MaxX * W + W / 2, (MapY - 1) * H, Player);
+
+            //         SetView (XView, YView);
+            //         SetYOffset (YBase);
+
+            //         for (int i = 0; i < MAX_PAGE); i++)
+            //            LastXView[i] = XView;
+
+            //         if PipeCode[1] == 'à'
+            //            Restart();
+            //         else
+            //            if (PipeCode[1] == 'á')
+            //               BuildLevel();
+
+            //      }
+
+
+         } while (!Buffers.GameDone && !Buffers.QuitGame);
 
    }
 

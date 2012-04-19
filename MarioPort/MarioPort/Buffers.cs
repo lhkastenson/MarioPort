@@ -124,8 +124,8 @@ namespace MarioPort
       public static bool GameDone;
       public static bool Passed;
       public static byte[,] WorldBuffer = new byte[MaxWorldSize + 2 * EX, NV + EY2 + EY1];
-      public static byte[,] WorldMap = new byte[MaxWorldSize + 2 * EX, NV + EY2 + EY1];
-      public static byte[,] SaveWorldMap = new byte[MaxWorldSize + 2 * EX, NV + EY2 + EY1];
+      public static char[,] WorldMap = new char[MaxWorldSize + 2 * EX, NV + EY2 + EY1];
+      public static char[,] SaveWorldMap = new char[MaxWorldSize + 2 * EX, NV + EY2 + EY1];
       public static WorldOptions Options = new WorldOptions();
       public static WorldOptions SaveOptions;
       public static int XView;
@@ -146,7 +146,7 @@ namespace MarioPort
       public const int dmDownOutOfPipe = 4;
       public const int dmDead = 5;
 
-      public static void ReadWorld(byte[,] M, ref byte[,] W, WorldOptions Opt)
+      public static void ReadWorld(char[,] M, ref char[,] W, WorldOptions Opt)
       {
          Console.WriteLine("Reading the world");
          //MapBuffer M;
@@ -156,17 +156,17 @@ namespace MarioPort
          //FillChar(W, W.size(), ' ');
          for (int i = 0; i < W.GetLength(0); i++)
             for (int j = 0; j < W.GetLength(1); j++)
-               W[i,j] = (byte)' ';
+               W[i,j] = ' ';
          for (int i = 0; i < EX - 1; i++)
       	   for (int j = 0; j < NV - 1 + EY2 + EY1; j++)
-      		   W[i,j] = (byte)'@';
+      		   W[i,j] = '@';
          x = 0;
       
          while (M[x,0] != (0) && (x < MaxWorldSize))
          {
       	   for (int i = 0; i < NV; i++)
-      		   W[x, NV - i - 1] = M[x,i];
-      	   W[x,EY1] = (0);
+      		   W[x, NV - i - 1] = (char)M[x,i];
+      	   W[x,EY1] = (char)(0);
       	   for (int i = 1; i < EY2 + EY1; i++)
       		   W[x,NV-1+i] = W[x,NV-1];
       	   x++;
@@ -175,7 +175,7 @@ namespace MarioPort
          Buffers.Options.XSize = x;
          for (int i = x; i < x + EX - 1; i++)
       	   for (int j = EY1; j < (NV - 1 + EY2); j++)
-      		   W[i,j] = (byte)'@';
+      		   W[i,j] = '@';
       }
 
       public static void Swap()
@@ -188,9 +188,9 @@ namespace MarioPort
          for (int i = EX; i < MaxWorldSize - 1 + EX; i++)
       	   for (int j = EY1; j < NV -1 + EY2; j++)
       	   {
-      		   C = WorldMap[i,j];
+      		   C = (byte)WorldMap[i,j];
                WorldMap[i, j] = SaveWorldMap[i, j];
-      		   SaveWorldMap[i,j] = C;
+      		   SaveWorldMap[i,j] = (char)C;
       	   }
       }
 

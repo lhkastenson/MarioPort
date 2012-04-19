@@ -173,65 +173,20 @@ namespace MarioPort
 //      }
 //      }
 
-      public static void Mirror(ref System.Drawing.Bitmap from, ref System.Drawing.Bitmap to)
-      { /**
-//        type
-//          PlaneBuffer = array[0..Buffers.H - 1, 0..Buffers.W div 4 - 1] of Byte;
-//          PlaneBufferArray = array[0..3] of PlaneBuffer;
-//          PlaneBufferArrayPtr = ^PlaneBufferArray;
-//        var
-//          Source, Dest: PlaneBufferArrayPtr;
-//        private static void Swap (Plane1, Plane2: Byte);
-//          var
-//            i, j: Byte;
-//        {
-//          for j = 0 to Buffers.H - 1 do
-//            for i = 0 to Buffers.W div 4 - 1 do
-//            {
-//              Dest^[Plane2, j, i] = Source^[Plane1, j, Buffers.W div 4 - 1 - i];
-//              Dest^[Plane1, j, i] = Source^[Plane2, j, Buffers.W div 4 - 1 - i];
-//            }
-//        }
-//      {
-//        Source = P1;
-//        Dest = P2;
-//        Swap (0, 3);
-//        Swap (1, 2);
-//      }
-      **/}
-
-      private static void Rotate(ref Bitmap from, ref Bitmap to)
+      public static void Mirror(System.Drawing.Bitmap from, ref System.Drawing.Bitmap to)
       {
-//      {
-//        asm
-//            push    ds
-//            push    es
-//            lds     si, P1
-//            les     di, P2
-//            cld
-//            add     si, Buffers.W * Buffers.H
-//            dec     si
-//            mov     cx, Buffers.H
-//      1:   push    cx
-//            mov     cx, Buffers.W
-//      2:   std
-//            lodsb
-//            cld
-//            stosb
-//            loop    2
-//            pop     cx
-//            loop    1
-//            pop     es
-//            pop     ds
-//        }
-//      }
+         from.RotateFlip(RotateFlipType.Rotate180FlipY);
+         to = from.Clone() as Bitmap;
+      }
+
+      private static void Rotate(Bitmap from, ref Bitmap to)
+      {
+         from.RotateFlip(RotateFlipType.Rotate180FlipY);
+         to = from.Clone() as Bitmap;
       }
 
       public static void InitSky(byte NewSky)
       {
-//      {
-//        Sky = NewSky;
-//      }
 			Sky = NewSky;
       }
 
@@ -325,14 +280,14 @@ namespace MarioPort
             }
          }
 
-         Mirror (ref FigList[N,  1], ref FigList[N,  3]);
-         Rotate (ref FigList[N,  4], ref FigList[N,  6]);
-         Rotate (ref FigList[N,  1], ref FigList[N,  9]);
-         Rotate (ref FigList[N,  2], ref FigList[N,  8]);
-         Rotate (ref FigList[N,  3], ref FigList[N,  7]);
-         Mirror (ref FigList[N, 10], ref FigList[N, 11]);
-         Rotate (ref FigList[N, 11], ref FigList[N, 12]);
-         Mirror (ref FigList[N, 12], ref FigList[N, 13]);
+         Mirror (FigList[N,  1], ref FigList[N,  3]);
+         Rotate (FigList[N,  4], ref FigList[N,  6]);
+         Rotate (FigList[N,  1], ref FigList[N,  9]);
+         Rotate (FigList[N,  2], ref FigList[N,  8]);
+         Rotate (FigList[N,  3], ref FigList[N,  7]);
+         Mirror (FigList[N, 10], ref FigList[N, 11]);
+         Rotate (FigList[N, 11], ref FigList[N, 12]);
+         Mirror (FigList[N, 12], ref FigList[N, 13]);
       }
       
       private static void SetSkyPalette()
@@ -586,11 +541,11 @@ namespace MarioPort
                   }
                   else
                   {
-                     if ( Buffers.WorldMap[X - 1, Y] >= 14 && Buffers.WorldMap[X - 1, Y] <= 26 )
+                     if ( Buffers.WorldMap[X, Y] >= 14 && Buffers.WorldMap[X, Y] <= 26 )
                      {
                         if ( Ch == 1 || Ch == (char)4 || Ch == (char)7 )
                         {
-                           Fig = FigList[1, (int)(Buffers.WorldMap[X - 1, Y]) - 13];
+                           Fig = FigList[1, (int)(Buffers.WorldMap[X, Y]) - 13];
                            FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                         }
                      }
@@ -617,9 +572,9 @@ namespace MarioPort
                case 'A':
                {
                   L = true;
-                     Buffers.WorldMap[X - 1, Y] = (byte)'A';
+                     Buffers.WorldMap[X, Y] = 'A';
                      R = true;
-                     Buffers.WorldMap[X + 1, Y] = (byte)'A';
+                     Buffers.WorldMap[X + 1, Y] = 'A';
                   if ( (X + Y) % 2 == 1 )
                   {
                      RS = true;
@@ -935,174 +890,216 @@ namespace MarioPort
       }
       
       // Impl  } of BuildWall *moved
+      private static char AB = ' ';
+      private static char CD = ' ';
+      private static char EF = ' ';
+      private static char LastAB = ' ';
+      private static char LastCD = ' ';
+      private static char LastEF = ' ';
       public static void BuildWorld()
       {
-//      var
-//        AB,
-//        CD,
-//        EF,
-//        LastAB,
-//        LastCD,
-//        LastEF: Char;
+         int i, j, k, l;
+         for( i = 0; i <= Buffers.Options.XSize - 1; i++)
+         {
+            for( j = 0; j <= Buffers.NV - 1; j++)
+            {
+               switch((char)Buffers.WorldMap[i, j])
+               {
+                  case 'ý': 
+                  {
+                     Buffers.WorldMap[i, j - 5] = '?';
+                     Buffers.WorldMap[i, j - 6] = 'á';
+                     Buffers.WorldMap[i, j] = ' ';
+                     break; 
+                  }
+                  case 'ü': 
+                  {
+                     Buffers.WorldMap[i, j + 2] = '*';
+                     Buffers.WorldMap[i, j] = ' ';
+                     break;
+                  }
+                  case '­': 
+                  {
+                     k = j + 1;
+                     for( l = j; l >= 0; l++)
+                        Buffers.WorldMap[i, l] = Buffers.WorldMap[i, k];
+                     break;
+                  }
+                  case '®': 
+                  {
+                     Buffers.WorldMap[i, j] = Buffers.WorldMap[i, j - 1];
+                     Buffers.WorldMap[i, Buffers.NV] = (char)254;
+                     break;
+                  }
+                  case '¯':
+                  {
+                     Buffers.WorldMap[i, j] = Buffers.WorldMap[i, j - 1];
+                     Buffers.WorldMap[i, Buffers.NV] = (char)255;
+                     break;
+                  }
+               }
+            }
+         }
 
-//      var
-//        i, j, k, l: Integer;
-//
-//      {  { BuildWorld }
-//        for i = 0 to Buffers.Options.XSize - 1 do
-//          for j = 0 to NV - 1 do
-//            case Buffers.WorldMap[i, j] of
-//              'ý': {
-//                     Buffers.WorldMap[i, j - 5] = '?';
-//                     Buffers.WorldMap[i, j - 6] = 'á';
-//                     Buffers.WorldMap[i, j] = ' ';
-//                   }
-//              'ü': {
-//                     Buffers.WorldMap[i, j - 2] = '*';
-//                     Buffers.WorldMap[i, j] = ' ';
-//                   }
-//              '­': {
-//                     k = j + 1;
-//                     for l = j downto -1 do
-//                       Buffers.WorldMap[i, l] = Buffers.WorldMap[i, k];
-//                   }
-//              '®': {
-//                     Buffers.WorldMap[i, j] = Buffers.WorldMap[i, j - 1];
-//                     Buffers.WorldMap[i, NV] = (char)254;
-//                   }
-//              '¯': {
-//                     Buffers.WorldMap[i, j] = Buffers.WorldMap[i, j - 1];
-//                     Buffers.WorldMap[i, NV] = (char)255;
-//                   }
-//            }
-//
-//        LastAB = ' ';
-//        LastCD = ' ';
-//        LastEF = ' ';
-//
-//        with Buffers.Options do
-//          BuildWall = (WallType1 < 100);
-//
-//        if Buffers.Options.BuildWall )
-//        {
-//          for i = 0 to Buffers.Options.XSize - 1 do
-//          {
-//            for j = 0 to NV - 1 do
-//              BuildWall (i, j);
-//
-//            LastAB = AB;
-//            LastAB = CD;
-//            LastAB = EF;
-//          }
-//        }
-//        else
-//          with Buffers.Options do
-//          {
-//            case WallType1 of
-//              100:
-//                {
-//                  Recolor (@Brick0000, Bricks[0], GroundColor1);
-//                  Recolor (@Brick0001, Bricks[1], GroundColor1);
-//                  Recolor (@Brick0002, Bricks[2], GroundColor1);
-//                }
-//              101:
-//                {
-//                  Recolor (@Brick1000, Bricks[0], GroundColor1);
-//                  Recolor (@Brick1001, Bricks[1], GroundColor1);
-//                  Recolor (@Brick1002, Bricks[2], GroundColor1);
-//                }
-//              102:
-//                {
-//                  Recolor (@Brick2000, Bricks[0], GroundColor1);
-//                  Recolor (@Brick2001, Bricks[1], GroundColor1);
-//                  Recolor (@Brick2002, Bricks[2], GroundColor1);
-//                }
-//
-//            }
-//          }
-//        ConvertGrass (@Grass1000, Grass1001, Grass1002);
-//        ConvertGrass (@Grass2000, Grass2001, Grass2002);
-//        ConvertGrass (@Grass3000, Grass3002, Grass3001);
-//
-//        ConvertGrass (@Palm0000, Palm0001, Palm0002);
-//        ConvertGrass (@Palm1000, Palm1001, Palm1002);
-//        ConvertGrass (@Palm2000, Palm2001, Palm2002);
-//        ConvertGrass (@PALM3_000, Palm3001, Palm3002);
-//
-//        Recolor (@Block001, Resources.BLOCK_001, Buffers.Options.BrickColor);
-//        Recolor (@Wood000, Resources.WOOD_000, Buffers.Options.WoodColor);
-//        Recolor (@XBlock000, Resources.XBLOCK_000, Buffers.Options.XBlockColor);
-//
-//      }
+         LastAB = ' ';
+         LastCD = ' ';
+         LastEF = ' ';
+
+         Buffers.Options.BuildWall = (Buffers.Options.WallType1 < 100);
+
+        if (Buffers.Options.BuildWall )
+        {
+           for (i = 0; i <= Buffers.Options.XSize - 1; i++)
+           {
+              for (j = 0; j <= Buffers.NV - 1; j++)
+                 BuildWall (i, j);
+
+            LastAB = AB;
+            LastAB = CD;
+            LastAB = EF;
+          }
+        }
+        //else
+        //  switch( Buffers.Options.WallType1 )
+        //  {
+        //    case 100:
+        //        {
+        //          Recolor (@Brick0000, Bricks[0], GroundColor1);
+        //          Recolor (@Brick0001, Bricks[1], GroundColor1);
+        //          Recolor (@Brick0002, Bricks[2], GroundColor1);
+        //        }
+        //    case 101:
+        //        {
+        //          Recolor (@Brick1000, Bricks[0], GroundColor1);
+        //          Recolor (@Brick1001, Bricks[1], GroundColor1);
+        //          Recolor (@Brick1002, Bricks[2], GroundColor1);
+        //        }
+        //    case 102:
+        //        {
+        //          Recolor (@Brick2000, Bricks[0], GroundColor1);
+        //          Recolor (@Brick2001, Bricks[1], GroundColor1);
+        //          Recolor (@Brick2002, Bricks[2], GroundColor1);
+        //        }
+
+        //    }
+        //  }
+        //ConvertGrass (@Grass1000, Grass1001, Grass1002);
+        //ConvertGrass (@Grass2000, Grass2001, Grass2002);
+        //ConvertGrass (@Grass3000, Grass3002, Grass3001);
+
+        //ConvertGrass (@Palm0000, Palm0001, Palm0002);
+        //ConvertGrass (@Palm1000, Palm1001, Palm1002);
+        //ConvertGrass (@Palm2000, Palm2001, Palm2002);
+        //ConvertGrass (@PALM3_000, Palm3001, Palm3002);
+
+        //Recolor (@Block001, Resources.BLOCK_001, Buffers.Options.BrickColor);
+        //Recolor (@Wood000, Resources.WOOD_000, Buffers.Options.WoodColor);
+        //Recolor (@XBlock000, Resources.XBLOCK_000, Buffers.Options.XBlockColor);
       }
-      
-      private static void BuildWall (int X, int Y)
+
+      private static void BuildWall(int X, int Y)
       {
-//      const
-//        IgnoreAbove = ['÷'];
-//      var
-//        A, B, L, R: Byte;
-//        N: Byte;
-//        C: Char;
-//        Ch, ChLeft: Set of Char;
-//      {
-//        C = Buffers.WorldMap[X, Y];
-//        case C of
-//          'A', 'B': {
-//                      AB = C;
-//                      Ch = [C] + [#1 .. (char)13];
-//                      if LastAB != C )
-//                        ChLeft = Ch - [#3, (char)6, (char)9]
-//                      else
-//                        ChLeft = Ch;
-//                      N = 0;
-//                    }
-//          'C', 'D': {
-//                      CD = C;
-//                      Ch = [C] + [#1..#26] + ['A', 'B'] + IgnoreAbove;
-//                      ChLeft = Ch;
-//                      N = 13;
-//                    }
-//          else Exit;
-//        }
-//        A = 1 - Byte ((Buffers.WorldMap[X, Y - 1] in (Ch - IgnoreAbove)) || (Y = 0));
-//        B = 2 * Byte (Not ((Y = NV - 1) || (Buffers.WorldMap[X, Y + 1] in Ch)));
-//        L = 4 * Byte (Not ((X = 0) || (Buffers.WorldMap[X - 1, Y] in ChLeft)));
-//        R = 8 * Byte (Not ((X = Buffers.Options.XSize - 1) || (Buffers.WorldMap[X + 1, Y] in Ch)));
-//        case A + B + L + R of
-//          0: {
-//               if (X > 0) && (Y > 0) )
-//                 if ( !(Buffers.WorldMap[X - 1, Y - 1] in Ch)) )
-//                   { Buffers.WorldMap[X, Y] = Chr (10 + N); Exit }
-//               if (X < Buffers.Options.XSize - 1) && (Y > 0) )
-//                 if  !(Buffers.WorldMap[X + 1, Y - 1] in Ch) )
-//                   { Buffers.WorldMap[X, Y] = Chr (11 + N); Exit }
-//               if (X > 0) && (Y < NV - 1) )
-//                 if  !(Buffers.WorldMap[X - 1, Y + 1] in Ch) )
-//                   { Buffers.WorldMap[X, Y] = Chr (12 + N); Exit }
-//               if (X < Buffers.Options.XSize - 1) && (Y < NV - 1) )
-//                 if  !(Buffers.WorldMap[X + 1, Y + 1] in Ch) )
-//                   { Buffers.WorldMap[X, Y] = Chr (13 + N); Exit }
-//               Buffers.WorldMap[X, Y] = Chr (5 + N);
-//             }
-//          1: Buffers.WorldMap[X, Y] = Chr (2 + N);
-//          2: Buffers.WorldMap[X, Y] = Chr (8 + N);
-//          4: Buffers.WorldMap[X, Y] = Chr (4 + N);
-//          8: Buffers.WorldMap[X, Y] = Chr (6 + N);
-//
-//          5: Buffers.WorldMap[X, Y] = Chr (1 + N);
-//          6: Buffers.WorldMap[X, Y] = Chr (7 + N);
-//          9: Buffers.WorldMap[X, Y] = Chr (3 + N);
-//         10: Buffers.WorldMap[X, Y] = Chr (9 + N);
-//
-//          else Buffers.WorldMap[X, Y] = Chr (5 + N);
-//        }
-//
-//      }
-//
-
+         const char IgnoreAbove = '÷';
+         byte A, B, L, R, N;
+         char C;
+         SortedSet<char> Ch = new SortedSet<char>();
+         SortedSet<char> ChLeft = new SortedSet<char>();
+         {
+         C = (char)Buffers.WorldMap[X, Y];
+         switch((char)C)
+         {
+            case 'A':
+            case 'B':
+            {
+               AB = C;
+               Ch.Add(C);
+               for(int m = 1; m <= 13; m++)
+                  Ch.Add((char)m);
+               if (LastAB != C )
+               {
+                  ChLeft = Ch;
+                  ChLeft.Remove((char)3);
+                  ChLeft.Remove((char)6);
+                  ChLeft.Remove((char)9);
+               }
+               else
+                 ChLeft = Ch;
+               N = 0;
+               break;
+            }
+            case 'C':
+            case 'D': 
+            {
+               CD = C;
+               Ch.Clear();
+               Ch.Add((char)C);
+               for(int m = 1; m <= 26; m++)
+                  Ch.Add((char)m);
+               Ch.Add('A');
+               Ch.Add('B');
+               Ch.Add(IgnoreAbove);
+               ChLeft = Ch;
+               N = 13;
+               break;
+            }
+            default:
+               return;
+          }
+          SortedSet<char> temp = new SortedSet<char>();
+          temp = Ch;
+          temp.Remove(IgnoreAbove);
+          A = System.Convert.ToByte(1 - System.Convert.ToByte(((temp.Contains((char)Buffers.WorldMap[X, Y - 1])) || (Y == 0))));
+          B = System.Convert.ToByte(2 * System.Convert.ToByte(!(Y == Buffers.NV - 1) ||  Ch.Contains((char)(Buffers.WorldMap[X, Y + 1]))));
+          L = System.Convert.ToByte(4 * System.Convert.ToByte(! ((X == 0) || ChLeft.Contains((char)Buffers.WorldMap[X - 1, Y]))));
+          R = System.Convert.ToByte(8 * System.Convert.ToByte(!((X == Buffers.Options.XSize - 1) || Ch.Contains((char)Buffers.WorldMap[X + 1, Y]))));
+          switch((A + B + L + R))
+          {
+            case 0: 
+            {
+               if ((X > 0) && (Y > 0) )
+                  if( ( !(Ch.Contains((char)Buffers.WorldMap[X - 1, Y - 1]))) )
+                    { Buffers.WorldMap[X, Y] = (char)(10 + N); return; }
+               if ((X < Buffers.Options.XSize - 1) && (Y > 0) )
+                  if(  !(Ch.Contains((char)Buffers.WorldMap[X + 1, Y - 1])) )
+                  { Buffers.WorldMap[X, Y] = (char)(11 + N); return; }
+               if ((X > 0) && (Y < Buffers.NV - 1) )
+                  if ( !(Ch.Contains((char)Buffers.WorldMap[X - 1, Y + 1])) )
+                  { Buffers.WorldMap[X, Y] = (char)(12 + N); return; }
+               if ((X < Buffers.Options.XSize - 1) && (Y < Buffers.NV - 1) )
+                  if ( !(Ch.Contains((char)Buffers.WorldMap[X + 1, Y + 1])) )
+                  { Buffers.WorldMap[X, Y] = (char)(13 + N); return; }
+               Buffers.WorldMap[X, Y] = (char)(5 + N);
+              break;
+            }
+            case 1:
+            Buffers.WorldMap[X, Y] = (char)(2 + N);
+               break;
+            case 2:
+               Buffers.WorldMap[X, Y] = (char)(8 + N);
+               break;
+            case 4:
+               Buffers.WorldMap[X, Y] = (char)(4 + N);
+               break;
+            case 8:
+               Buffers.WorldMap[X, Y] = (char)(6 + N);
+               break;
+            case 5:
+               Buffers.WorldMap[X, Y] = (char)(1 + N);
+               break;
+            case 6:
+               Buffers.WorldMap[X, Y] = (char)(7 + N);
+               break;
+            case 9:
+               Buffers.WorldMap[X, Y] = (char)(3 + N);
+               break;
+            case 10:
+               Buffers.WorldMap[X, Y] = (char)(9 + N);
+               break;
+            default:
+               Buffers.WorldMap[X, Y] = (char)(5 + N);
+               break;
+            }
+         }
       }
-
-
    }
 }

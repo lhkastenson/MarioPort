@@ -19,9 +19,9 @@ namespace MarioPort
       //const VGA_SEGMENT = $A000;  do not think we will need this
       public const int windowHeight = 13 * 14;
       public const int windowWidth = 16 * 20;
-      public const int screenWidth = 320;
-      public const int screenHeight = 200;
-      public const int virScreenWidth = screenWidth + 2 * 20;
+      public const int SCREEN_WIDTH = 320;
+      public const int SCREEN_HEIGHT = 200;
+      public const int virScreenWidth = SCREEN_WIDTH + 2 * 20;
       public const int virScreenHeight = 182;
       public const int bytesPerLine = virScreenWidth / 4;
 
