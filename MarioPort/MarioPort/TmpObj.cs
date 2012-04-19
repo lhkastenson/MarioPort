@@ -34,9 +34,9 @@ namespace MarioPort
         public const int W = 1; //temp
         public const int H = 1; //temp
 
-        public struct TempRec
+        public class TempRec
         {
-           public TempRec(bool x)
+           public TempRec()
            {
               this.Visible = new bool[MAX_PAGE];
               this.BackGrAddr = new ushort[MAX_PAGE];
@@ -52,6 +52,10 @@ namespace MarioPort
               this.YVel = 0;
               this.DelayCounter = 0;
            }
+           public static TempRec Create()
+           {
+              return new TempRec();
+           }
            public bool Alive;
            public bool[] Visible;
            public byte Tp;
@@ -62,25 +66,32 @@ namespace MarioPort
            public int[] OldY;
         }
 
-        public struct RemoveRec
+        public class RemoveRec
         {
            public bool Active;
            public int RemCount, RemX, RemY, RemW, RemH, NewImage;
+           public RemoveRec()
+           {
+           }
+           public static RemoveRec Create()
+           {
+              return new RemoveRec();
+           }
         }
 
-        public static TempRec[] TempObj = new TempRec[MaxTempObj];
-        public static RemoveRec[] RemList = new RemoveRec[MaxRemove];
+        public static TempRec[] TempObj = new TempRec[] { TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create(), TempRec.Create() };
+        public static RemoveRec[] RemList = new RemoveRec[] { RemoveRec.Create(), RemoveRec.Create(), RemoveRec.Create(), RemoveRec.Create(), RemoveRec.Create(), RemoveRec.Create(), RemoveRec.Create(), RemoveRec.Create(), RemoveRec.Create(), RemoveRec.Create()};
 
         public static void InitTempObj()
         {
              int i, j;
-             for (i = 1; i <= MaxTempObj; i++ )
+             for (i = 0; i < MaxTempObj; i++ )
              {
                TempObj[i].Alive = false;
-               for( j = 0; j <= MAX_PAGE; j++)
+               for( j = 0; j < MAX_PAGE; j++)
                  TempObj[i].Visible[j] = false;
              }
-             for (i = 1; i <= MaxRemove; i++ )
+             for (i = 0; i < MaxRemove; i++ )
              {
                 RemList[i].Active = false;
              }

@@ -224,7 +224,7 @@ namespace MarioPort
 
             Play.PlayWorld('0', '0', Worlds.Intro_0(), Worlds.Options_0(), Worlds.Options_0(),
                     Worlds.Intro_0(), Worlds.Options_0(), Worlds.Options_0(), Buffers.plMario);
-            //BackGr.InitBackGr(3, 0);
+            BackGr.InitBackGr(3, 0);
 
             //Palettes.OutPalette(0xA0, 35, 45, 50);
             //Palettes.OutPalette(0xA1, 45, 55, 60);
@@ -608,8 +608,8 @@ namespace MarioPort
 
             EndGame = false;
 //#if MENU
-            if (MENU)
-      		   Intro();
+            //if (MENU)
+            //   Intro();
 //#endif
             //Randomize();
 

@@ -10,7 +10,7 @@ namespace MarioPort
 {
    public static class Worlds
    {
-      public static byte[,] Intro_0()
+      public static char[,] Intro_0()
       {
          string levelInfo = 
             @"AA÷          " +
@@ -31,8 +31,9 @@ namespace MarioPort
             @"AA           " +
             @"AA           ";
          System.Text.ASCIIEncoding  encoding=new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] intro = new byte[temp.Length / 13 + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,] intro = new char[temp.Length / 13 + 1, 13];
          for(int x = 0; x < (temp.Length / 13); x++) 
          {
             for (int y = 0; y < 13; y++)
@@ -40,7 +41,7 @@ namespace MarioPort
                intro[x, y] = temp[x * 13 + y];
             }
          }
-         intro[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         intro[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return intro;
       }
 
@@ -75,7 +76,7 @@ namespace MarioPort
          return options;
       }
 
-      public static byte[,] Level_1a()
+      public static char[,] Level_1a()
       {
          string levelInfo =
             @"AA÷          " +
@@ -259,8 +260,9 @@ namespace MarioPort
             @"AA÷          " +
             @"AA÷          ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] level_1a = new byte[(temp.Length / 13) + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,] level_1a = new char[(temp.Length / 13) + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -268,7 +270,7 @@ namespace MarioPort
                level_1a[x, y] = temp[x * 13 + y];
             }
          }
-         level_1a[(temp.Length / 13),0] = 0; //Storing 0 at end, not positive if necessary
+         level_1a[(temp.Length / 13),0] = (char)0; //Storing 0 at end, not positive if necessary
          return level_1a;
       }
 
@@ -334,7 +336,7 @@ namespace MarioPort
          return options;
       }
 
-      public static byte[,] Level_1b()
+      public static char[,] Level_1b()
       {
          string levelInfo =
             @"WWWWWWWWWWWWW" +
@@ -354,8 +356,9 @@ namespace MarioPort
             @"W   $       W" +
             @"WWWWWWWWWWWWW";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] level_1b = new byte[temp.Length / 13 + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,] level_1b = new char[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -363,7 +366,7 @@ namespace MarioPort
                level_1b[x, y] = temp[x * 13 + y];
             }
          }
-         level_1b[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         level_1b[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return level_1b;
       }
 
@@ -398,7 +401,7 @@ namespace MarioPort
          return options;
       }
 
-      public static byte[,] Level_2a()
+      public static char[,] Level_2a()
       {
          string levelInfo =
             @"AAAAAAAAAAAAA" +
@@ -636,8 +639,9 @@ namespace MarioPort
             @"    @    ?à A" +
             @"AAAAAAAAAAAAA";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] level_2a = new byte[temp.Length / 13 + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,] level_2a = new char[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -645,7 +649,7 @@ namespace MarioPort
                level_2a[x, y] = temp[x * 13 + y];
             }
          }
-         level_2a[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         level_2a[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return level_2a;
       }
 
@@ -711,10 +715,10 @@ namespace MarioPort
          return options;
       }
 
-      public static byte[,] Level_2b()
+      public static char[,] Level_2b()
       {
-         byte[,] level_2b = new byte[1,1];
-         level_2b[0,0] = 0;
+         char[,] level_2b = new char[1,1];
+         level_2b[0,0] = (char)0;
          return level_2b;
       }
 
@@ -723,7 +727,7 @@ namespace MarioPort
          return new Buffers.WorldOptions();
       }
 
-      public static byte[,] Level_3a()
+      public static char[,] Level_3a()
       {
          string levelInfo =
             @"AA           " +
@@ -882,8 +886,9 @@ namespace MarioPort
             @"AAAAAAAAAAAAA" +
             @"AAAAAAAAAAAAA";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,]Level_3a = new byte[temp.Length / 13 + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,]Level_3a = new char[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -891,7 +896,7 @@ namespace MarioPort
                Level_3a[x, y] = temp[x * 13 + y];
             }
          }
-         Level_3a[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         Level_3a[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_3a;
       }
 
@@ -957,10 +962,10 @@ namespace MarioPort
          return options;
       }
 
-      public static byte[,] Level_3b()
+      public static char[,] Level_3b()
       {
-         byte[,] level_3b = new byte[1,1];
-         level_3b[0,0] = 0;
+         char[,] level_3b = new char[1,1];
+         level_3b[0,0] = (char)0;
          return level_3b;
       }
 
@@ -969,7 +974,7 @@ namespace MarioPort
          return new Buffers.WorldOptions();
       }
 
-      public static byte[,] Level_4a()
+      public static char[,] Level_4a()
       {
          string levelInfo =
             @"AAAA       AA" +
@@ -1175,8 +1180,9 @@ namespace MarioPort
             @"AI          I" +
             @"¯AIIIIIIIIIII";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_4a = new byte[temp.Length / 13 + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,] Level_4a = new char[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -1184,7 +1190,7 @@ namespace MarioPort
                Level_4a[x, y] = temp[x * 13 + y];
             }
          }
-         Level_4a[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         Level_4a[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_4a;
       }
 
@@ -1250,7 +1256,7 @@ namespace MarioPort
          return options;
       }
 
-      public static byte[,] Level_4b()
+      public static char[,] Level_4b()
       {
          string levelInfo =
             @"AAAAAAAAAAAAA" +
@@ -1371,8 +1377,9 @@ namespace MarioPort
             @"AAAAAAAAAAAAA" +
             @"AAAAAAAAAAAAA";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_4b = new byte[temp.Length / 13 + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,] Level_4b = new char[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -1380,7 +1387,7 @@ namespace MarioPort
                Level_4b[x, y] = temp[x * 13 + y];
             }
          }
-         Level_4b[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         Level_4b[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_4b;
       }
 
@@ -1415,7 +1422,7 @@ namespace MarioPort
          return options;
       }
 
-      public static byte[,] Level_5a()
+      public static char[,] Level_5a()
       {
          string levelInfo =
             @"AA           " +
@@ -1584,8 +1591,9 @@ namespace MarioPort
             @"AA           " +
             @"AA           ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_5a = new byte[temp.Length / 13 + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,] Level_5a = new char[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -1593,7 +1601,7 @@ namespace MarioPort
                Level_5a[x, y] = temp[x * 13 + y];
             }
          }
-         Level_5a[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         Level_5a[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_5a;
       }
 
@@ -1659,7 +1667,7 @@ namespace MarioPort
          return options;
       }
 
-      public static byte[,] Level_5b()
+      public static char[,] Level_5b()
       {
          string levelInfo =
             @"AAXXXXXXXXXXX" +
@@ -1710,8 +1718,9 @@ namespace MarioPort
             @"AA          X" +
             @"AAXXXXXXXXXXX";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_5b = new byte[temp.Length / 13 + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,] Level_5b = new char[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -1719,7 +1728,7 @@ namespace MarioPort
                Level_5b[x, y] = temp[x * 13 + y];
             }
          }
-         Level_5b[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         Level_5b[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_5b;
       }
 
@@ -1754,7 +1763,7 @@ namespace MarioPort
          return options;
       }
 
-      public static byte[,] Level_6a()
+      public static char[,] Level_6a()
       {
          string levelInfo =
             @"AA           " +
@@ -1899,8 +1908,9 @@ namespace MarioPort
             @"AA           " +
             @"AA           ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_6a = new byte[temp.Length / 13 + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,] Level_6a = new char[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -1908,7 +1918,7 @@ namespace MarioPort
                Level_6a[x, y] = temp[x * 13 + y];
             }
          }
-         Level_6a[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         Level_6a[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_6a;
       }
 
@@ -1974,7 +1984,7 @@ namespace MarioPort
          return options;
       }
 
-      public static byte[,] Level_6b()
+      public static char[,] Level_6b()
       {
          string levelInfo =
             @"AAA          " +
@@ -2028,8 +2038,9 @@ namespace MarioPort
             @"AA           " +
             @"AA           ";
          System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-         byte[] temp = encoding.GetBytes(levelInfo);
-         byte[,] Level_6b = new byte[temp.Length / 13 + 1, 13];
+         //byte[] temp = encoding.GetBytes(levelInfo);
+         char[] temp = levelInfo.ToCharArray();
+         char[,] Level_6b = new char[temp.Length / 13 + 1, 13];
          for (int x = 0; x < (temp.Length / 13); x++)
          {
             for (int y = 0; y < 13; y++)
@@ -2037,7 +2048,7 @@ namespace MarioPort
                Level_6b[x, y] = temp[x * 13 + y];
             }
          }
-         Level_6b[(temp.Length / 13), 0] = 0; //Storing 0 at end, not positive if necessary
+         Level_6b[(temp.Length / 13), 0] = (char)0; //Storing 0 at end, not positive if necessary
          return Level_6b;
       }
 
