@@ -8,13 +8,11 @@ using System.Drawing;
 using MarioPort;
 ﻿using Resources = MarioPort.Properties.Resources;
 
-/*
- *
- */
-
 namespace MarioPort
 {
-
+   //-------------------------------------------------
+   // Class that controls the players
+   //-------------------------------------------------
    public static class Players
    {
       public const int stOnTheGround = 0;
@@ -42,115 +40,91 @@ namespace MarioPort
       public static bool EarthQuake;
       public static int EarthQuakeCounter;
       public static int Small;
-
-      //// implementation ////
       
-            private const int Safe = Buffers.EY1;
-            private const int HSafe = Buffers.H * Safe;
+      private const int Safe = Buffers.EY1;
+      private const int HSafe = Buffers.H * Safe;
 
-            private static bool keyLeft;
-            private static bool keyRight;
-            private static bool keyUp;
-            private static bool keyDown;
-            private static bool keyAlt;
-            private static bool keyCtrl;
-            private static bool keyLeftShift;
-            private static bool keyRightShift;
-            private static bool keySpace;
+      private static bool keyLeft;
+      private static bool keyRight;
+      private static bool keyUp;
+      private static bool keyDown;
+      private static bool keyAlt;
+      private static bool keyCtrl;
+      private static bool keyLeftShift;
+      private static bool keyRightShift;
+      private static bool keySpace;
 
-            public class ScreenRec
-            {
-               public bool Visible;
-               public int XPos;
-               public int YPos;
-               public uint BackGrAddr;
+      //-------------------------------------------------
+      // Screen rectangle
+      //-------------------------------------------------
+      public class ScreenRec
+      {
+         public bool Visible;
+         public int XPos;
+         public int YPos;
+         public uint BackGrAddr;
 
-               public ScreenRec()
-               {
-                  Visible = false;
-                  XPos = 0;
-                  YPos = 0;
-                  BackGrAddr = 0;
-               }
+         public ScreenRec()
+         {
+            Visible = false;
+            XPos = 0;
+            YPos = 0;
+            BackGrAddr = 0;
+         }
 
-               public static ScreenRec Create()
-               {
-                  //return ScreenRec 
-                  return new ScreenRec();
-               }
-            }
+         public static ScreenRec Create()
+         {
+            return new ScreenRec();
+         }
+      }
 
-            public static ScreenRec screenRec = ScreenRec.Create();
-            private static ScreenRec[] SaveScreen = new ScreenRec[] { ScreenRec.Create(), ScreenRec.Create() };//[FormMarioPort.MAX_PAGE + 1];
+      public static ScreenRec screenRec = ScreenRec.Create();
+      private static ScreenRec[] SaveScreen = new ScreenRec[] { ScreenRec.Create(), ScreenRec.Create() };
 
-            private static int X;
-            private static int Y;
-            private static int OldX;
-            private static int OldY;
-            private static int DemoX;
-            private static int DemoY;
-            private static int DemoCounter1;
-            private static int DemoCounter2;
-            private static int XVel;
-            private static int YVel;
-      
-            private static byte Direction;
-            private static byte Status;
-            private static byte Walkingmode;
-            private static byte Counter;
-            private static byte WalkCount;
-      
-            private static bool HighJump;
-            private static bool HitEnemy;
-            private static bool Jumped;
-            private static bool Fired;
-      
-            private static int FireCounter;
-            private static int StarCounter;
-            private static int GrowCounter;
-            private static int BlinkCounter;
-      
-            private static char AtCh1;
-            private static char AtCh2;
-            private static char Below1;
-            private static char Below2;
+      private static int X;
+      private static int Y;
+      private static int OldX;
+      private static int OldY;
+      private static int DemoX;
+      private static int DemoY;
+      private static int DemoCounter1;
+      private static int DemoCounter2;
+      private static int XVel;
+      private static int YVel;
 
-      
-      //      private static void HighMirror (P1, P2: Pointer)
-      //      {
-      //        type
-      //          PlaneBuffer = array[0..2 * Buffers.H - 1, 0..Buffers.W / 4 - 1] of Byte;
-      //          PlaneBufferArray = array[0..3] of PlaneBuffer;
-      //          PlaneBufferArrayPtr = ^PlaneBufferArray;
-      //        var
-      //          Source, Dest: PlaneBufferArrayPtr;
-      //        private static void Swap (Plane1, Plane2: Byte );
-      //          var
-      //            i, j: Byte;
-      //        {
-      //          for j = 0 to 2 * Buffers.H - 1 do
-      //            for i = 0 to Buffers.W / 4 - 1 do
-      //            {
-      //              Dest^[Plane2, j, i] = Source^[Plane1, j, Buffers.W / 4 - 1 - i];
-      //              Dest^[Plane1, j, i] = Source^[Plane2, j, Buffers.W / 4 - 1 - i];
-      //            }
-      //        }
-      //      {
-      //        Source = P1;
-      //        Dest = P2;
-      //        Swap (0, 3 );
-      //        Swap (1, 2 );
-      //      }
-      //      }
+      private static byte Direction;
+      private static byte Status;
+      private static byte Walkingmode;
+      private static byte Counter;
+      private static byte WalkCount;
 
-            // NOTE: I'm guessing that "Mirror" means flip over Y axis
-            
+      private static bool HighJump;
+      private static bool HitEnemy;
+      private static bool Jumped;
+      private static bool Fired;
+
+      private static int FireCounter;
+      private static int StarCounter;
+      private static int GrowCounter;
+      private static int BlinkCounter;
+
+      private static char AtCh1;
+      private static char AtCh2;
+      private static char Below1;
+      private static char Below2;
+          
+      //-------------------------------------------------
+      // Mirror bitmap from
+      //-------------------------------------------------
       private static void HighMirror(Bitmap from, ref Bitmap to)
       {
          from.RotateFlip(RotateFlipType.Rotate180FlipY);
          to = from.Clone() as Bitmap;
       }
       
+      //-------------------------------------------------
+      // Initialize Player Figures
+      //-------------------------------------------------
       public static void InitPlayerFigures()
       {
          Buffers.Pictures[Buffers.plMario, Buffers.mdSmall, 0, Buffers.dirLeft] = Resources.SWMAR_000;
@@ -190,6 +164,10 @@ namespace MarioPort
                   HighMirror ( Buffers.Pictures[Pl, Md, N, Buffers.dirLeft], ref Buffers.Pictures[Pl, Md, N, Buffers.dirRight] );
          }
       }
+      
+      //-------------------------------------------------
+      // Initialize Player
+      //-------------------------------------------------
       public static void InitPlayer (int InitX, int InitY, byte Name)
       {
          Buffers.Player = Name;
@@ -221,18 +199,18 @@ namespace MarioPort
          EarthQuake = false;
       }
       
+      //-------------------------------------------------
+      // Draw the Demo
+      //-------------------------------------------------
       private static void DrawDemo()
       {
          int i, j;
-         
-//         with SaveScreen[FormMarioPort.formRef.CurrentPage()] do
-//         GetImage (X, Y, Buffers.W, 2 * Buffers.H, Buffer );
+
          SaveScreen[FormMarioPort.formRef.CurrentPage()].BackGrAddr = FormMarioPort.formRef.PushBackGr(X, Y, Buffers.W + 4, 2 * Buffers.H);
          SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos = X;
          SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos = Y;
          SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible = true;
          
-//         case Demo of
          switch (Buffers.Demo)
          {
             case Buffers.dmDownInToPipe:
@@ -259,6 +237,9 @@ namespace MarioPort
          OldY = Y;
       }
       
+      //-------------------------------------------------
+      // Draw the Player
+      //-------------------------------------------------
       public static void DrawPlayer()
       {
          if (Buffers.Demo != Buffers.dmNoDemo)
@@ -268,14 +249,11 @@ namespace MarioPort
          }
          if ( !Blinking || (BlinkCounter % 2 == 0) )
          {
-//            with SaveScreen [CurrentPage] do
-//            {
-//               { GetImage (X, Y, Buffers.W, 2 * Buffers.H, Buffer ); }
             SaveScreen[FormMarioPort.formRef.CurrentPage()].BackGrAddr = FormMarioPort.formRef.PushBackGr(X, Y, Buffers.W + 4, 2 * Buffers.H);
             SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos = X;
             SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos = Y;
             SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible = true;
-//            }
+
             if ((Buffers.data.mode[Buffers.Player] == Buffers.mdFire) && keySpace && (FireCounter < 7))
             {
                FireCounter++;
@@ -288,24 +266,37 @@ namespace MarioPort
                         Convert.ToByte((GrowCounter + StarCounter) /*& 0xF*/ < 8)));
                else
                   FormMarioPort.formRef.DrawImage(X, Y, Buffers.W, 2 * Buffers.H, Buffers.Pictures[Buffers.Player, Buffers.data.mode[Buffers.Player], Walkingmode, Direction]);
+            
             OldX = X;
             OldY = Y;
          }
       }
       
+      //-------------------------------------------------
+      // Erase the Player
+      //-------------------------------------------------
       public static void ErasePlayer()
       {
-         //if ( !SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible )
-         //   return;
+         if ( !SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible )
+            return;
 
-         //FormMarioPort.PutImage(SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos, SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos, Buffers.W, 2 * Buffers.H, Buffer);
-         //FormMarioPort.PopBackGr(SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos, SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos, Buffers.W + 4, 2 * Buffers.H, BackGrAddr);
-         //SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible = false;
+         FormMarioPort.PutImage(SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos, 
+                                SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos, 
+                                Buffers.W, 2 * Buffers.H, Buffer);
+         
+         FormMarioPort.PopBackGr(SaveScreen[FormMarioPort.formRef.CurrentPage()].XPos, 
+                                 SaveScreen[FormMarioPort.formRef.CurrentPage()].YPos,
+                                 Buffers.W + 4, 2 * Buffers.H, BackGrAddr);
+         
+         SaveScreen[FormMarioPort.formRef.CurrentPage()].Visible = false;
       }
 
+      //-------------------------------------------------
+      // Execute the Demo
+      //-------------------------------------------------
       public static void DoDemo()
       {
-         Small = 0;// TODO 9 * Convert.ToByte(Buffers.data.mode[Buffers.Player] == Buffers.mdSmall);
+         Small = 9 * System.Convert.ToByte(Buffers.data.mode[Buffers.Player] == Buffers.mdSmall);
          switch(Buffers.Demo)
          {
             case Buffers.dmDownInToPipe:
@@ -389,6 +380,9 @@ namespace MarioPort
          }
       }
       
+      //-------------------------------------------------
+      // Start the Demo
+      //-------------------------------------------------
       private static void StartDemo (int dm)
       {
          Buffers.Demo = dm;
@@ -425,6 +419,9 @@ namespace MarioPort
          InPipe = false;
       }
       
+      //-------------------------------------------------
+      // Check the pipe below for type
+      //-------------------------------------------------
       private static void CheckPipeBelow()
       {
          int Mo;
@@ -442,6 +439,9 @@ namespace MarioPort
          StartDemo(Buffers.dmDownInToPipe);
       }
       
+      //-------------------------------------------------
+      // Check the pipe above for type
+      //-------------------------------------------------
       private static void CheckPipeAbove (char C1, char C2)
       {
          int Mo = X % Buffers.W;
@@ -460,23 +460,22 @@ namespace MarioPort
       }
       
       
-      // !!! CheckFall && CheckJump are inside Check !!! *moved
       static int Side, NewX1, NewX2, NewY, Y1, Y2, Y3, Mo;
       static char NewCh1, NewCh2, NewCh3, ch;
       static bool Hold1, Hold2, Hold3, Hit;
 
+      //-------------------------------------------------
+      // Check the player for actions
+      //-------------------------------------------------
       private static void Check()
       {
-         //int Side, NewX1, NewX2, NewY, Y1, Y2, Y3, Mo;
-         //char NewCh1, NewCh2, NewCh3, ch;
-         //bool Small, Hold1, Hold2, Hold3, Hit;
          bool Small;
 
          NewCh1 = ' ';
          NewCh2 = ' ';
          NewCh3 = ' ';
 
-         Side = 0;// TODO Convert.ToByte(XVel > 0) * (Buffers.W - 1);
+         Side  = System.Convert.ToByte(XVel > 0) * (Buffers.W - 1);
          NewX1 = (X + Side) / Buffers.W;
          NewX2 = (X + Side + XVel) / Buffers.W;
          Small = Buffers.data.mode[Buffers.Player] == Buffers.mdSmall;
@@ -558,13 +557,12 @@ namespace MarioPort
                         {
                            Below1 = NewCh1;
                            Below2 = NewCh2;
-                        	MapX = NewX1;  //Codes for pipes
+                        	MapX = NewX1; //Codes for pipes
                            MapY = NewY - 1;
                         	AtCh1 = (char)Buffers.WorldMap[MapX, MapY];
                         	AtCh2 = (char)Buffers.WorldMap[MapX + 1, MapY];
 
-                           //Mo = (X + XVel) % Buffers.W;
-                           Mo = (X) % Buffers.W;
+                           Mo = (X + XVel) % Buffers.W;
                            if ( !Hold1 && (Mo >= 1 && Mo <= 5) )
                               XVel--;
                            if ( !Hold2 && (Mo >= Buffers.W - 5 && Mo <= Buffers.W - 1) )
@@ -622,11 +620,8 @@ namespace MarioPort
                }
                else
                {
-//                  Ch = #0;
                   char Ch = (char)0;
 
-                  //switch (Mo)
-                  //{
                   if (Mo >= 0 && Mo <= (Buffers.W / 2 - 1))
                   {
                      if (  Buffers.CanHoldYou(NewCh1) || Buffers.CanStandOn(NewCh1)  )
@@ -646,7 +641,6 @@ namespace MarioPort
                         NewX2 = NewX1;
                      }
                   }
-                  //}
              
                   switch (Ch)
                   {
@@ -760,6 +754,9 @@ namespace MarioPort
          }
       }
       
+      //-------------------------------------------------
+      // Check status of player - Fall
+      //-------------------------------------------------
       private static void CheckFall()
       {
          int Mo = 0;
@@ -836,6 +833,9 @@ namespace MarioPort
          
       }
       
+      //-------------------------------------------------
+      // Check status of player - Jump
+      //-------------------------------------------------
       private static void CheckJump()
       {  
          if (Enemies.cdEnemy != 0)
@@ -856,6 +856,9 @@ namespace MarioPort
          Enemies.cdEnemy = 0;
       }
 
+      //-------------------------------------------------
+      // Move the player
+      //-------------------------------------------------
       public static void MovePlayer()
       {  
          int MaxSpeed, MinSpeed, OldXVel, OldXView;
@@ -975,8 +978,8 @@ namespace MarioPort
          
          //ReadJoystick( );
          
-         //LastKeyLeft = KeyLeft;
-         //LastKeyRight = KeyRight;
+         LastKeyLeft = Keyboard.keyLeft;
+         LastKeyRight = Keyboard.keyRight;
          
          //keyLeft = kbLeft || jsLeft;
          //keyRight = kbRight || jsRight;
@@ -986,17 +989,24 @@ namespace MarioPort
          //keyCtrl = kbCtrl || jsButton2;
          //keySpace = kbSpace || jsButton2;
 
-         //if ( keyRight && (!LastKeyRight) && (Direction == dirLeft) )
-         //{
-         //   OldDir = dirRight;
-         //   OldXVel = -XVel;
-         //}
-         //if ( keyLeft && (!LastKeyLeft) && (Direction == dirRight) )
-         //{
-         //   OldDir = dirLeft;
-         //   OldXVel = -XVel;
-         //}
-
+         keyLeft  = Keyboard.kbLeft;
+         keyRight = Keyboard.kbRight;
+         keyUp    = Keyboard.kbUp;
+         keyDown  = Keyboard.kbDown;
+         keyAlt   = Keyboard.kbAlt;
+         keyCtrl  = Keyboard.kbCtrl;
+         keySpace = Keyboard.kbSpace;
+         
+         if ( keyRight && (!LastKeyRight) && (Direction == dirLeft) )
+         {
+            OldDir = dirRight;
+            OldXVel = -XVel;
+         }
+         if ( keyLeft && (!LastKeyLeft) && (Direction == dirRight) )
+         {
+            OldDir = dirLeft;
+            OldXVel = -XVel;
+         }
 
          if ( Fired && (!keySpace) )
             Fired = false;
@@ -1121,7 +1131,6 @@ namespace MarioPort
             if ( X < 0 ) X = 0;
          }
 
-//        with Options do
          if ( Buffers.XView > (Buffers.Options.XSize - Buffers.NH) * Buffers.W )
             Buffers.XView = (Buffers.Options.XSize - Buffers.NH) * Buffers.W;
          if ( Buffers.XView < OldXView )
@@ -1151,7 +1160,6 @@ namespace MarioPort
          }
       }
       
-
 
    } // end class Players
 } // end namespace MarioPort
