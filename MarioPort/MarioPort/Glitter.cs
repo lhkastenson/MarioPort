@@ -1,4 +1,12 @@
-﻿using System;
+﻿//Author: Peter Braun
+//
+//Note:    Uses a couple asm methods too, but only in a 
+//         small portion of the methods.
+//
+//File Translation Percentage: 
+//-------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +17,9 @@ using System.Text;
 
 namespace MarioPort
 {
+   //----------------------------------------------------------------
+   //Static class that handles glitter effects in program
+   //----------------------------------------------------------------
    public static class Glitter
    {
 
@@ -41,6 +52,9 @@ namespace MarioPort
           public static byte NumGlitter;
           public static GlitterRec[] GlitterList = new GlitterRec[MaxGlitter];
 
+        //----------------------------------------------------------------
+        //Method to clear glitter
+        //----------------------------------------------------------------
         public static void ClearGlitter()
         {
            for (int i = 0; i < MaxGlitter; i++)
@@ -50,6 +64,9 @@ namespace MarioPort
            }
         }
 
+        //----------------------------------------------------------------
+        //Method to create new glitter
+        //----------------------------------------------------------------
         public static void NewGlitter(int X, int Y, byte NewAttr, byte Duration)
         {
               //int i;
@@ -72,7 +89,9 @@ namespace MarioPort
               //}
         }
 
-
+        //----------------------------------------------------------------
+        //Method to create a new star
+        //----------------------------------------------------------------
         public static void NewStar(int X, int Y, byte NewAttr, byte Duration)
          {
             NewGlitter(X, Y, NewAttr, (byte)(Duration + 4));
@@ -82,6 +101,9 @@ namespace MarioPort
             NewGlitter(X, Y - 1, NewAttr, Duration);
         }
 
+        //----------------------------------------------------------------
+        //Asm method so not used
+        //----------------------------------------------------------------
          public static void ShowGlitter()
          {
             //var
@@ -153,6 +175,9 @@ namespace MarioPort
             //end;
         }
 
+        //----------------------------------------------------------------
+        //Asm method so not used
+        //----------------------------------------------------------------
         public static void HideGlitter()
         {
               //var
@@ -214,6 +239,9 @@ namespace MarioPort
               //end;
         }
 
+        //----------------------------------------------------------------
+        //Method to handle the coin glitter
+        //----------------------------------------------------------------
         public static void CoinGlitter(int X, int Y)
         {
            NewStar(X + 5, Y + 2, (byte)1F, (byte)20);
@@ -224,6 +252,9 @@ namespace MarioPort
            NewGlitter(X + 3, Y + 9, (byte)1F, (byte)15);
         }
 
+        //----------------------------------------------------------------
+        //Method to start the glitter effects
+        //----------------------------------------------------------------
         public static void StartGlitter(int X, int Y, int W, int H)
         {
            int i;
