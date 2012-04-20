@@ -38,14 +38,14 @@ namespace MarioPort
 
       public static bool CanHoldYou(char ch)
       {
-         if (ch >= (char)0 || ch <= (char)13 || ch >= '0' || ch <= 'Z')
+         if (ch >= (char)0 && ch <= (char)13 || ch >= '0' && ch <= 'Z')
             return true;
          return false;
       }
 
       public static bool CanStandOn(char ch)
       {
-         if (ch >= (char)14 || ch <= (char)16 || ch >= 'a' || ch <= 'f')
+         if (ch >= (char)14 && ch <= (char)16 || ch >= 'a' && ch <= 'f')
             return true;
          return false;
       }
@@ -183,7 +183,7 @@ namespace MarioPort
       public static WorldOptions SaveOptions;
       public static int XView;
       public static int YView;
-      public static int[] LastXView = new int[FormMarioPort.MAX_PAGE];
+      public static int[] LastXView = new int[FormMarioPort.MAX_PAGE + 1];
       public static byte[,] StarBuffer = new byte[FormMarioPort.MAX_PAGE + 1, 320];
       public static byte[,] StarBackGr;
       public static int Size;
@@ -208,34 +208,39 @@ namespace MarioPort
       //-------------------------------------------------------------------
       public static void ReadWorld(char[,] M, ref char[,] W, WorldOptions Opt)
       {
-         Console.WriteLine("Reading the world");
+         //Console.WriteLine("Reading the world");
          //MapBuffer M;
          int x;
+         
          //Move(Opt, Buffers.Options, Buffers.Options.SizeOf());
+         Buffers.Options = Opt;
+         
          //M = Map;
          //FillChar(W, W.size(), ' ');
          for (int i = 0; i < W.GetLength(0); i++)
             for (int j = 0; j < W.GetLength(1); j++)
                W[i,j] = ' ';
-         for (int i = 0; i < EX - 1; i++)
-      	   for (int j = 0; j < NV - 1 + EY2 + EY1; j++)
+
+         for (int i = 0; i < EX; i++)
+      	   for (int j = 0; j < NV + EY2 + EY1; j++)
       		   W[i,j] = '@';
+
          x = 0;
       
          while (M[x,0] != (0) && (x < MaxWorldSize))
          {
       	   for (int i = 0; i < NV; i++)
-      		   W[x, NV - i - 1] = (char)M[x,i];
-      	   W[x,EY1] = (char)(0);
-      	   for (int i = 1; i < EY2 + EY1; i++)
-      		   W[x,NV-1+i] = W[x,NV-1];
+               W[x, NV - i] = (char)M[x, i];
+      	   W[x, W.GetLength(1) - EY1] = (char)(0);
+            for (int i = 0; i < EY2 + EY1; i++)
+               W[x, NV + i] = W[x, NV - 1];
       	   x++;
          }
       
          Buffers.Options.XSize = x;
-         for (int i = x; i < x + EX - 1; i++)
-      	   for (int j = EY1; j < (NV - 1 + EY2); j++)
-      		   W[i,j] = '@';
+         for (int i = x; i < x + EX; i++)
+      	   for (int j = 0; j < (NV + EY2 + EY1); j++)
+      		   W[i, j] = '@';
       }
       //-------------------------------------------------------------------
       // Will change the WorldOptions of a single world so that the world

@@ -488,6 +488,8 @@ namespace MarioPort
          
          XPos = X * Buffers.W;
          YPos = Y * Buffers.H;
+         if (X < 0)
+            return;
          Ch = (char)Buffers.WorldMap[X, Y];
          
          if ( X >= 0 && Y >= 0 && Y < Buffers.NV )

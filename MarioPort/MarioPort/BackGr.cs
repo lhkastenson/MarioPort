@@ -78,7 +78,7 @@ namespace MarioPort
          //else if(BackGround == 10)
          //   move(@BOGEN26^, BackGrMap, BackGrMap.Length);
          if (BackGround == 1 || BackGround == 9 || BackGround == 10)
-            for (i = 0; i <= Max; i++)
+            for (i = 0; i < Max; i++)
                BackGrMap[i] = Convert.ToByte(Height - BackGrMap[i] + 1);
          Clouds = bClouds;
          if (Clouds != 0)

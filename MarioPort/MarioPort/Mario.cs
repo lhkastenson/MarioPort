@@ -25,6 +25,16 @@ namespace MarioPort
       public const int MAX_SAVE = 3;
       public const int WAIT_BEFORE_DEMO = 500;
 
+      private static int P, l, m, n, wd, ht, xp;
+      private static int NextNumPlayers, Selected;
+      private static bool IntroDone, TestVGAMode, UpDate;
+      private static int Counter;
+      private static char MacroKey;
+      private static byte Page;
+      private static int NumOptions;
+
+      private static Statuses Status;
+
       public class ConfigData
       {
          public bool Sound;
@@ -41,9 +51,10 @@ namespace MarioPort
          }
          public static ConfigData Create()
          {
-          //              for (int i = 0; i < 3; i++)
-              // Games[i] = new GameData();
-            return new ConfigData();
+            ConfigData configData = new ConfigData();
+            for (int i = 0; i < 3; i++)
+               configData.Games[i] = Buffers.GameData.Create();
+            return configData;
          }
       }
       public static ConfigData ConfigFile;
@@ -65,7 +76,22 @@ namespace MarioPort
          ST_OPTIONS,
          ST_NUMPLAYERS
       }
-      public delegate void Up();
+
+      public static void Up()
+      {
+         if ( Selected == 1 )
+            if ( Status == Statuses.ST_MENU )
+               Selected = NumOptions;
+         else
+            ;//MacroKey = Keyboard.kbEsc;
+         else
+            Selected--;
+      }
+
+      public static void Down()
+      {
+
+      }
 
 #if (DEBUG)
       public static void MouseHalt()
@@ -217,23 +243,18 @@ namespace MarioPort
                  Worlds.Level_6b(), Worlds.Options_6b(), Worlds.Options_6b(), Buffers.plMario);
          //Keyboard.StopMacro();
       }
+
       public static void Intro()
       {
-         int P, l, m, n, wd, ht, xp;
-         int NextNumPlayers, Selected;
-         bool IntroDone, TestVGAMode, UpDate;
-         int Counter;
-         char MacroKey;
-         byte Page;
-
-         Statuses Status = Statuses.ST_NONE;
+         int i = 0, j = 0;
+         Status = Statuses.ST_NONE;
          Statuses OldStatus = Statuses.ST_NONE;
          Statuses LastStatus = Statuses.ST_NONE;
          string[] Menu = new String[5];
-         uint[,] BG = new uint[FormMarioPort.MAX_PAGE, 4];
-         int NumOptions;
+         uint[,] BG = new uint[FormMarioPort.MAX_PAGE + 1, 5];
+
          //nested procedures
-         //Page = FormMarioPort.formRef.CurrentPage;
+         Page = (byte)FormMarioPort.formRef.CurrentPage();
          Status = Statuses.ST_NONE;
          TestVGAMode = false;
          GameNumber = -1;
@@ -265,8 +286,8 @@ namespace MarioPort
 
             for(int p = 0; p < FormMarioPort.MAX_PAGE; p++)
             {
-               for(int i = 1; i >= 0; i--)
-                  for(int j = 1; j >= 0; j--)
+               for( i = 1; i >= 0; i--)
+                  for( j = 1; j >= 0; j--)
                      for(int k = 1; k >= 0; k--)
                      {
                         FormMarioPort.formRef.DrawImage(38 + i + j, 29 + i + k, 108, 28, Resources.INTRO_000);
@@ -276,8 +297,8 @@ namespace MarioPort
                BackGr.DrawBackGrMap(10 * Buffers.H + 6, 11 * Buffers.H - 1, 54, 0xA0);
                BackGr.DrawBackGrMap(10 * Buffers.H + 6, 11 * Buffers.H - 1, 55, 0xA1);
                BackGr.DrawBackGrMap(10 * Buffers.H + 6, 11 * Buffers.H - 1, 53, 0xA1);
-               for(int i = 0; i < Buffers.NH - 1; i++)
-                  for(int j = 0; j < Buffers.NV - 1; j++)
+               for( i = 0; i < Buffers.NH - 1; i++)
+                  for( j = 0; j < Buffers.NV - 1; j++)
                      if((i == 0 || i == Buffers.NH - 1) || (j == 0 || j == Buffers.NV - 1))
                         FormMarioPort.formRef.DrawImage(i * Buffers.W, j * Buffers.H, Buffers.W, Buffers.H, Resources.BLOCK_000);
                Players.DrawPlayer();
@@ -359,7 +380,8 @@ namespace MarioPort
                         Menu[2] = "Game #3 " + 7 + " ";
                         Menu[3] = "";
                         Menu[4] = "";
-                        for (int i = 0; i < 3; i++)
+
+                        for ( i = 0; i < 3; i++)
                            if (Config.Games[i].progress[Buffers.plMario] == 0 &&
                               Config.Games[i].progress[Buffers.plLuigi] == 0)
                               Menu[i] = Menu[i] + "EMPTY";
@@ -391,9 +413,10 @@ namespace MarioPort
                   }
                   wd = 0;
                   xp = 0;
-                  for (int i = 0; i < 5; i++)
+
+                  for ( i = 0; i < 5; i++)
                   {
-                     int j = TXT.TextWidth(Menu[i]);
+                      j = TXT.TextWidth(Menu[i]);
                      if (j > wd)
                      {
                         wd = j;
@@ -405,103 +428,101 @@ namespace MarioPort
                   UpDate = false;
                }
                MacroKey = '0';
-               //switch(Keyboard.Key)
-               //{
-               //   case kbEsc:
-               //      if(Status = ST_MENU)
-               //      {
-               //         IntroDone = true;
-               //         QuitGame = true;
-               //      }
-               //      else
-               //         Status = LastStatus;
-               //      break;
-               //   case Keyboard.kbUpArrow:
-               //      Up();
-               //      break;
-               //   case Keyboard.kbDownArrow:
-               //      Down();
-               //      break;
-               //   case Keyboard.kbSP:
-               //   case KeyboardkbEnter:
-               //      switch(Status)
-               //      {
-               //         case ST_MENU:
-               //            switch(Selected)
-               //            {
-               //               case 1:
-               //                  Status = ST_START;
-               //                  break;
-               //               case 2:
-               //                  Status = ST_OPTIONS;
-               //                  break;
-               //               case 3:
-               //                  IntroDone = true;
-               //                  QuitGame = true;
-               //                  break;
-               //            }
-               //            break;
-               //         case ST_START:
-               //            switch(Selected)
-               //            {
-               //               case 1:
-               //                  Status = ST_NUMPLAYERS;
-               //                  break;
-               //               case 2:
-               //                  Status = ST_LOAD;
-               //                  break;
-               //               case 3:
-               //                  Status = ST_ERASE;
-               //                  break;
-               //            }
-               //            break;
-               //         case ST_OPTIONS:
-               //            switch(Selected)
-               //            {
-               //               case 1:
-               //                  if(Buffers.BeeperSound)
-               //                     Buffers.BeeperOff();
-               //                  else
-               //                     Buffers.BeeperOn();
-               //                  break;
-               //               case 2:
-               //                  Play.Stat = !Play.Stat;
-               //                  break;
-               //            }
-               //            break;
-               //         case ST_NUMPLAYERS:
-               //            switch(Selected)
-               //            {
-               //               case 1:
-               //                  NextNumPlayers = 1;
-               //                  IntroDone = true;
-               //                  break;
-               //               case 2:
-               //                  NextNumPlayers = 2;
-               //                  IntroDone = true;
-               //                  break;
-               //            }
-               //            break;
-               //         case ST_LOAD:
-               //            GameNumber = Selected - 1;
-               //            Config.Games[GameNumber].NumPlayers = 1;
-               //            if(Config.Games[GameNumber].Progress[plMario] = 0 &&
-               //               Config.Games[GameNumber].Progress[plLuigi] = 0)
-               //               Status = ST_NUMPLAYERS;
-               //            else
-               //            {
-               //               IntroDone = true;
-               //               NextNumPlayers = ConfigGames[GameNumber].NumPlayers;
-               //            }
-               //            break;
-               //         case ST_ERASE:
-               //            NewData();
-               //            Config.Games[Selected - 1] = Data;
-               //            Config.Games[Selected - 1].NumPlayers = 1;
-               //            GameNumber = -1;
-               //            break;
-               //      }
-               //}
+               
+                  if ( Keyboard.kbEsc)
+                     if (Status == Statuses.ST_MENU)
+                     {
+                        IntroDone = true;
+                        Buffers.QuitGame = true;
+                     }
+                     else
+                        Status = LastStatus;
+
+                  if ( Keyboard.kbUpArrow )
+                     Up();
+
+                  if ( Keyboard.kbDownArrow )
+                     Down();
+
+                  if ( Keyboard.kbSP || Keyboard.kbEnter )
+                     switch (Status)
+                     {
+                        case Statuses.ST_MENU:
+                           switch (Selected)
+                           {
+                              case 1:
+                                 Status = Statuses.ST_START;
+                                 break;
+                              case 2:
+                                 Status = Statuses.ST_OPTIONS;
+                                 break;
+                              case 3:
+                                 IntroDone = true;
+                                 Buffers.QuitGame = true;
+                                 break;
+                           }
+                           break;
+                        case Statuses.ST_START:
+                           switch (Selected)
+                           {
+                              case 1:
+                                 Status = Statuses.ST_NUMPLAYERS;
+                                 break;
+                              case 2:
+                                 Status = Statuses.ST_LOAD;
+                                 break;
+                              case 3:
+                                 Status = Statuses.ST_ERASE;
+                                 break;
+                           }
+                           break;
+                        case Statuses.ST_OPTIONS:
+                           switch (Selected)
+                           {
+                              case 1:
+                                 if (Buffers.BeeperSound)
+                                    Buffers.BeeperOff();
+                                 else
+                                    Buffers.BeeperOn();
+                                 break;
+                              case 2:
+                                 Play.Stat = !Play.Stat;
+                                 break;
+                           }
+                           break;
+                        case Statuses.ST_NUMPLAYERS:
+                           switch (Selected)
+                           {
+                              case 1:
+                                 NextNumPlayers = 1;
+                                 IntroDone = true;
+                                 break;
+                              case 2:
+                                 NextNumPlayers = 2;
+                                 IntroDone = true;
+                                 break;
+                           }
+                           break;
+                        case Statuses.ST_LOAD:
+                           GameNumber = Selected - 1;
+                           Config.Games[GameNumber].numPlayers = 1;
+                           if (Config.Games[GameNumber].progress[Buffers.plMario] == 0 &&
+                                    Config.Games[GameNumber].progress[Buffers.plLuigi] == 0)
+                              Status = Statuses.ST_NUMPLAYERS;
+                           else
+                           {
+                              IntroDone = true;
+                              NextNumPlayers = Config.Games[GameNumber].numPlayers;
+                           }
+                           break;
+                        case Statuses.ST_ERASE:
+                           NewData();
+                           Config.Games[Selected - 1] = Buffers.data;
+                           Config.Games[Selected - 1].numPlayers = 1;
+                           GameNumber = -1;
+                           break;
+                     }
+
                //if(Keyboard.Key != 0)
                //{
                //   Counter = 0;
@@ -509,33 +530,34 @@ namespace MarioPort
                //   UpDate = true;
                //}
 
-               //for(int k = 0; k < 5; k++)
-               //{
-               //   if(BG[Page, k] != 0)
-               //      BackGr.PopBackGr(BG[Page, k]);
-               //}
+               for(int k = 0; k < 5; k++)
+               {
+                  if(BG[Page, k] != 0)
+                     FormMarioPort.formRef.PopBackGr((ushort)BG[Page, k]);
+               }
 
-               //for(int k = 0; k < 5; k++)
-               //{
-               //   if(Menu[k] != "")
-               //   {
-               //      m = xp;
-               //      n = 56 + 14 * k;
-               //      BG[Page, k] = BackGr.PushBackGr(50, j, 220, ht);
-               //      if(k == Selected)
-               //         WriteText(i - 12, j, 16, 5);
-               //      l = 15;
-               //      if(Menu[k].Length > 19 && Menu[k][10] == '*')
-               //         //l := 14 + (Counter and 1);
-               //         l = 14 + (Counter & l);
-               //      SetPalette(14, 63, 61, 31);
-               //      WriteText(i + 8, j, Menu[k], l);
-               //   }
-               //}
-               //ShowPage();
+               for(int k = 0; k < 5; k++)
+               {
+                  if(Menu[k] != "")
+                  {
+                     m = xp;
+                     n = 56 + 14 * k;
+                     BG[Page, k] = FormMarioPort.formRef.PushBackGr(50, j, 220, ht);
+                     if (k == Selected)
+                        ;//TXT.WriteText(i - 12, j, 16, 5);
+                     l = 15;
+                     if(Menu[k].Length > 19 && Menu[k][10] == '*')
+                        //l := 14 + (Counter and 1);
+                        l = 14 + (Counter & l);
+                     //SetPalette(14, 63, 61, 31);
+                     //TXT.WriteText(i + 8, j, Menu[k], l);
+                  }
+               }
+               FormMarioPort.formRef.ShowPage();
                //Palettes.BlinkPalette();
-               //ResetStack();
+               FormMarioPort.formRef.ResetStack();
 
+               System.Threading.Thread.Sleep(10);
                Counter++;
             } while(!IntroDone && Counter != WAIT_BEFORE_DEMO);
 
@@ -547,7 +569,8 @@ namespace MarioPort
 
          if(GameNumber != -1)
             Buffers.data = Config.Games[GameNumber];
-         Config.Games[GameNumber].numPlayers = NextNumPlayers;
+
+         Config.Games[Config.Games.Length - 1].numPlayers = NextNumPlayers;
       }
 
       static void ShowPlayerName(byte Player)
@@ -633,8 +656,8 @@ namespace MarioPort
 
             EndGame = false;
 //#if MENU
-            //if (MENU)
-            //   Intro();
+            if (MENU)
+               Intro();
 //#endif
             //Randomize();
 
@@ -669,6 +692,7 @@ namespace MarioPort
       						ShowPlayerName (CurPlayer);
 #endif
                         switch(Buffers.data.progress[CurPlayer] % NUM_LEV)
+                        //switch(5)
                         {
                            case 0:
                               Passed = Play.PlayWorld('x', '1', Worlds.Level_1a(),
@@ -710,7 +734,7 @@ namespace MarioPort
                               EndGame = true;
                               break;
                         }
-                        Console.WriteLine("I want to play a world");
+                        //Console.WriteLine("I want to play a world");
                         if(Passed)
                            Buffers.data.progress[CurPlayer]++;
                         if(Buffers.QuitGame)

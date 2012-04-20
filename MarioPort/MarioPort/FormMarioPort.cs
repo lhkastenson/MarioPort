@@ -109,7 +109,9 @@ namespace MarioPort
 	  //-----------------------------------------------------
       public void PutImage(int XPos, int YPos, int Width, int Height, Bitmap bitmap)
       {
-         graphics.DrawImage(bitmap, XPos, YPos, Width, Height);
+         if (bitmap == null)
+            return;
+         graphics.DrawImage(bitmap, XPos - xView, YPos, Width, Height);
       }
 
 	  //-----------------------------------------------------
@@ -118,7 +120,9 @@ namespace MarioPort
 	  //-----------------------------------------------------
       public void DrawImage(int XPos, int YPos, int Width, int Height, Bitmap bitmap)
       {
-         graphics.DrawImage(bitmap, XPos, YPos, Width, Height);
+         if (bitmap == null)
+            return;
+         graphics.DrawImage(bitmap, XPos - xView, YPos, Width, Height);
       }
 
       //-----------------------------------------------------
@@ -625,8 +629,11 @@ namespace MarioPort
 
       private void FormMarioPort_Load(object sender, EventArgs e)
       {
-
+         //System.Threading.Thread thread = new Thread(this.redraw);
+         //thread.Start();
       }
+
+
 
       private void FormMarioPort_FormClosing(object sender, FormClosingEventArgs e)
       {
@@ -644,7 +651,10 @@ namespace MarioPort
          else if (e.KeyData == Keys.Right)
             Keyboard.kbRightArrow = true;
          else if (e.KeyData == Keys.Space)
+         {
+            Keyboard.kbAlt = true;
             Keyboard.kbSP = true;
+         }
          else if (e.KeyData == Keys.Enter)
             Keyboard.kbEnter = true;
          else if (e.KeyData == Keys.Tab)
@@ -653,13 +663,13 @@ namespace MarioPort
             Keyboard.kbBS = true;
          else if (e.KeyData == Keys.Escape)
             Keyboard.kbEsc = true;
-         else if (e.KeyData == Keys.Control)
+         else if (Control.ModifierKeys == Keys.Control)
             Keyboard.kbCtrl = true;
-         else if (e.KeyData == Keys.Alt)
-            Keyboard.kbAlt = true;
-         else if (e.KeyData == Keys.LShiftKey)
+         //else if (Control.ModifierKeys == Keys.Alt)
+         //   Keyboard.kbAlt = true;
+         else if (Control.ModifierKeys == Keys.Shift)
             Keyboard.kbShiftl = true;
-         else if (e.KeyData == Keys.RShiftKey)
+         else if (Control.ModifierKeys == Keys.Shift)
             Keyboard.kbShiftr = true;
       }
 
@@ -674,7 +684,10 @@ namespace MarioPort
          else if (e.KeyData == Keys.Right)
             Keyboard.kbRightArrow = false;
          else if (e.KeyData == Keys.Space)
+         {
+            Keyboard.kbAlt = false;
             Keyboard.kbSP = false;
+         }
          else if (e.KeyData == Keys.Enter)
             Keyboard.kbEnter = false;
          else if (e.KeyData == Keys.Tab)
@@ -683,13 +696,13 @@ namespace MarioPort
             Keyboard.kbBS = false;
          else if (e.KeyData == Keys.Escape)
             Keyboard.kbEsc = false;
-         else if (e.KeyData == Keys.Control)
+         else if (Control.ModifierKeys == Keys.Control)
             Keyboard.kbCtrl = false;
-         else if (e.KeyData == Keys.Alt)
-            Keyboard.kbAlt = false;
-         else if (e.KeyData == Keys.LShiftKey)
+         //else if (Control.ModifierKeys == Keys.Alt)
+         //   Keyboard.kbAlt = false;
+         else if (Control.ModifierKeys == Keys.Shift)
             Keyboard.kbShiftl = false;
-         else if (e.KeyData == Keys.RShiftKey)
+         else if (Control.ModifierKeys == Keys.Shift)
             Keyboard.kbShiftr = false;
       }
    }

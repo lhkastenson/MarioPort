@@ -27,6 +27,7 @@ namespace MarioPort
       public const int shadow = 2;
       public static bool bShadow = false;
       public static bool bBold = false;
+      
       public static byte Base;
 
 	  //-----------------------------------------------------
@@ -46,10 +47,10 @@ namespace MarioPort
          //bBold := Style or Bold = Style;
          //bShadow := Style or Shadow = Style;
       }
-	  
-	  //-----------------------------------------------------
-	  // 
-	  //-----------------------------------------------------
+      
+	   //-----------------------------------------------------
+	   // 
+	   //-----------------------------------------------------
       public void Letter(int i)
       {
          //ushort w1, w2;
@@ -86,7 +87,7 @@ namespace MarioPort
          byte tempBold = 0;
          byte tempShadow = 0;
 
-         for (i = 1; i <= s.Length; i++)
+         for (i = 0; i < s.Length; i++)
          {
             a = (ushort)(s[i] << 1);
             a = (ushort)(a - 2 * Base);
@@ -157,8 +158,8 @@ namespace MarioPort
       }
 
       //-----------------------------------------------------
-	  // Not Implemented
-	  //-----------------------------------------------------
+ 	   // Not Implemented
+	   //-----------------------------------------------------
       public void SwissFont()
       {
 

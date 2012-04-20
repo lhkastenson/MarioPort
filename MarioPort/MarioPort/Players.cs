@@ -456,7 +456,7 @@ namespace MarioPort
       
       static int Side, NewX1, NewX2, NewY, Y1, Y2, Y3, Mo;
       static char NewCh1, NewCh2, NewCh3, ch;
-      static bool Hold1, Hold2, Hold3, Hit;
+      static bool Hold1, Hold2, Hold3, Hit = false;
 
       //-------------------------------------------------
       // Check the player for actions
@@ -606,6 +606,7 @@ namespace MarioPort
                 
                   if ( (Counter % (JumpDelay + Convert.ToByte(HighJump)) == 0) || ((!keyAlt) && (!HitEnemy)) )
                      YVel++;
+
                   if ( YVel >= 0 )
                   {
                      YVel = 0;
@@ -1081,7 +1082,7 @@ namespace MarioPort
             else
             {
                WalkCount++;
-               //WalkCount = WalkCount & 0xf;
+               WalkCount = (byte)(WalkCount & 0xf);
                Walkingmode = Convert.ToByte(WalkCount < 0x8);
             }
          }
@@ -1099,8 +1100,12 @@ namespace MarioPort
          X += XVel;
          Y += YVel;
 
+         //Console.WriteLine(X);
+         //if ( X % 40 == 0)
+         //   X += 1;
+
          OldXView = Buffers.XView;
-         //Buffers.XView = Buffers.XView - (Keyboard.kbLeftShift) + (kbRightShift);
+         Buffers.XView = Buffers.XView - System.Convert.ToByte(Keyboard.kbShiftl) + System.Convert.ToByte(Keyboard.kbShiftr);
          if ( X + Buffers.W + SCROLL_AT > Buffers.XView + 320 )
             Buffers.XView = X + Buffers.W + SCROLL_AT - 320;
          if ( X < Buffers.XView + SCROLL_AT )
