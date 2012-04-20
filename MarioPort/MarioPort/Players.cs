@@ -1,3 +1,13 @@
+//-------------------------------------------------------------------
+// File:    Players.cs
+//
+// Purpose: Players controls the creation, actions, and deletion of 
+//          all the player.
+//
+// Author:  Tom Schroeder
+//
+// Notes:   Direct port from the Pascal source.
+//-------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
@@ -1095,13 +1105,6 @@ namespace MarioPort
 
          X += XVel;
          Y += YVel;
-
-         //Console.WriteLine(X);
-         //if ( X % 40 == 0)
-         //   X += 1;
-
-         //X++;
-         //Y = 10;
 
          OldXView = Buffers.XView;
          Buffers.XView = Buffers.XView - System.Convert.ToByte(Keyboard.kbShiftl) + System.Convert.ToByte(Keyboard.kbShiftr);

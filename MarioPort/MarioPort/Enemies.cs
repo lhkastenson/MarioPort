@@ -1,3 +1,13 @@
+//-------------------------------------------------------------------
+// File:    Enemies.cs
+//
+// Purpose: Enemies controls the creation, actions, and deletion of 
+//          all enemies.
+//
+// Author:  Tom Schroeder
+//
+// Notes:   Direct port from the Pascal source.
+//-------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
@@ -90,7 +100,7 @@ namespace MarioPort
       //-------------------------------------------------
       public static void init()
       {
-         // init FireballList && KoopaList
+
       }
 
       private static byte[,] rKoopa = new byte[4, 20 * 24 + 1];
@@ -218,7 +228,7 @@ namespace MarioPort
       //-------------------------------------------------
       private static void ShowStar (int X, int Y)
       {
-//         Beep (100);
+         //Beep (100);
          if ((X + Buffers.W > Buffers.XView) && (X < Buffers.XView + FormMarioPort.SCREEN_WIDTH))
             TmpObj.NewTempObj(TmpObj.tpHit, X, Y, 0, 0, Buffers.W, Buffers.H);
       }

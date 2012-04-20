@@ -1,3 +1,13 @@
+//-------------------------------------------------------------------
+// File:    Figures.cs
+//
+// Purpose: Figures controls the creation, actions, and deletion of 
+//          all figures.
+//
+// Author:  Tom Schroeder
+//
+// Notes:   Direct port from the Pascal source.
+//-------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
