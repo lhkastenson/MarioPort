@@ -8,12 +8,11 @@ using System.Drawing;
 using MarioPort;
 ﻿using Resources = MarioPort.Properties.Resources;
 
-/*
- *
- */
-
 namespace MarioPort
 {
+   //----------------------------------------------------
+   // Figures class that controls figures
+   //----------------------------------------------------
    public static class Figures
    {
       public const int N1 = 4;//3;
@@ -23,66 +22,20 @@ namespace MarioPort
       public static Bitmap[] Bricks = new Bitmap[4];
       public static byte Sky;
 
-
-
-//        private static void ReColor (P1, P2: Pointer; C: Byte);
-//        private static void ReColor2 (P1, P2: Pointer; C1, C2: Byte);
-//        private static void Replace (P1, P2: Pointer; N1, N2: Byte);
-//        private static void Mirror (P1, P2: Pointer);
-//        private static void Rotate (P1, P2: Pointer);
-//        private static void InitSky (NewSky: Byte);
-//        private static void InitPipes (NewColor: Byte);
-//        private static void InitWalls (W1, W2, W3: Byte);
-//        private static void DrawSky (X, Y, Buffers.W, Buffers.H: Integer);
-//        private static void SetSkyPalette;
-//        private static void Redraw (X, Y: Integer);
-//        private static void BuildWorld;
-
-      //// implementation ////
-
-      // !! Convert is inside of ConvertGrass
+      //----------------------------------------------------
+      // Convert grass bitmap
+      //----------------------------------------------------
       private static void ConvertGrass(ref Bitmap P0, ref Bitmap P1, ref Bitmap P2)
       {
-//      var
-//        i, j: Integer;
-//        C0, C1, C2: Byte;
-//          
-//        {
-//        for i = 1 to Buffers.H do
-//          for j = 1 to Buffers.W do
-//          {
-//            C1 = (int)(P1^ [i, j]);
-//            C2 = (int)(P2^ [i, j]);
-//            Convert;
-//            P0^ [i, j] = Chr (C0);
-//          }
-//      }
+         
       }
-      
+
+      //----------------------------------------------------
+      // General Convert for all changing images
+      //----------------------------------------------------
       private static void Convert()
       {
-//      {
-//        C0 = C1;
-//        if C1 = C2 ) Exit;
-//        if C1 = 2 )
-//        {
-//          C0 = 153;
-//          if C2 = 0 ) Exit;
-//          C0 = 155;
-//        }
-//        else
-//        if C1 = 3 )
-//        {
-//          C0 = 154;
-//          if C2 = 0 ) Exit;
-//          C0 = 156;
-//        }
-//        else  { C1 = 0 }
-//          if C2 = 2 )
-//            C0 = 157
-//          else
-//            C0 = 155;
-//      }
+
       }
       
 //      private static void ReColor (P1, P2: Pointer; C: Byte)
@@ -173,6 +126,9 @@ namespace MarioPort
 //      }
 //      }
 
+      //----------------------------------------------------
+      // Mirror the image
+      //----------------------------------------------------
       public static void Mirror(System.Drawing.Bitmap from, ref System.Drawing.Bitmap to)
       {
          if (from == null)
@@ -181,36 +137,52 @@ namespace MarioPort
          to = from.Clone() as Bitmap;
       }
 
+      //----------------------------------------------------
+      // Rotate the image
+      //----------------------------------------------------
       private static void Rotate(Bitmap from, ref Bitmap to)
       {
          from.RotateFlip(RotateFlipType.Rotate180FlipY);
          to = from.Clone() as Bitmap;
       }
 
+      //----------------------------------------------------
+      // Initialize the sky
+      //----------------------------------------------------
       public static void InitSky(byte NewSky)
       {
 			Sky = NewSky;
       }
 
+      //----------------------------------------------------
+      // Initialize the pipes
+      //----------------------------------------------------
       public static void InitPipes(byte NewColor)
       {
-//      {
 //        ReColor (@Pipe000, Resources.PIPE_000, NewColor);
 //        ReColor (@Pipe001, Resources.PIPE_001, NewColor);
 //        ReColor (@Pipe002, Resources.PIPE_002, NewColor);
 //        ReColor (@Pipe003, Resources.PIPE_003, NewColor);
-//
-//      }
       }
-      
-      // Calls InitWall ({  } of InitWall) *moved
+
+      //----------------------------------------------------
+      // Initialize the walls
+      //----------------------------------------------------
       public static void InitWalls(byte W1, byte W2, byte W3)
       {
+         Bricks[0] = Resources.BRICK0_000;
+         Bricks[1] = Resources.BRICK0_001;
+         Bricks[2] = Resources.BRICK0_002;
+         Bricks[3] = Resources.BRICK0_002;
+
          InitWall(1, W1);
          InitWall(2, W2);
          InitWall(3, W3);
       }
 
+      //----------------------------------------------------
+      // Initialize the wall
+      //----------------------------------------------------
       public static void InitWall(byte N, byte WallType)
       {
          switch (WallType)
@@ -291,7 +263,10 @@ namespace MarioPort
          Rotate (FigList[N, 11], ref FigList[N, 12]);
          Mirror (FigList[N, 12], ref FigList[N, 13]);
       }
-      
+
+      //----------------------------------------------------
+      // Set the sky palette
+      //----------------------------------------------------
       public static void SetSkyPalette()
       {
 //      var
@@ -436,7 +411,10 @@ namespace MarioPort
 //        }
 //      }
       }
-      
+
+      //----------------------------------------------------
+      // Draw the sky
+      //----------------------------------------------------
       private static void DrawSky(int X, int Y, int W, int H)
       {
 //      const
@@ -478,7 +456,10 @@ namespace MarioPort
 //        }
 //      }
       }
-      
+
+      //----------------------------------------------------
+      // Redraw the image described by WorldMap[X, Y]
+      //----------------------------------------------------
       public static void Redraw (int X, int Y)
       {
          char Ch;
@@ -491,8 +472,8 @@ namespace MarioPort
          if (X < 0)
             return;
          Ch = (char)Buffers.WorldMap[X, Y];
-         
-         if ( X >= 0 && Y >= 0 && Y < Buffers.NV )
+
+         if ( X >= 0 && Y >= 0 && Y < Buffers.NV * 2 )
          {
             if ( Ch != (char)0 )
             {
@@ -540,7 +521,6 @@ namespace MarioPort
                {
                   if ( Ch > (char)13 )
                   {
-//                     Ch = Chr ((int)(Ch) - 13)
                      Ch -= (char)13;
                   }
                   else
@@ -893,13 +873,16 @@ namespace MarioPort
          }
       }
       
-      // Impl  } of BuildWall *moved
       private static char AB = ' ';
       private static char CD = ' ';
       private static char EF = ' ';
       private static char LastAB = ' ';
       private static char LastCD = ' ';
       private static char LastEF = ' ';
+
+      //----------------------------------------------------
+      // Build the world
+      //----------------------------------------------------
       public static void BuildWorld()
       {
          int i, j, k, l;
@@ -951,18 +934,18 @@ namespace MarioPort
 
          Buffers.Options.BuildWall = (Buffers.Options.WallType1 < 100);
 
-        if (Buffers.Options.BuildWall )
-        {
-           for (i = 0; i <= Buffers.Options.XSize - 1; i++)
-           {
-              for (j = 0; j <= Buffers.NV - 1; j++)
-                 BuildWall (i, j);
+         if (Buffers.Options.BuildWall )
+         {
+            for (i = 0; i <= Buffers.Options.XSize - 1; i++)
+            {
+               for (j = 0; j <= Buffers.NV - 1; j++)
+                  BuildWall (i, j);
 
-            LastAB = AB;
-            LastAB = CD;
-            LastAB = EF;
-          }
-        }
+               LastAB = AB;
+               LastAB = CD;
+               LastAB = EF;
+            }
+         }
         //else
         //  switch( Buffers.Options.WallType1 )
         //  {
@@ -1001,6 +984,9 @@ namespace MarioPort
         //Recolor (@XBlock000, Resources.XBLOCK_000, Buffers.Options.XBlockColor);
       }
 
+      //----------------------------------------------------
+      // Build a wall
+      //----------------------------------------------------
       private static void BuildWall(int X, int Y)
       {
          const char IgnoreAbove = '÷';

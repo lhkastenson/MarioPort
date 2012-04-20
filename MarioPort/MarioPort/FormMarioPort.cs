@@ -94,6 +94,13 @@ namespace MarioPort
 
       public FormMarioPort()
       {
+         //this.DoubleBuffered = true;
+
+         SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+         SetStyle(ControlStyles.ResizeRedraw, true);
+         SetStyle(ControlStyles.UserPaint, true);
+         SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
          InitializeComponent();
          formRef = this;
          graphics = CreateGraphics();
@@ -122,6 +129,7 @@ namespace MarioPort
       {
          if (bitmap == null)
             return;
+
          graphics.DrawImage(bitmap, XPos - xView, YPos, Width, Height);
       }
 
@@ -345,7 +353,7 @@ namespace MarioPort
       public void DrawPart(int xPos, int yPos, int width, int height, int y1, int y2, Bitmap var)
       {
           Rectangle tempRec = new Rectangle(xPos, y1, width, y2);    		   // makes rectangle the size of the horizontal slice between y1 and y2.
-		  graphics.DrawImage(var, xPos, yPos, tempRec, GraphicsUnit.Pixel);    //draws portion of image specified from tempRec at xPos, yPos
+          graphics.DrawImage(var, xPos - xView, yPos, tempRec, GraphicsUnit.Pixel);    //draws portion of image specified from tempRec at xPos, yPos
       }
 
       //-----------------------------------------------------
@@ -671,6 +679,19 @@ namespace MarioPort
             Keyboard.kbShiftl = true;
          else if (Control.ModifierKeys == Keys.Shift)
             Keyboard.kbShiftr = true;
+
+         else if (e.KeyData == Keys.D1)
+            Keyboard.kb1 = true;
+         else if (e.KeyData == Keys.D2)
+            Keyboard.kb2 = true;
+         else if (e.KeyData == Keys.D3)
+            Keyboard.kb3 = true;
+         else if (e.KeyData == Keys.D4)
+            Keyboard.kb4 = true;
+         else if (e.KeyData == Keys.D5)
+            Keyboard.kb5 = true;
+         else if (e.KeyData == Keys.D6)
+            Keyboard.kb6 = true;
       }
 
       private void FormMarioPort_KeyUp(object sender, KeyEventArgs e)
@@ -704,6 +725,27 @@ namespace MarioPort
             Keyboard.kbShiftl = false;
          else if (Control.ModifierKeys == Keys.Shift)
             Keyboard.kbShiftr = false;
+
+         //else if (e.KeyData == Keys.D1)
+         //   Keyboard.kb1 = false;
+         //else if (e.KeyData == Keys.D2)
+         //   Keyboard.kb2 = false;
+         //else if (e.KeyData == Keys.D3)
+         //   Keyboard.kb3 = false;
+         //else if (e.KeyData == Keys.D4)
+         //   Keyboard.kb4 = false;
+         //else if (e.KeyData == Keys.D5)
+         //   Keyboard.kb5 = false;
+         //else if (e.KeyData == Keys.D6)
+         //   Keyboard.kb6 = false;
+      }
+
+      private void FormMarioPort_Paint(object sender, PaintEventArgs e)
+      {
+         //for (int x = Buffers.XView / Buffers.W; x < Buffers.XView / Buffers.W + Buffers.NH; x++)
+         //   for (int y = 0; y <= Buffers.NV; y++)
+         //      Figures.Redraw(x, y);
+         //Enemies.ShowEnemies();
       }
    }
 

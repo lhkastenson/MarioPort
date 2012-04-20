@@ -49,5 +49,12 @@ namespace MarioPort
       public bool KeyHit = false; //: Boolean = FALSE;
 
       public const bool PlayingMacro = false;
+
+      public static bool kb1 = false;
+      public static bool kb2 = false;
+      public static bool kb3 = false;
+      public static bool kb4 = false;
+      public static bool kb5 = false;
+      public static bool kb6 = false;
    }
 }

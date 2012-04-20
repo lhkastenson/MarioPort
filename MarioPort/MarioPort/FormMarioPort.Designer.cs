@@ -34,12 +34,13 @@
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(442, 383);
-         this.DoubleBuffered = true;
+         this.BackColor = System.Drawing.Color.DarkCyan;
+         this.ClientSize = new System.Drawing.Size(306, 195);
          this.Name = "FormMarioPort";
          this.Text = "MarioPort";
          this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMarioPort_FormClosing);
          this.Load += new System.EventHandler(this.FormMarioPort_Load);
+         this.Paint += new System.Windows.Forms.PaintEventHandler(this.FormMarioPort_Paint);
          this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormMarioPort_KeyDown);
          this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormMarioPort_KeyUp);
          this.ResumeLayout(false);

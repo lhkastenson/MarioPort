@@ -563,7 +563,6 @@ namespace MarioPort
                               XVel++;
                         }
                      }
-                
                      CheckJump();
                   }
                }
@@ -712,8 +711,6 @@ namespace MarioPort
                         else if (Buffers.WorldMap[NewX2, NewY - 1] == 'í') 
                            Enemies.NewEnemy (EnemyType.tpRisingChamp, 1, NewX2, NewY, 0, -1, 2 );
 
-
-
                         Enemies.HitAbove (NewX2, NewY - 1 );
                         if ( Ch == 'K' )
                         {
@@ -855,25 +852,25 @@ namespace MarioPort
       // Move the player
       //-------------------------------------------------
       public static void MovePlayer()
-      {  
+      {
          int MaxSpeed, MinSpeed, OldXVel, OldXView;
          bool CheckX;
          byte OldDir;
          bool LastKeyRight, LastKeyLeft;
-       
+
          if (InPipe)
          {
-            if ( Buffers.WorldMap[MapX, MapY + 1] == '0' )
-               StartDemo (Buffers.dmUpOutOfPipe );
+            if (Buffers.WorldMap[MapX, MapY + 1] == '0')
+               StartDemo(Buffers.dmUpOutOfPipe);
             else
-               if ( Buffers.WorldMap[MapX, MapY - 1] == '0' )
+               if (Buffers.WorldMap[MapX, MapY - 1] == '0')
                   StartDemo(Buffers.dmDownOutOfPipe);
             return;
          }
 
          if (Enemies.cdChamp != 0)
          {
-            if ( Buffers.data.mode[Buffers.Player] == Buffers.mdSmall )
+            if (Buffers.data.mode[Buffers.Player] == Buffers.mdSmall)
             {
                Buffers.data.mode[Buffers.Player] = Buffers.mdLarge;
                Growing = true;
@@ -886,7 +883,7 @@ namespace MarioPort
          if (Enemies.cdLife != 0)
          {
             Enemies.cdLife = 0;
-            TmpObj.AddLife( );
+            TmpObj.AddLife();
          }
          if (Enemies.cdFlower != 0)
          {
@@ -896,37 +893,36 @@ namespace MarioPort
             //StartMusic (GrowMusic );
             Growing = true;
             GrowCounter = 0;
-            Enemies.cdFlower = 0;            
+            Enemies.cdFlower = 0;
          }
 
          //if ( !Blinking && !Enemies.Star && !Growing )
          if (!Blinking && !Growing)
          {
-            if ( Enemies.cdHit != 0 )
+            if (Enemies.cdHit != 0)
 
-            switch (Buffers.data.mode[Buffers.Player])
-            {
-               case Buffers.mdSmall:
+               switch (Buffers.data.mode[Buffers.Player])
                {
-                  BlinkCounter = 0;
-                  Blinking = true;
-                  StartDemo(Buffers.dmDead);
-                  //StartMusic (DeadMusic );
-                  return;
+                  case Buffers.mdSmall:
+                     {
+                        BlinkCounter = 0;
+                        Blinking = true;
+                        StartDemo(Buffers.dmDead);
+                        //StartMusic (DeadMusic );
+                        return;
+                     }
+                  case Buffers.mdLarge:
+                  case Buffers.mdFire:
+                     {
+                        Buffers.data.mode[Buffers.Player] = Buffers.mdSmall;
+                        BlinkCounter = 0;
+                        Blinking = true;
+                        //StartMusic (HitMusic );
+                        break;
+                     }
+                  default:
+                     break;
                }
-               case Buffers.mdLarge:
-               case Buffers.mdFire:
-               {
-                  Buffers.data.mode[Buffers.Player] = Buffers.mdSmall;
-                  BlinkCounter = 0;
-                  Blinking = true;
-                  //StartMusic (HitMusic );
-                  break;
-               }
-               default:
-//                  throw new Exception( );
-                  break;
-            }
             Enemies.cdHit = 0;
          }
          else
@@ -949,40 +945,40 @@ namespace MarioPort
          if (Enemies.Star)
          {
             StarCounter++;
-            if ( StarCounter >= StarTime )
+            if (StarCounter >= StarTime)
                Enemies.Star = false;
-            if ( StarCounter % 3 == 0 )
-               Glitter.StartGlitter (X, Y + 11 * Convert.ToByte(Buffers.data.mode[Buffers.Player] = Buffers.mdSmall), Buffers.W, Buffers.H + 3 + 11 * Convert.ToByte(Buffers.data.mode[Buffers.Player] != Buffers.mdSmall) );
+            if (StarCounter % 3 == 0)
+               Glitter.StartGlitter(X, Y + 11 * Convert.ToByte(Buffers.data.mode[Buffers.Player] = Buffers.mdSmall), Buffers.W, Buffers.H + 3 + 11 * Convert.ToByte(Buffers.data.mode[Buffers.Player] != Buffers.mdSmall));
             Enemies.cdStar = 0;
          }
 
          if (Growing)
          {
             GrowCounter++;
-            if ( GrowCounter > GrowTime )
+            if (GrowCounter > GrowTime)
                Growing = false;
          }
 
          Counter++;
-         if ( (XVel == 0) && (YVel == 0) )
+         if ((XVel == 0) && (YVel == 0))
             Counter = 0;
-         CheckX = (Counter % Slip == 0 );
-         
+         CheckX = (Counter % Slip == 0);
+
          OldDir = Direction;
          OldXVel = XVel;
          
-         //LastKeyLeft = Keyboard.keyLeft;
-         //LastKeyRight = Keyboard.keyRight;
+//         LastKeyLeft = Keyboard.keyLeft;
+//         LastKeyRight = Keyboard.keyRight;
 
          keyLeft = Keyboard.kbLeftArrow;
          keyRight = Keyboard.kbRightArrow;
          keyUp = Keyboard.kbUpArrow;
          keyDown = Keyboard.kbDownArrow;
-         keyAlt   = Keyboard.kbAlt;
-         keyCtrl  = Keyboard.kbCtrl;
+         keyAlt = Keyboard.kbAlt;
+         keyCtrl = Keyboard.kbCtrl;
          keySpace = Keyboard.kbSP;
-         
-         if ( keyRight && (Direction == Buffers.dirLeft) )
+
+         if (keyRight && (Direction == Buffers.dirLeft))
          {
             OldDir = Buffers.dirRight;
             OldXVel = -XVel;
@@ -993,88 +989,88 @@ namespace MarioPort
             OldXVel = -XVel;
          }
 
-         if ( Fired && (!keySpace) )
+         if (Fired && (!keySpace))
             Fired = false;
 
-         if ( keySpace && (!Fired) && (Buffers.data.mode[Buffers.Player] == Buffers.mdFire) )
+         if (keySpace && (!Fired) && (Buffers.data.mode[Buffers.Player] == Buffers.mdFire))
          {
             FireCounter = 0;
-            Enemies.NewEnemy (EnemyType.tpFireBall, 0, X / Buffers.W + Direction, (Y + Buffers.H) / Buffers.H,
-               10 * (-1 + 2 * Direction), 3 + 3 * (Convert.ToByte(keyDown) - Convert.ToByte(keyUp)), 2 );
+            Enemies.NewEnemy(EnemyType.tpFireBall, 0, X / Buffers.W + Direction, (Y + Buffers.H) / Buffers.H,
+               10 * (-1 + 2 * Direction), 3 + 3 * (Convert.ToByte(keyDown) - Convert.ToByte(keyUp)), 2);
             Fired = true;
          }
 
-         if ( Enemies.cdLift != 0 )
+         if (Enemies.cdLift != 0)
          {
             Y = Enemies.PlayerY1;
             XVel = Enemies.PlayerXVel;
             YVel = Enemies.PlayerYVel;
             Status = stOnTheGround;
          }
-         if ( Enemies.cdStopJump != 0 )
+         if (Enemies.cdStopJump != 0)
          {
             Jumped = true;
             Enemies.cdStopJump = 0;
          }
 
-         if ( Jumped && (!keyAlt) )
+         if (Jumped && (!keyAlt))
             Jumped = false;
 
-         MaxSpeed = +MAX_SPEED - 1 + Convert.ToByte(keyCtrl) + Convert.ToByte(Enemies.Turbo) + Math.Abs(Enemies.cdLift * Enemies.PlayerXVel );
-         MinSpeed = -MAX_SPEED + 1 - Convert.ToByte(keyCtrl) - Convert.ToByte(Enemies.Turbo) - Math.Abs(Enemies.cdLift * Enemies.PlayerXVel );
+         MaxSpeed = +MAX_SPEED - 1 + Convert.ToByte(keyCtrl) + Convert.ToByte(Enemies.Turbo) + Math.Abs(Enemies.cdLift * Enemies.PlayerXVel);
+         MinSpeed = -MAX_SPEED + 1 - Convert.ToByte(keyCtrl) - Convert.ToByte(Enemies.Turbo) - Math.Abs(Enemies.cdLift * Enemies.PlayerXVel);
 
          if (keyLeft)
          {
-            if ( (XVel > MinSpeed) )
+            if ((XVel > MinSpeed))
             {
-               if ( CheckX || (Enemies.cdLift != 0) )
-                  XVel -= 1 + Convert.ToByte((Enemies.cdLift != 0) && keyCtrl );
+               if (CheckX || (Enemies.cdLift != 0))
+                  XVel -= 1 + Convert.ToByte((Enemies.cdLift != 0) && keyCtrl);
             }
             else
                XVel = MinSpeed;
-            Direction = Convert.ToByte(XVel > 0 );
-            if ( X + XVel < 0 )
-               XVel = - X;
+            Direction = Convert.ToByte(XVel > 0);
+            if (X + XVel < 0)
+               XVel = -X;
          }
          else
-            if ( (XVel < 0) && CheckX && (Enemies.cdLift == 0) )
+            if ((XVel < 0) && CheckX && (Enemies.cdLift == 0))
                XVel++;
 
-         if ( keyRight )
+         if (keyRight)
          {
-            if ( (XVel < MaxSpeed) )
+            if ((XVel < MaxSpeed))
             {
-               if ( CheckX || Enemies.cdLift != 0 )
-                 XVel += 1 + Convert.ToByte( Enemies.cdLift != 0 && keyCtrl );
+               if (CheckX || Enemies.cdLift != 0)
+                  XVel += 1 + Convert.ToByte(Enemies.cdLift != 0 && keyCtrl);
             }
             else
                XVel = MaxSpeed;
-            Direction = Convert.ToByte(XVel >= 0 );
+            Direction = Convert.ToByte(XVel >= 0);
          }
          else
-            if ( (XVel > 0) && CheckX && (Enemies.cdLift == 0) )
+            if ((XVel > 0) && CheckX && (Enemies.cdLift == 0))
                XVel--;
 
-         if ( keyLeft && keyRight )
+         if (keyLeft && keyRight)
          {
             Direction = OldDir;
             XVel = OldXVel;
          }
 
-         if ( Y + YVel >= Buffers.NV * Buffers.H )
+         if (Y + YVel >= Buffers.NV * Buffers.H)
          {
             Buffers.GameDone = true;
             //StartMusic (DeadMusic );
          }
 
-         if ( Status == stOnTheGround )
+         if (Status == stOnTheGround)
             HitEnemy = false;
 
-         Check( );
+         Check();
 
-         if ( (Status == stOnTheGround) && YVel == 0 )
+         if ((Status == stOnTheGround) && YVel == 0)
          {
-            if ( (XVel == 0) || ((Enemies.cdLift != 0) && (XVel == Enemies.PlayerXVel)) )
+            if ((XVel == 0) || ((Enemies.cdLift != 0) && (XVel == Enemies.PlayerXVel)))
             {
                Walkingmode = 0;
                WalkCount = 0;
@@ -1088,13 +1084,13 @@ namespace MarioPort
          }
          else
          {
-            if ( YVel < 0 )
+            if (YVel < 0)
                Walkingmode = 2;
             else
                Walkingmode = 3;
          }
-        
-         if ( keyDown )
+
+         if (keyDown)
             CheckPipeBelow();
 
          X += XVel;
@@ -1104,33 +1100,36 @@ namespace MarioPort
          //if ( X % 40 == 0)
          //   X += 1;
 
+         //X++;
+         //Y = 10;
+
          OldXView = Buffers.XView;
          Buffers.XView = Buffers.XView - System.Convert.ToByte(Keyboard.kbShiftl) + System.Convert.ToByte(Keyboard.kbShiftr);
-         if ( X + Buffers.W + SCROLL_AT > Buffers.XView + 320 )
+         if (X + Buffers.W + SCROLL_AT > Buffers.XView + 320)
             Buffers.XView = X + Buffers.W + SCROLL_AT - 320;
-         if ( X < Buffers.XView + SCROLL_AT )
+         if (X < Buffers.XView + SCROLL_AT)
             Buffers.XView = X - SCROLL_AT;
-         if ( Buffers.XView - OldXView > MAX_SPEED + Convert.ToByte(Enemies.Turbo) )
-            Buffers.XView = OldXView + MAX_SPEED + Convert.ToByte(Enemies.Turbo );
-         if ( Buffers.XView - OldXView < -MAX_SPEED - Convert.ToByte(Enemies.Turbo) )
-            Buffers.XView = OldXView - MAX_SPEED - Convert.ToByte(Enemies.Turbo );
-         if ( Buffers.XView < 0 )
+         if (Buffers.XView - OldXView > MAX_SPEED + Convert.ToByte(Enemies.Turbo))
+            Buffers.XView = OldXView + MAX_SPEED + Convert.ToByte(Enemies.Turbo);
+         if (Buffers.XView - OldXView < -MAX_SPEED - Convert.ToByte(Enemies.Turbo))
+            Buffers.XView = OldXView - MAX_SPEED - Convert.ToByte(Enemies.Turbo);
+         if (Buffers.XView < 0)
          {
             Buffers.XView = 0;
-            if ( X < 0 ) X = 0;
+            if (X < 0) X = 0;
          }
 
-         if ( Buffers.XView > (Buffers.Options.XSize - Buffers.NH) * Buffers.W )
+         if (Buffers.XView > (Buffers.Options.XSize - Buffers.NH) * Buffers.W)
             Buffers.XView = (Buffers.Options.XSize - Buffers.NH) * Buffers.W;
-         if ( Buffers.XView < OldXView )
-            if ( (Buffers.WorldMap[Buffers.XView / Buffers.W, Buffers.NV] == 254) )
+         if (Buffers.XView < OldXView)
+            if ((Buffers.WorldMap[Buffers.XView / Buffers.W, Buffers.NV] == 254))
                if ((Buffers.WorldMap[(Buffers.XView / Buffers.W), (int)(Enemies.PlayerY1 / Buffers.H)] != ' '))
                   Buffers.XView = OldXView;
-         if ( Buffers.XView > OldXView )
-            if ( (Buffers.WorldMap[((Buffers.XView - 1) / Buffers.W + Buffers.NH), Buffers.NV] == 255) )
-               if ( (Buffers.WorldMap[((Buffers.XView - 1) / Buffers.W + Buffers.NH), (int)(Enemies.PlayerY1 / Buffers.H)] != ' ') )
+         if (Buffers.XView > OldXView)
+            if ((Buffers.WorldMap[((Buffers.XView - 1) / Buffers.W + Buffers.NH), Buffers.NV] == 255))
+               if ((Buffers.WorldMap[((Buffers.XView - 1) / Buffers.W + Buffers.NH), (int)(Enemies.PlayerY1 / Buffers.H)] != ' '))
                   Buffers.XView = OldXView;
-                  
+
          Enemies.PlayerX1 = X + XVel;
          Enemies.PlayerX2 = Enemies.PlayerX1 + Buffers.W - 1;
          Enemies.PlayerY1 = Y;
@@ -1142,7 +1141,7 @@ namespace MarioPort
          Enemies.PlayerXVel = XVel;
          Enemies.PlayerYVel = YVel;
 
-         if ( Enemies.cdLift != 0 )
+         if (Enemies.cdLift != 0)
          {
             Enemies.PlayerYVel += 2 - YVel;
             Enemies.cdLift = 0;

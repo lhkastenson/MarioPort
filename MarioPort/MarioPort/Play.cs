@@ -100,7 +100,14 @@ namespace MarioPort
          FormMarioPort.formRef.SetView (Buffers.XView, Buffers.YView);
 
          BuildLevel();
-         Restart();
+         try
+         {
+            Restart();
+         }
+         catch (Exception e)
+         {
+            Console.WriteLine("Exception: ", e);
+         }
 
          FormMarioPort.formRef.SetYOffset(YBase);
 
@@ -452,7 +459,6 @@ namespace MarioPort
       //-------------------------------------------------------------------
       static void Restart()
       {
-
          FormMarioPort.formRef.ResetStack();
 
          TextStatus = false;
@@ -589,10 +595,13 @@ namespace MarioPort
                if (Buffers.Demo == Buffers.dmNoDemo)
                {
                   Enemies.MoveEnemies();
+
                   Players.MovePlayer();
                }
                else
                   Players.DoDemo();
+
+
 
             if (!Waiting)
             {
@@ -625,6 +634,8 @@ namespace MarioPort
                      Buffers.GameDone = false;
                   }
             }
+
+
 
             //if (Keyboard.Key = 25) //P
             //   Pause();
@@ -688,6 +699,7 @@ namespace MarioPort
                }
             }
 
+
             //FormMarioPort.formRef.ResetStack();
 
             if (ShowObjects)
@@ -726,6 +738,7 @@ namespace MarioPort
             if (Players.InPipe && Keyboard.PlayingMacro)
                Buffers.GameDone = true;
 
+
             if (Players.InPipe && !Buffers.GameDone && !Waiting)
             {
                Enemies.StopEnemies();
@@ -751,7 +764,6 @@ namespace MarioPort
                      break;
                }
 
-
                Players.InitPlayer(Players.MapX * Buffers.W + Buffers.W / 2, (Players.MapY - 1) * Buffers.H, Buffers.Player);
 
                FormMarioPort.formRef.SetView(Buffers.XView, Buffers.YView);
@@ -767,21 +779,21 @@ namespace MarioPort
                      BuildLevel();
             }
 
-            System.Threading.Thread.Sleep(10);
+            System.Threading.Thread.Sleep(5);
 
-            if (counter % 3 == 0)
+            if (counter % 15 == 0)
             {
                FormMarioPort.formRef.Invalidate();
                for (int x = Buffers.XView / Buffers.W; x < Buffers.XView / Buffers.W + Buffers.NH; x++)
-                  for (int y = 0; y < Buffers.NV - 1; y++)
+                  for (int y = 0; y <= Buffers.NV; y++)
                      Figures.Redraw(x, y);
             }
 
             counter++;
             counter %= 100;
 
-         } while (!Buffers.GameDone && !Buffers.QuitGame);
 
+         } while (!Buffers.GameDone && !Buffers.QuitGame);
       }
 
    }

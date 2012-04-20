@@ -637,11 +637,11 @@ namespace MarioPort
             {
                case Buffers.plMario:
                   iW = 116;
-                  //DrawImage (160 - iW / 2, 85 - iH / 2, iW, iH, Start000);
+                  FormMarioPort.formRef.DrawImage (160 - iW / 2, 85 - iH / 2, iW, iH, Resources.START_000);
                   break;
                case Buffers.plLuigi:
                   iW = 108;
-                  //DrawImage (160 - iW / 2, 85 - iH / 2, iW, iH, @Start001*);
+                  FormMarioPort.formRef.DrawImage(160 - iW / 2, 85 - iH / 2, iW, iH, Resources.START_001);
                   break;
             }
             //FormMarioPort.ShowPage;
@@ -663,16 +663,20 @@ namespace MarioPort
       //-------------------------------------------------------------------
       public static void main()//string[] args)
       {
-         //Keyboard.InitKeyBoard();
-         Buffers.data.numPlayers =  1;
-         //ReadConfig(args);
-         //ReadCmdLine(args);
+         try
+         {
+            int level = -1;
 
-         //jr = Config.JSDat;
-         //jsEnabled = jsDetected() && Config.UseJS();
+            //Keyboard.InitKeyBoard();
+            Buffers.data.numPlayers = 1;
+            //ReadConfig(args);
+            //ReadCmdLine(args);
+
+            //jr = Config.JSDat;
+            //jsEnabled = jsDetected() && Config.UseJS();
 
 #if DEBUG//asm stuff :(
-         /**
+            /**
 {$IFDEF DEBUG}
    MouseHaltAddr := @MouseHalt;
    asm
@@ -690,128 +694,151 @@ namespace MarioPort
 **/
 #endif
 
-         if(!FormMarioPort.formRef.DetectVGA())
-         {
-            Console.Write("VGA graphics adapter required");
-         //   //halt (1);
-         }
+            if (!FormMarioPort.formRef.DetectVGA())
+            {
+               Console.Write("VGA graphics adapter required");
+               //   //halt (1);
+            }
 
-         //Keyboard.ResetKeyBoard();
+            //Keyboard.ResetKeyBoard();
 
-         if(!FormMarioPort.formRef.InGraphicsMode)
-            FormMarioPort.formRef.InitializeVGA();
+            if (!FormMarioPort.formRef.InGraphicsMode)
+               FormMarioPort.formRef.InitializeVGA();
 
 #if DEBUG
-         do
-         {
-#endif
-            FormMarioPort.formRef.ClearVGAMem();
-
-            Players.InitPlayerFigures();
-            Enemies.InitEnemyFigures();
-
-            EndGame = false;
-//#if MENU
-            if (MENU)
-               Intro();
-//#endif
-            //Randomize();
-
-            if(Buffers.data.numPlayers == 2)
-               if(Buffers.data.progress[Buffers.plMario] > Buffers.data.progress[Buffers.plLuigi])
-                  Buffers.data.progress[Buffers.plLuigi] = Buffers.data.progress[Buffers.plMario];
-               else
-                  Buffers.data.progress[Buffers.plMario] = Buffers.data.progress[Buffers.plLuigi];
-
-            Buffers.data.lives[Buffers.plMario] = 3;
-            Buffers.data.lives[Buffers.plLuigi] = 3;
-            Buffers.data.coins[Buffers.plMario] = 0;
-            Buffers.data.coins[Buffers.plLuigi] = 0;
-            Buffers.data.score[Buffers.plMario] = 0;
-            Buffers.data.score[Buffers.plLuigi] = 0;
-            Buffers.data.mode[Buffers.plMario] = Buffers.mdSmall;
-            Buffers.data.mode[Buffers.plLuigi] = Buffers.mdSmall;
-
-            do //until EndGame or QuitGame 
+            do
             {
-               if(Buffers.data.numPlayers == 1)
-                  Buffers.data.lives[Buffers.plLuigi] = 0;
-               for(CurPlayer = Buffers.plMario; CurPlayer < Buffers.data.numPlayers; CurPlayer++)
+#endif
+               FormMarioPort.formRef.ClearVGAMem();
+
+               Players.InitPlayerFigures();
+               Enemies.InitEnemyFigures();
+
+               EndGame = false;
+
+               if (MENU)
+                  Intro();
+
+               //Randomize();
+
+               if (Buffers.data.numPlayers == 2)
+                  if (Buffers.data.progress[Buffers.plMario] > Buffers.data.progress[Buffers.plLuigi])
+                     Buffers.data.progress[Buffers.plLuigi] = Buffers.data.progress[Buffers.plMario];
+                  else
+                     Buffers.data.progress[Buffers.plMario] = Buffers.data.progress[Buffers.plLuigi];
+
+               Buffers.data.lives[Buffers.plMario] = 3;
+               Buffers.data.lives[Buffers.plLuigi] = 3;
+               Buffers.data.coins[Buffers.plMario] = 0;
+               Buffers.data.coins[Buffers.plLuigi] = 0;
+               Buffers.data.score[Buffers.plMario] = 0;
+               Buffers.data.score[Buffers.plLuigi] = 0;
+               Buffers.data.mode[Buffers.plMario] = Buffers.mdSmall;
+               Buffers.data.mode[Buffers.plLuigi] = Buffers.mdSmall;
+
+               do //until EndGame or QuitGame 
                {
-                  if(!(EndGame || Buffers.QuitGame))
-                     if(Buffers.data.lives[CurPlayer] >= 1)
-                     {
-                        //Turbo = (ConfigData.Games[GameNumber].progress[CurPlayer] >= NUM_LEV);
-                        if(Buffers.data.progress[CurPlayer] > LAST_LEV)
-                           Buffers.data.progress[CurPlayer] = NUM_LEV;
+                  if (Buffers.data.numPlayers == 1)
+                     Buffers.data.lives[Buffers.plLuigi] = 0;
+                  for (CurPlayer = Buffers.plMario; CurPlayer < Buffers.data.numPlayers; CurPlayer++)
+                  {
+                     if (!(EndGame || Buffers.QuitGame))
+                        if (Buffers.data.lives[CurPlayer] >= 1)
+                        {
+                           //Turbo = (ConfigData.Games[GameNumber].progress[CurPlayer] >= NUM_LEV);
+                           if (Buffers.data.progress[CurPlayer] > LAST_LEV)
+                              Buffers.data.progress[CurPlayer] = NUM_LEV;
 #if MENU
       						ShowPlayerName (CurPlayer);
 #endif
-                        switch(Buffers.data.progress[CurPlayer] % NUM_LEV)
-                        //switch(5)
-                        {
-                           case 0:
-                              Passed = Play.PlayWorld('x', '1', Worlds.Level_1a(),
-                                     Worlds.Options_1a(), Worlds.Opt_1a(),
-                                     Worlds.Level_1b(), Worlds.Options_1b(),
-                                     Worlds.Options_1b(), Convert.ToByte(CurPlayer));
-                              break;
-                           case 1:
-                              Passed = Play.PlayWorld('x', '2', Worlds.Level_2a(),
-                                     Worlds.Options_2a(), Worlds.Opt_2a(),
-                                     Worlds.Level_2b(), Worlds.Options_2b(),
-                                     Worlds.Options_2b(), Convert.ToByte(CurPlayer));
-                              break;
-                           case 2:
-                              Passed = Play.PlayWorld('x', '3', Worlds.Level_3a(),
-                                     Worlds.Options_3a(), Worlds.Opt_3a(),
-                                     Worlds.Level_3b(), Worlds.Options_3b(),
-                                     Worlds.Options_3b(), Convert.ToByte(CurPlayer));
-                              break;
-                           case 3:
-                              Passed = Play.PlayWorld('x', '4', Worlds.Level_5a(),
-                                     Worlds.Options_5a(), Worlds.Opt_5a(),
-                                     Worlds.Level_5b(), Worlds.Options_5b(),
-                                     Worlds.Options_5b(), Convert.ToByte(CurPlayer));
-                              break;
-                           case 4:
-                              Passed = Play.PlayWorld('x', '5', Worlds.Level_6a(),
-                                     Worlds.Options_6a(), Worlds.Opt_6a(),
-                                     Worlds.Level_6b(), Worlds.Options_6b(),
-                                     Worlds.Options_6b(), Convert.ToByte(CurPlayer));
-                              break;
-                           case 5:
-                              Passed = Play.PlayWorld('x', '6', Worlds.Level_4a(),
-                                      Worlds.Options_4a(), Worlds.Opt_4a(),
-                                     Worlds.Level_4b(), Worlds.Options_4b(),
-                                     Worlds.Options_4b(), Convert.ToByte(CurPlayer));
-                              break;
-                           default:
+
+                           if (Keyboard.kb1)
+                              level = 0;
+                           else if (Keyboard.kb2)
+                              level = 1;
+                           else if (Keyboard.kb3)
+                              level = 2;
+                           else if (Keyboard.kb4)
+                              level = 3;
+                           else if (Keyboard.kb5)
+                              level = 4;
+                           else if (Keyboard.kb6)
+                              level = 5;
+                           //else if (level == -1) return;
+                           else break;
+
+                           //switch(Buffers.data.progress[CurPlayer] % NUM_LEV)
+                           switch (level)
+                           {
+                              case 0:
+                                 Passed = Play.PlayWorld('x', '1', Worlds.Level_1a(),
+                                        Worlds.Options_1a(), Worlds.Opt_1a(),
+                                        Worlds.Level_1b(), Worlds.Options_1b(),
+                                        Worlds.Options_1b(), Convert.ToByte(CurPlayer));
+                                 break;
+                              case 1:
+                                 Passed = Play.PlayWorld('x', '2', Worlds.Level_2a(),
+                                        Worlds.Options_2a(), Worlds.Opt_2a(),
+                                        Worlds.Level_2b(), Worlds.Options_2b(),
+                                        Worlds.Options_2b(), Convert.ToByte(CurPlayer));
+                                 break;
+                              case 2:
+                                 Passed = Play.PlayWorld('x', '3', Worlds.Level_3a(),
+                                        Worlds.Options_3a(), Worlds.Opt_3a(),
+                                        Worlds.Level_3b(), Worlds.Options_3b(),
+                                        Worlds.Options_3b(), Convert.ToByte(CurPlayer));
+                                 break;
+                              case 3:
+                                 Passed = Play.PlayWorld('x', '4', Worlds.Level_5a(),
+                                        Worlds.Options_5a(), Worlds.Opt_5a(),
+                                        Worlds.Level_5b(), Worlds.Options_5b(),
+                                        Worlds.Options_5b(), Convert.ToByte(CurPlayer));
+                                 break;
+                              case 4:
+                                 Passed = Play.PlayWorld('x', '5', Worlds.Level_6a(),
+                                        Worlds.Options_6a(), Worlds.Opt_6a(),
+                                        Worlds.Level_6b(), Worlds.Options_6b(),
+                                        Worlds.Options_6b(), Convert.ToByte(CurPlayer));
+                                 break;
+                              case 5:
+                                 Passed = Play.PlayWorld('x', '6', Worlds.Level_4a(),
+                                         Worlds.Options_4a(), Worlds.Opt_4a(),
+                                        Worlds.Level_4b(), Worlds.Options_4b(),
+                                        Worlds.Options_4b(), Convert.ToByte(CurPlayer));
+                                 break;
+                              default:
+                                 EndGame = true;
+                                 break;
+                           }
+                           //Console.WriteLine("I want to play a world");
+                           if (Passed)
+                              Buffers.data.progress[CurPlayer]++;
+                           if (Buffers.QuitGame)
+                           {
                               EndGame = true;
-                              break;
-                        }
-                        //Console.WriteLine("I want to play a world");
-                        if(Passed)
-                           Buffers.data.progress[CurPlayer]++;
-                        if(Buffers.QuitGame)
-                        {
-                           EndGame = true;
 #if MENU
       							QuitGame = false;
 #endif
+                           }
                         }
-                     }
-               }
-            } while(!(EndGame || Buffers.QuitGame || (Buffers.data.lives[Buffers.plMario] +
-               Buffers.data.lives[Buffers.plLuigi] == 0)));
+                  }
+               } while (!(EndGame || Buffers.QuitGame || (Buffers.data.lives[Buffers.plMario] +
+                  Buffers.data.lives[Buffers.plLuigi] == 0)));
 
-            if(GameNumber != -1)
-               Config.Games[GameNumber] = Buffers.data;
+               if (GameNumber != -1)
+                  Config.Games[GameNumber] = Buffers.data;
 #if MENU
       	} while (!QuitGame)
 #endif
-            WriteConfig();
-         } while(!Buffers.QuitGame);
+               WriteConfig();
+            } while (!Buffers.QuitGame);
+         }
+         catch (Exception e)
+         {
+            Console.WriteLine(e);
+            System.Threading.Thread.ResetAbort();
+         }
+
       }
    }
 }

@@ -85,6 +85,9 @@ namespace MarioPort
       
       public static bool Star;
       
+      //-------------------------------------------------
+      // Initialize Enemies
+      //-------------------------------------------------
       public static void init()
       {
          // init FireballList && KoopaList
@@ -206,7 +209,6 @@ namespace MarioPort
                break;
             }
             default:
-//               throw new Exception();
                break;
          }
       }
@@ -222,7 +224,7 @@ namespace MarioPort
       }
 
       //-------------------------------------------------
-      // 
+      // Show a fire temporary object
       //-------------------------------------------------
       private static void ShowFire (int X, int Y)
       {
@@ -234,7 +236,7 @@ namespace MarioPort
       }
       
       //-------------------------------------------------
-      // 
+      // Mirror bitmap from
       //-------------------------------------------------
       private static void Mirror20x24(Bitmap from, ref Bitmap to)
       {
@@ -245,7 +247,7 @@ namespace MarioPort
       }
       
       //-------------------------------------------------
-      // 
+      // Initialize Enemies with figure bitmaps
       //-------------------------------------------------
       public static void InitEnemyFigures()
       {
@@ -286,7 +288,7 @@ namespace MarioPort
       }
 
       //-------------------------------------------------
-      // 
+      // Clear Enemies - Kill all enemies
       //-------------------------------------------------
       public static void ClearEnemies()
       {
@@ -307,7 +309,7 @@ namespace MarioPort
       }
 
       //-------------------------------------------------
-      // 
+      // Stop All Active Enemies
       //-------------------------------------------------
       public static void StopEnemies()
       {
@@ -346,7 +348,6 @@ namespace MarioPort
                   Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY] = '±';
                   break;
                default:
-                  //                  throw new Exception();
                   break;
             }
          }
@@ -355,7 +356,7 @@ namespace MarioPort
       }
 
       //-------------------------------------------------
-      // 
+      // Create a new enemy
       //-------------------------------------------------
       public static void NewEnemy(EnemyType InitType, int SubType, int InitX, int InitY, int InitXVel, int InitYVel, int InitDelay)
       {
@@ -404,7 +405,6 @@ namespace MarioPort
          EnemyList[i].DirCounter = 0;
          EnemyList[i].Status = Grounded;
 
-         //FillChar (BackGrAddr, SizeOf (BackGrAddr), 0xFF);
          for (int k = 0; k < EnemyList[i].BackGrAddr.Length; k++)
          {
             EnemyList[i].BackGrAddr[k] = 0xFF;
@@ -437,7 +437,7 @@ namespace MarioPort
       }
       
       //-------------------------------------------------
-      // 
+      // Show all active enemies
       //-------------------------------------------------
       public static void ShowEnemies()
       {
@@ -634,7 +634,7 @@ namespace MarioPort
       }
       
       //-------------------------------------------------
-      // 
+      // Hide all active enemies
       //-------------------------------------------------
       public static void HideEnemies()
       {
@@ -650,7 +650,7 @@ namespace MarioPort
       }
       
       //-------------------------------------------------
-      // 
+      // Check all enemies for required action
       //-------------------------------------------------
       private static void Check (int i)
       {
@@ -799,7 +799,6 @@ namespace MarioPort
                               }
                               break;
                            }
-                              
                            Buffers.WorldMap[NewX, l] = '@';
                         }
                      }
@@ -965,7 +964,7 @@ namespace MarioPort
       }
       
       //-------------------------------------------------
-      // 
+      // Move all active enemies
       //-------------------------------------------------
       public static void MoveEnemies()
       {
@@ -1116,25 +1115,25 @@ namespace MarioPort
                      switch (EnemyList[j].Tp)
                      {
                         case EnemyType.tpChibibo:
-                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY] = '';
+                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY] = '€';
                            break;
                         case EnemyType.tpVertFish:
-                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY - 2] = '';
+                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY - 2] = '§';
                            break;
                         case EnemyType.tpVertFireBall:
-                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY - 2] = '';
+                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY - 2] = '‚';
                            break;
                         case EnemyType.tpVertPlant:
-                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY - 2] = (char)((int)('') + EnemyList[j].SubTp);
+                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY - 2] = (char)((int)('„') + EnemyList[j].SubTp);
                            break;
                         case EnemyType.tpRed:
-                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY] = '';
+                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY] = '‡';
                            break;
                         case EnemyType.tpKoopa:
                         case EnemyType.tpSleepingKoopa:
                         case EnemyType.tpWakingKoopa:
                         case EnemyType.tpRunningKoopa:
-                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY] = (char)((int)('') + EnemyList[j].SubTp);
+                           Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY] = (char)((int)('ˆ') + EnemyList[j].SubTp);
                            break;
                         case EnemyType.tpBlockLift:
                            Buffers.WorldMap[EnemyList[j].MapX, EnemyList[j].MapY] = '°';
@@ -1367,13 +1366,12 @@ namespace MarioPort
                }
             }
          } // end for
-         
+
          i = 0;
-         while ( i < ActiveEnemies.Length )
+         while (i < ActiveEnemies.Length)
          {
-            if ( EnemyList[(int)(ActiveEnemies[i])].Tp == EnemyType.tpDead )
-               //Delete(ActiveEnemies, i, 1);
-               ActiveEnemies.Remove(i, 1);
+            if (EnemyList[(int)(ActiveEnemies[i])].Tp == EnemyType.tpDead)
+               ActiveEnemies = ActiveEnemies.Remove(i, 1);
             else
                i++;
          }
@@ -1382,7 +1380,7 @@ namespace MarioPort
       }
       
       //-------------------------------------------------
-      // 
+      // Start Enemies in Level
       //-------------------------------------------------
       public static void StartEnemies (int X, short Dir)
       {
@@ -1426,7 +1424,7 @@ namespace MarioPort
       }
       
       //-------------------------------------------------
-      // 
+      // Hit the top of an enemy
       //-------------------------------------------------
       public static void HitAbove (int MapX, int MapY)
       {
