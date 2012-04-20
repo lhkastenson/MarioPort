@@ -175,6 +175,8 @@ namespace MarioPort
 
       public static void Mirror(System.Drawing.Bitmap from, ref System.Drawing.Bitmap to)
       {
+         if (from == null)
+            return;
          from.RotateFlip(RotateFlipType.Rotate180FlipY);
          to = from.Clone() as Bitmap;
       }
@@ -290,7 +292,7 @@ namespace MarioPort
          Mirror (FigList[N, 12], ref FigList[N, 13]);
       }
       
-      private static void SetSkyPalette()
+      public static void SetSkyPalette()
       {
 //      var
 //        i, j: Integer;
@@ -486,6 +488,8 @@ namespace MarioPort
          
          XPos = X * Buffers.W;
          YPos = Y * Buffers.H;
+         if (X < 0)
+            return;
          Ch = (char)Buffers.WorldMap[X, Y];
          
          if ( X >= 0 && Y >= 0 && Y < Buffers.NV )
@@ -499,7 +503,7 @@ namespace MarioPort
             }
             if ( Ch == ' ' )
                return;
-            if ( Buffers.WorldMap[X, Y - 1] == (char)18 )
+            if ( Buffers.WorldMap[X, Y] == (char)18 )
             {
                Fig = FigList[1, 5];
                FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
@@ -1048,7 +1052,7 @@ namespace MarioPort
           SortedSet<char> temp = new SortedSet<char>();
           temp = Ch;
           temp.Remove(IgnoreAbove);
-          A = System.Convert.ToByte(1 - System.Convert.ToByte(((temp.Contains((char)Buffers.WorldMap[X, Y - 1])) || (Y == 0))));
+          A = System.Convert.ToByte(1 - System.Convert.ToByte(((temp.Contains((char)Buffers.WorldMap[X, Y])) || (Y == 0))));
           B = System.Convert.ToByte(2 * System.Convert.ToByte(!(Y == Buffers.NV - 1) ||  Ch.Contains((char)(Buffers.WorldMap[X, Y + 1]))));
           L = System.Convert.ToByte(4 * System.Convert.ToByte(! ((X == 0) || ChLeft.Contains((char)Buffers.WorldMap[X - 1, Y]))));
           R = System.Convert.ToByte(8 * System.Convert.ToByte(!((X == Buffers.Options.XSize - 1) || Ch.Contains((char)Buffers.WorldMap[X + 1, Y]))));

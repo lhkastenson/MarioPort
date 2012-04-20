@@ -52,7 +52,7 @@ namespace MarioPort
       byte page0 = 0;
       uint page1 = 32768;
 
-      const int yBase = 9;
+      public const int YBASE = 9;
       public bool InGraphicsMode = false;
       public static int xView = 0;
       public static int yView = 0;
@@ -86,12 +86,16 @@ namespace MarioPort
 
       public void PutImage(int XPos, int YPos, int Width, int Height, Bitmap bitmap)
       {
-         graphics.DrawImage(bitmap, XPos, YPos, Width, Height);
+         if (bitmap == null)
+            return;
+         graphics.DrawImage(bitmap, XPos - xView, YPos, Width, Height);
       }
 
       public void DrawImage(int XPos, int YPos, int Width, int Height, Bitmap bitmap)
       {
-         graphics.DrawImage(bitmap, XPos, YPos, Width, Height);
+         if (bitmap == null)
+            return;
+         graphics.DrawImage(bitmap, XPos - xView, YPos, Width, Height);
       }
 
       //{ Be sure to return to textmode if program is halted }
@@ -543,12 +547,82 @@ namespace MarioPort
 
       private void FormMarioPort_Load(object sender, EventArgs e)
       {
-
+         //System.Threading.Thread thread = new Thread(this.redraw);
+         //thread.Start();
       }
+
+
 
       private void FormMarioPort_FormClosing(object sender, FormClosingEventArgs e)
       {
          thread.Abort();
       }
+
+      private void FormMarioPort_KeyDown(object sender, KeyEventArgs e)
+      {
+         if (e.KeyData == Keys.Up)
+            Keyboard.kbUpArrow = true;
+         else if (e.KeyData == Keys.Down)
+            Keyboard.kbDownArrow = true;
+         else if (e.KeyData == Keys.Left)
+            Keyboard.kbLeftArrow = true;
+         else if (e.KeyData == Keys.Right)
+            Keyboard.kbRightArrow = true;
+         else if (e.KeyData == Keys.Space)
+         {
+            Keyboard.kbAlt = true;
+            Keyboard.kbSP = true;
+         }
+         else if (e.KeyData == Keys.Enter)
+            Keyboard.kbEnter = true;
+         else if (e.KeyData == Keys.Tab)
+            Keyboard.kbTab = true;
+         else if (e.KeyData == Keys.Back)
+            Keyboard.kbBS = true;
+         else if (e.KeyData == Keys.Escape)
+            Keyboard.kbEsc = true;
+         else if (Control.ModifierKeys == Keys.Control)
+            Keyboard.kbCtrl = true;
+         //else if (Control.ModifierKeys == Keys.Alt)
+         //   Keyboard.kbAlt = true;
+         else if (Control.ModifierKeys == Keys.Shift)
+            Keyboard.kbShiftl = true;
+         else if (Control.ModifierKeys == Keys.Shift)
+            Keyboard.kbShiftr = true;
+      }
+
+      private void FormMarioPort_KeyUp(object sender, KeyEventArgs e)
+      {
+         if (e.KeyData == Keys.Up)
+            Keyboard.kbUpArrow = false;
+         else if (e.KeyData == Keys.Down)
+            Keyboard.kbDownArrow = false;
+         else if (e.KeyData == Keys.Left)
+            Keyboard.kbLeftArrow = false;
+         else if (e.KeyData == Keys.Right)
+            Keyboard.kbRightArrow = false;
+         else if (e.KeyData == Keys.Space)
+         {
+            Keyboard.kbAlt = false;
+            Keyboard.kbSP = false;
+         }
+         else if (e.KeyData == Keys.Enter)
+            Keyboard.kbEnter = false;
+         else if (e.KeyData == Keys.Tab)
+            Keyboard.kbTab = false;
+         else if (e.KeyData == Keys.Back)
+            Keyboard.kbBS = false;
+         else if (e.KeyData == Keys.Escape)
+            Keyboard.kbEsc = false;
+         else if (Control.ModifierKeys == Keys.Control)
+            Keyboard.kbCtrl = false;
+         //else if (Control.ModifierKeys == Keys.Alt)
+         //   Keyboard.kbAlt = false;
+         else if (Control.ModifierKeys == Keys.Shift)
+            Keyboard.kbShiftl = false;
+         else if (Control.ModifierKeys == Keys.Shift)
+            Keyboard.kbShiftr = false;
+      }
    }
+
 }

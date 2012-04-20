@@ -8,15 +8,15 @@ namespace MarioPort
 {
    class TXT //TXT
    {
-      const int normal = 0;
-      const int bold = 1;
-      const int shadow = 2;
-      bool bShadow = false;
-      bool bBold = false;
+      public const int normal = 0;
+      public const int bold = 1;
+      public const int shadow = 2;
+      public static bool bShadow = false;
+      public static bool bBold = false;
 
-      byte Base;
+      public static byte Base;
 
-      public void SetFont(int i, ushort style)
+      public static void SetFont(int i, ushort style)
       {
          if (i == 0)
          {
@@ -31,7 +31,7 @@ namespace MarioPort
       }
       // according to how this is called in WriteText it should return bitmap 
       // of the char ar the ascii value i.
-      public void Letter(int i)
+      public static void Letter(int i)
       {
          //ushort w1, w2;
 
@@ -52,7 +52,7 @@ namespace MarioPort
          //return UIntPtr(w1, w2);
       }
 
-      public int TextWidth(string s)
+      public static int TextWidth(string s)
       {
          //Pointer p;
          int width = 0;
@@ -62,7 +62,7 @@ namespace MarioPort
          byte tempBold = 0;
          byte tempShadow = 0;
 
-         for (i = 1; i <= s.Length; i++)
+         for (i = 0; i < s.Length; i++)
          {
             a = (ushort)(s[i] << 1);
             a = (ushort)(a - 2 * Base);
@@ -89,7 +89,7 @@ namespace MarioPort
          return width;
       }
 
-      public void WriteText(int x, int y, string s, byte attr)
+      public static void WriteText(int x, int y, string s, byte attr)
       {
          //byte i = 1;
          //char c;
@@ -111,23 +111,23 @@ namespace MarioPort
          //}
       }
 
-      public int CenterX(string s)
+      public static int CenterX(string s)
       {
           return FormMarioPort.xView + (FormMarioPort.SCREEN_WIDTH - TextWidth(s)) >> 1;
       }
 
-      public void CenterText(int y, string s, byte attr)
+      public static void CenterText(int y, string s, byte attr)
       {
          WriteText(CenterX(s), y, s, attr);
       }
 
       // creates a font type
-      public void SwissFont()
+      public static void SwissFont()
       {
 
       }
 
-      public void Font8x8()
+      public static void Font8x8()
       {
 
       }

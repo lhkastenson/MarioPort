@@ -238,6 +238,8 @@ namespace MarioPort
       //-------------------------------------------------
       private static void Mirror20x24(Bitmap from, ref Bitmap to)
       {
+         if (from == null)
+            return;
          from.RotateFlip(RotateFlipType.Rotate180FlipY);
          to = from.Clone() as Bitmap;
       }
@@ -254,7 +256,7 @@ namespace MarioPort
          EnemyPictures[3, Right] = Resources.CHIBIBO_003;
 
          EnemyPictures[4, Left] = Resources.FISH_001;
-         Figures.Mirror(EnemyPictures[3, Left], ref EnemyPictures[3, Right]);
+         Figures.Mirror(EnemyPictures[4, Left], ref EnemyPictures[4, Right]);
 
          EnemyPictures[5, Left] = Resources.RED_000;
          EnemyPictures[6, Left] = Resources.RED_001;
@@ -587,13 +589,13 @@ namespace MarioPort
                   break;
                }
                case EnemyType.tpRed:
-               FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[6 + System.Convert.ToByte(EnemyList[i].DirCounter % 16 <= 8), System.Convert.ToByte(EnemyList[i].XVel > 0)]);
+                  FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[6 + System.Convert.ToByte(EnemyList[i].DirCounter % 16 <= 8), System.Convert.ToByte(EnemyList[i].XVel > 0)]);
                   break;
                case EnemyType.tpDeadRed:
                   FormMarioPort.formRef.UpSideDown(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[6 + System.Convert.ToByte(EnemyList[i].DirCounter % 16 <= 8), System.Convert.ToByte(EnemyList[i].XVel > 0)]);
                   break;
                case EnemyType.tpKoopa:
-                  FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos - 10, Buffers.W, 24, KoopaList[System.Convert.ToByte(EnemyList[i].XVel > 0), EnemyList[i].SubTp, System.Convert.ToByte(EnemyList[i].DirCounter % 16 <= 8)]);
+                  FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos - 10, Buffers.W, 24, KoopaList[System.Convert.ToByte(EnemyList[i].XVel > 0), 0/*EnemyList[i].SubTp*/, System.Convert.ToByte(EnemyList[i].DirCounter % 16 <= 8)]);
                   break;
                case EnemyType.tpWakingKoopa:
                case EnemyType.tpRunningKoopa:
@@ -1366,8 +1368,8 @@ namespace MarioPort
             }
          } // end for
          
-         i = 1;
-         while ( i <= ActiveEnemies.Length )
+         i = 0;
+         while ( i < ActiveEnemies.Length )
          {
             if ( EnemyList[(int)(ActiveEnemies[i])].Tp == EnemyType.tpDead )
                //Delete(ActiveEnemies, i, 1);

@@ -11,7 +11,7 @@ namespace MarioPort
       public static bool ShowRetrace = false;
 
       const int YBase = 9;
-
+      public static bool Waiting, ShowObjects, ShowScore, CountingScore;
       public static int CheatsUsed = 0;
 
       private static bool TextStatus, OnlyDraw = false;
@@ -19,9 +19,8 @@ namespace MarioPort
 						  char[,] Map2, Buffers.WorldOptions Opt2, Buffers.WorldOptions Opt2b, byte Player)
 	   {
 		   int j, k, x, y;
-         bool Waiting;
+         
 	      int[] TotalBackGrAddr = new int[FormMarioPort.MAX_PAGE];
-	      bool ShowScore, CountingScore, ShowObjects;
          //PlayWorld = false;
          //Keyboard.Key = 0;
 
@@ -63,7 +62,7 @@ namespace MarioPort
             Buffers.Swap();
             Buffers.ReadWorld (Map1, ref Buffers.WorldMap, Opt1b);
          }
-         Console.WriteLine("Done Reading World");
+         //Console.WriteLine("Done Reading World");
          Players.InitPlayer (Buffers.Options.InitX, Buffers.Options.InitY, Buffers.Player);
          Players.MapX = Buffers.Options.InitX;
          Players.MapY = Buffers.Options.InitY;
@@ -94,51 +93,50 @@ namespace MarioPort
 
 		public static void MoveScreen()
 		{
-         //int Scroll;
-         //int N1, N2;
-         //int i, j, OldX, NewX, Page;
-         //Random random = new Random();
-         //int randomNumber;
-         //Page = CurrentPage;
-         //Scroll = XView - LastXView[Page];
-         //if (!EarthQuake)
-         //   SetView(XView, YView);
-         //else
-         //{
-         //   EarthQuakeCounter++;
-         //   if (EarthQuakeCounter > 0)
-         //      EarthQuake = false;
-         //   int Rand1 = randomNumber.Next(0, 2);
-         //   int Rand2 = randomNumber.Next(0, 2);
-         //   SetView (XView, YView + Rand1 - Rand2;				
-         //}
-         //if (Scroll < 0)
-         //   StartEnemies ((XView / W) - StartEnemiesAt, 1);
-         //else if (Scroll > 0)
-         //   StartEnemies((XView / W) + NH + StartEnemiesAt(), -1);
+         int Scroll;
+         int N1, N2;
+         int OldX, NewX, Page;
+         Random rand = new Random();
+         Page = FormMarioPort.formRef.CurrentPage();
+         Scroll = Buffers.XView - Buffers.LastXView[Page];
+         if (!Players.EarthQuake)
+            FormMarioPort.formRef.SetView(Buffers.XView, Buffers.YView);
+         else
+         {
+            Players.EarthQuakeCounter++;
+            if (Players.EarthQuakeCounter > 0)
+               Players.EarthQuake = false;
+            int Rand1 = rand.Next(0, 2);
+            int Rand2 = rand.Next(0, 2);
+            FormMarioPort.formRef.SetView (Buffers.XView, Buffers.YView + Rand1 - Rand2);				
+         }
+         if (Scroll < 0)
+            Enemies.StartEnemies ((Buffers.XView / Buffers.W) - Enemies.StartEnemiesAt, 1);
+         else if (Scroll > 0)
+            Enemies.StartEnemies((Buffers.XView / Buffers.W) + Buffers.NH + Enemies.StartEnemiesAt, -1);
 			
-         //// Need to find out what else is in "Options"
-         //i = Buffers.Options.Horizon;
-         //Options.Horizon = i + GetYOffset() - YBASE;
-         //DrawBackGr(false);
-         //Options.Horizon = i;
+         // Need to find out what else is in "Options"
+         int i = Buffers.Options.Horizon;
+         Buffers.Options.Horizon = (byte)(i + FormMarioPort.formRef.GetYOffset() - FormMarioPort.YBASE);
+         BackGr.DrawBackGr(false);
+         Buffers.Options.Horizon = (byte)i;
 			
-         //if (Scroll > 0)
-         //   for (int j = LastXView[Page]; j < XView; j++)
-         //   {
-         //      i = j - W - W;
-         //      if (i >= 0)
-         //         PutPixel(i, 0, 0);
-         //      i = W - j % W - 1;
-         //      Redraw (j / W + NH + 1, i);
-         //   }
+         if (Scroll > 0)
+            for (int j = Buffers.LastXView[Page]; j < Buffers.XView; j++)
+            {
+               i = j - Buffers.W - Buffers.W;
+               if (i >= 0)
+                  FormMarioPort.formRef.PutPixel(i, 0, 0);
+               i = Buffers.W - j % Buffers.W - 1;
+               Figures.Redraw (j / Buffers.W + Buffers.NH + 1, i);
+            }
 				
-         //   if (Scroll < 0)
-         //      for (int j = LastXView[Page]; j > XView; j--);
-         //      {
-         //         i = W - j % W - 1;
-         //         Redraw(j / W - 1, i);
-         //      }
+            if (Scroll < 0)
+               for (int j = Buffers.LastXView[Page]; j > Buffers.XView; j--)
+               {
+                  i = Buffers.W - j % Buffers.W - 1;
+                  Figures.Redraw(j / Buffers.W - 1, i);
+               }
 		}
 		
 	
@@ -401,14 +399,15 @@ namespace MarioPort
 				
             Figures.BuildWorld();
 		}
-		
-		static void Restart()
-		{
+
+      static void Restart()
+      {
+
          FormMarioPort.formRef.ResetStack();
-			
+
          TextStatus = false;
          //InitStatus();
-			
+
          Blocks.InitBlocks();
          TmpObj.InitTempObj();
          Glitter.ClearGlitter();
@@ -424,302 +423,316 @@ namespace MarioPort
             int j = (Buffers.XView / Buffers.W) + i;
             Enemies.StartEnemies(j, (short)(1 - 2 * System.Convert.ToByte(j > Players.MapX)));
          }
-			
-      //   SetYOffset (YBase);
-			
+
+         //   SetYOffset (YBase);
+
          for (int i = 0; i < FormMarioPort.MAX_PAGE; i++)
          {
-      //      DrawSky (XView, 0, NH * W, NV * H);
-				
-      //      StartClouds();
+            //      DrawSky (XView, 0, NH * W, NV * H);
+
+            //      StartClouds();
 
             for (int x = Buffers.XView / Buffers.W; x < Buffers.XView / Buffers.W + Buffers.NH; x++)
                for (int y = 0; y < Buffers.NV - 1; y++)
                   Figures.Redraw(x, y);
-					
-      //      DrawBackGr(true);
-      //      ReadColorMap();
-				
-      //      if (Options.Stars != 0)
-      //         ShowStars();
-					
+
+            BackGr.DrawBackGr(true);
+            //ReadColorMap();
+
+            if (Buffers.Options.Stars != 0)
+               Stars.ShowStars();
+
             Enemies.ShowEnemies();
             if (!OnlyDraw)
                Players.DrawPlayer();
 
-            FormMarioPort.formRef.ShowPage();				
+            FormMarioPort.formRef.ShowPage();
          }
-			
-      //   Demo = dmNoDemo;
-      //   Waiting = false;
-			
-      //   NewPalette (P256*);
-      //   for (int i = 1; i < 100; i++)
-      //   {
-      //      //Waterfalls()?
-      //      BlinkPalette();
-      //   }
-			
-      //   SetSkyPalette();
-      //   DrawPalBackGr();
-      //   InitGrass();
-			
+
+         Buffers.Demo = Buffers.dmNoDemo;
+         Waiting = false;
+
+         //Palettes.NewPalette (P256*);
+         //for (int i = 1; i < 100; i++)
+         //{
+         //Waterfalls()?
+         //Palettes.BlinkPalette();
+         //}
+
+         Figures.SetSkyPalette();
+         BackGr.DrawPalBackGr();
+         //Palettes.InitGrass();
+
          if (OnlyDraw)
             return;
-				
-      //   UnLockPal();
-      //   FadeUp (64);
-      //   Palettes.ReadPalette (Palette);
-			
-      //   TextStatus = (Stat && !PlayingMacro);
 
+         //   Palettes.UnLockPal();
+         //   FadeUp (64);
+         //   Palettes.ReadPalette (Palette);
+
+         TextStatus = Stat;// && !KeyBoard.PlayingMacro());
+
+         uint counter = 0;
          do //until gamedone
          {
-            Console.WriteLine("Restart Loop");
-            //      if (!PlayingMacro)
-            //      {
-            //         if (Key = 31) //'S'
-            //         {
-            //            Stat = !Stat;
-            //            TextStatus = Stat;
-            //            Key = 255;
-            //         }
-            //         if (Key = 16) //'Q'
-            //         {
-            //            if (BeeperSound)
-            //               BeeperOff();
-            //            else
-            //            {
-            //               BeeperOn();
-            //               Beep (80);
-            //            }
-            //            Key = 255;
-            //         }
+            //Console.WriteLine("Restart Loop");
 
-            //         if (Key == 197 || Key == 198) //Pause/Break
-            //         {
-            //            PauseMusic();
-            //            do
-            //            {
-            //               while (Key = 197) {} //busy wait of some sort?
-            //            } while kbHit;
-            //         }
-            //         else
-            //         {
-            //            if (Key != 0)
-            //            {
-            //               GameDone = true;
-            //               Passed = true;
-            //            }
-            //         }
-
-            //         if (TextCounter) //in 40..40+MAX_PAGE
-            //            ShowObjects = false;
-
-            //         HideGlitter();
-            //         if (Options.Stars != 0)
-            //            HideStars();
-            //         if (ShowObjects)
-            //            HideTempObj();
-            //         if (ShowScore)
-            //            HideTotalBack();
-            //         ErasePlayer();
-            //         if (ShowObjects)
-            //         {
-            //            HideEnemies();
-            //            EraseBlocks();
-            //         }
-            //      }
-
-            //      // { Fade }; 
-            //      LavaCounter++;
-
-            //      if (!Waiting)
-            //         if (Demo == dmNoDemo)
-            //         {
-                        Enemies.MoveEnemies();
-                        Players.MovePlayer();
-            //         }
-            //         else
-            //            DoDemo();
-
-            //      if (!Waiting)
-            //      {
-            //         if (Passed)
-            //         {
-            //            if (Demo = dmNoDemo || InPipe)
-            //            {
-            //               Waiting = true;
-            //               TextCounter = 0;
-            //            }
-            //            TextCounter++;
-            //            if (!ShowScore && (TextCounter)) //in 50..50 + MAX_PAGE
-            //            {
-            //               //SetFont (0, Bold + Shadow);
-            //               CenterText (20, PlayerName [Player], 30.ToString("X"));
-            //               //SetFont(1, Bold + Shadow);
-            //               CenterText (40, "STAGE CLEAR!", 31);
-            //               if (TextCounter = 50 + MAX_PAGE)
-            //                  ShowScore = true;
-            //            }
-            //         }
-            //         else
-            //            if (GameDone)
-            //            {
-            //               Data.Lives[Player]--;
-            //               Data.Mode[Player = mdSmall;
-            //               TextCounter = 0;
-            //               Data.Score[Player] += LevelScore;
-            //               Waiting = true;
-            //               GameDone = false;
-            //            }
-            //      }
-
-            //      if (Key = 25) //P
-            //         Pause();
-
-            //      if (ShowScore && (TextCounter == 120) && (LevelScore > 0))
-            //      {
-            //         i = LevelScore - 50;
-            //         if (i < 0)
-            //            i = 0;
-            //         Data.Score[Player] += LevelScore - 1;
-            //         LevelScore = i;
-            //         TextCounter = 119;
-            //         CountingScore = true;
-            //      }
+            //if (!Keyboard.PlayingMacro)
+            //{
+            //   if (Key = 31) //'S'
+            //   {
+            //      Stat = !Stat;
+            //      TextStatus = Stat;
+            //      Keyboard.Key = 255;
+            //   }
+            //   if (Keyboard.Key = 16) //'Q'
+            //   {
+            //      if (Buffers.BeeperSound)
+            //         Buffers.BeeperOff();
             //      else
-            //         CountingScore = false;
-
-            //      if (Waiting)
             //      {
-            //         TextCounter++;
-            //         if (Data.Lives[Player] == 0)
-            //         {
-            //            if (TextCounter) //in 100..100 + MAX_PAGE
-            //            {
-            //               //SetFont (0, Bold + Shadow);
-            //               CenterText (20, PlayerName[Player], 30.ToString("X"));
-            //               //SetFont (1, Bold + Shadow);
-            //               CenterText (40, "GAME OVER", 31);
-            //               ShowScore = true;
-            //            }
-            //            if (TextCounter > 350)
-            //               GameDone = true;
-            //         }
-            //         else
-            //            if (Passed)
-            //            {
-            //               if (TextCounter > 250)
-            //                  Waiting = false;
-            //            }
-            //            else
-            //               if (TextCounter > 100)
-            //                  GameDone = true;
+            //         Buffers.BeeperOn();
+            //         Buffers.Beep (80);
             //      }
-            //      MoveTempObj();
-            //      MoveBlocks();
+            //      Key = 255;
+            //   }
 
-            //      if (Key == kbEsc || Key == 129)
-            //         QuitGame = true;
-
-            //      MoveScreen();
-            //      RunRemove();
-
-            //      if (Options.Horizon < NV)
+            //   if (Key == 197 || Key == 198) //Pause/Break
+            //   {
+            //      Music.PauseMusic();
+            //      //do
+            //      //{
+            //      //   while (Keyboard.Key = 197) {} //busy wait of some sort?
+            //      //} while //(Keyboard.kbHit);
+            //   }
+            //   else
+            //   {
+            //      if (Keyboard.Key != 0)
             //      {
-            //         j = Buffers.Options.Horizon - 1;
-            //         for (int i = 0 / W; i < NH; i++)
-            //         {
-            //            k = XView / W + (i + LavaCounter / 8) % (NH + 1);
-            //            if (WorldMap * [k, j] = '%')
-            //               Redraw(k, j);
-            //         }
+            //         Buffers.GameDone = true;
+            //         Buffers.Passed = true;
             //      }
+            //   }
 
-            //      ResetStack();
+            //   if (Buffers.TextCounter) //in 40..40+MAX_PAGE
+            //      ShowObjects = false;
 
-            //      if (ShowObjects)
-            //      {
-                     Blocks.DrawBlocks();
-                     Enemies.ShowEnemies();
-            //      }
-                  Players.DrawPlayer();
+            //   HideGlitter();
+            //   if (Options.Stars != 0)
+            //      HideStars();
+            //   if (ShowObjects)
+            //      HideTempObj();
+            //   if (ShowScore)
+            //      HideTotalBack();
+            //   ErasePlayer();
+            //   if (ShowObjects)
+            //   {
+            //      HideEnemies();
+            //      EraseBlocks();
+            //   }
+            //}
 
-            //      if (ShowScore)
-            //         ShowTotalBack();
-            //      if (TextStatus)
-            //         ShowStatus();
-            //      if (ShowObjects)
-            //         ShowTempObj();
-            //      if (Options.Stars != 0)
-            //         ShowStars();
-            //      ShowGlitter();
+            // { Fade }; 
+            Buffers.LavaCounter++;
 
-            //      LastXView[CurrentPage] = XView;
+            if (!Waiting)
+               if (Buffers.Demo == Buffers.dmNoDemo)
+               {
+                  Enemies.MoveEnemies();
+                  Players.MovePlayer();
+               }
+               else
+                  Players.DoDemo();
 
-            //      if (ShowRetrace)
-            //         SetPalette(0, 0, 0, 0);
+            if (!Waiting)
+            {
+               if (Buffers.Passed)
+               {
+                  if (Buffers.Demo == Buffers.dmNoDemo || Players.InPipe)
+                  {
+                     Waiting = true;
+                     Buffers.TextCounter = 0;
+                  }
+                  Buffers.TextCounter++;
+                  if (!ShowScore && (Buffers.TextCounter >= 50 && Buffers.TextCounter < 50 + FormMarioPort.MAX_PAGE)) //in 50..50 + MAX_PAGE
+                  {
+                     //SetFont (0, Bold + Shadow);
+                     //TXT.CenterText (20, Buffers.PlayerName [Buffers.Player], 30.ToString("X"));
+                     //SetFont(1, Bold + Shadow);
+                     //TXT.CenterText (40, "STAGE CLEAR!", 31);
+                     if (Buffers.TextCounter == (50 + FormMarioPort.MAX_PAGE))
+                        ShowScore = true;
+                  }
+               }
+               else
+                  if (Buffers.GameDone)
+                  {
+                     Buffers.data.lives[Buffers.Player]--;
+                     Buffers.data.mode[Buffers.Player] = Buffers.mdSmall;
+                     Buffers.TextCounter = 0;
+                     Buffers.data.score[Buffers.Player] += Buffers.LevelScore;
+                     Waiting = true;
+                     Buffers.GameDone = false;
+                  }
+            }
 
-            //      ShowPage();
+            //if (Keyboard.Key = 25) //P
+            //   Pause();
 
-            //      if (ShowRetrace)
-            //         SetPalette( 0, 63, 63, 63);
+            if (ShowScore && (Buffers.TextCounter == 120) && (Buffers.LevelScore > 0))
+            {
+               int i = (int)(Buffers.LevelScore - 50);
+               if (i < 0)
+                  i = 0;
+               Buffers.data.score[Buffers.Player] += Buffers.LevelScore - 1;
+               Buffers.LevelScore = i;
+               Buffers.TextCounter = 119;
+               CountingScore = true;
+            }
+            else
+               CountingScore = false;
 
-            //      DrawPalBackGr();
+            if (Waiting)
+            {
+               Buffers.TextCounter++;
+               if (Buffers.data.lives[Buffers.Player] == 0)
+               {
+                  if (Buffers.TextCounter >= 100 && Buffers.TextCounter < 100 + FormMarioPort.MAX_PAGE) //in 100..100 + MAX_PAGE
+                  {
+                     //SetFont (0, Bold + Shadow);
+                     //CenterText (20, Buffers.PlayerName[Buffers.Player], 30.ToString("X"));
+                     //SetFont (1, Bold + Shadow);
+                     //CenterText (40, "GAME OVER", 31);
+                     ShowScore = true;
+                  }
+                  if (Buffers.TextCounter > 350)
+                     Buffers.GameDone = true;
+               }
+               else
+                  if (Buffers.Passed)
+                  {
+                     if (Buffers.TextCounter > 250)
+                        Waiting = false;
+                  }
+                  else
+                     if (Buffers.TextCounter > 100)
+                        Buffers.GameDone = true;
+            }
+            TmpObj.MoveTempObj();
+            Blocks.MoveBlocks();
 
-            //      BlinkPalette();
+            if (Keyboard.kbEsc)
+               Buffers.QuitGame = true;
 
-            //      PlayMusic();
+            MoveScreen();
+            TmpObj.RunRemove();
 
-            //      if (InPipe && PlayingMacro)
-            //         GameDone = true;
+            if (Buffers.Options.Horizon < Buffers.NV)
+            {
+               int j = Buffers.Options.Horizon;
+               for (int i = 0 / Buffers.W; i < Buffers.NH; i++)
+               {
+                  int k = Buffers.XView / Buffers.W + (i + Buffers.LavaCounter / 8) % (Buffers.NH + 1);
+                  if (Buffers.WorldMap[k, j] == '%')
+                     Figures.Redraw(k, j);
+               }
+            }
 
-            //      if (InPipe && !GameDone && !Waiting)
-            //      {
-            //         StopEnemies();
-            //         ClearGlitter();
-            //         FadeDown(64);
-            //         ClearPalette();
-            //         LockPal();
-            //         ClearVGAMem();
+            //FormMarioPort.formRef.ResetStack();
 
-            //         switch (PipeCode[1])
-            //         {
-            //            case 'à'
-            //               FindPipeExit();
-            //               Delay(100);
-            //               break;
-            //            case 'á'
-            //               Swap();
-            //               FindPipeExit();
-            //               break;
-            //            case 'ç'
-            //               GameDone = true;
-            //               PlayWorld = true;
-            //               break;
-            //         }
+            if (ShowObjects)
+            {
+               Blocks.DrawBlocks();
+               Enemies.ShowEnemies();
+            }
+            Players.DrawPlayer();
 
-            //         InitPlayer (MaxX * W + W / 2, (MapY - 1) * H, Player);
+            if (ShowScore)
+               ShowTotalBack();
+            //if (TextStatus)
+            //   Status.ShowStatus();
+            if (ShowObjects)
+               TmpObj.ShowTempObj();
+            if (Buffers.Options.Stars != 0)
+               Stars.ShowStars();
+            Glitter.ShowGlitter();
 
-            //         SetView (XView, YView);
-            //         SetYOffset (YBase);
+            Buffers.LastXView[FormMarioPort.formRef.CurrentPage()] = Buffers.XView;
 
-            //         for (int i = 0; i < MAX_PAGE); i++)
-            //            LastXView[i] = XView;
+            //if (ShowRetrace)
+            //   SetPalette(0, 0, 0, 0);
 
-            //         if PipeCode[1] == 'à'
-            //            Restart();
-            //         else
-            //            if (PipeCode[1] == 'á')
-            //               BuildLevel();
+            FormMarioPort.formRef.ShowPage();
 
-            //      }
+            //if (ShowRetrace)
+            //   SetPalette( 0, 63, 63, 63);
 
+            BackGr.DrawPalBackGr();
+
+            //Palette.BlinkPalette();
+
+            Music.PlayMusic();
+
+            if (Players.InPipe && Keyboard.PlayingMacro)
+               Buffers.GameDone = true;
+
+            if (Players.InPipe && !Buffers.GameDone && !Waiting)
+            {
+               Enemies.StopEnemies();
+               Glitter.ClearGlitter();
+               //FadeDown(64);
+               FormMarioPort.formRef.ClearPalette();
+               //FormMarioPort.formRef.LockPal();
+               //FormMarioPort.formRef.ClearVGAMem();
+
+               switch (Players.PipeCode[1])
+               {
+                  case 'à':
+                     FindPipeExit();
+                     //Delay(100);
+                     break;
+                  case 'á':
+                     //Swap();
+                     FindPipeExit();
+                     break;
+                  case 'ç':
+                     Buffers.GameDone = true;
+                     //PlayWorld = true;
+                     break;
+               }
+
+
+               Players.InitPlayer(Players.MapX * Buffers.W + Buffers.W / 2, (Players.MapY - 1) * Buffers.H, Buffers.Player);
+
+               FormMarioPort.formRef.SetView(Buffers.XView, Buffers.YView);
+               FormMarioPort.formRef.SetYOffset(YBase);
+
+               for (int i = 0; i < FormMarioPort.MAX_PAGE; i++)
+                  Buffers.LastXView[i] = Buffers.XView;
+
+               if (Players.PipeCode[1] == 'à')
+                  Restart();
+               else
+                  if (Players.PipeCode[1] == 'á')
+                     BuildLevel();
+            }
+
+            System.Threading.Thread.Sleep(10);
+
+            if (counter % 3 == 0)
+            {
+               FormMarioPort.formRef.Invalidate();
+               for (int x = Buffers.XView / Buffers.W; x < Buffers.XView / Buffers.W + Buffers.NH; x++)
+                  for (int y = 0; y < Buffers.NV - 1; y++)
+                     Figures.Redraw(x, y);
+            }
+
+            counter++;
+            counter %= 100;
 
          } while (!Buffers.GameDone && !Buffers.QuitGame);
 
-   }
+      }
 
    }
 }
