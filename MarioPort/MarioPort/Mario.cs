@@ -1,4 +1,14 @@
-﻿using System;
+﻿//-------------------------------------------------------------------
+//Purpose: This File contains much of the global data including any
+//         buffers, constant measurements, directions, and various
+//         counters relavent to the game. Functions are related to
+//         initializing data and reading into buffers.
+//
+//Author:  Lon Kastenson
+//
+//
+//-------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
