@@ -22,13 +22,12 @@ namespace MarioPort
 {
    class TXT //TXT
    {
-      const int normal = 0;
-      const int bold = 1;
-      const int shadow = 2;
-      bool bShadow = false;
-      bool bBold = false;
-
-      byte Base;
+      public const int normal = 0;
+      public const int bold = 1;
+      public const int shadow = 2;
+      public static bool bShadow = false;
+      public static bool bBold = false;
+      public static byte Base;
 
 	  //-----------------------------------------------------
 	  // Sets the font to the declared style.
@@ -77,7 +76,7 @@ namespace MarioPort
 	  // Some asembly not implemented in this method so 
 	  //    functionality may not be correct.
 	  //-----------------------------------------------------
-      public int TextWidth(string s)
+      public static int TextWidth(string s)
       {
          //Pointer p;
          int width = 0;
