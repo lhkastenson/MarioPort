@@ -1,8 +1,7 @@
 ﻿//-------------------------------------------------------------------
-//Purpose: This File contains much of the global data including any
-//         buffers, constant measurements, directions, and various
-//         counters relavent to the game. Functions are related to
-//         initializing data and reading into buffers.
+//Purpose: This File contains the main() of the program.
+//         as well as handling the menu and Intro, Grabbing any commandline
+//         data and preforming the demo.
 //
 //Author:  Lon Kastenson
 //
@@ -35,6 +34,14 @@ namespace MarioPort
 
       private static Statuses Status;
 
+      //-------------------------------------------------------------------
+      // Handles the configuration for one session of the mario game
+      //    Sound: bool, sound on or off
+      //    SLine: bool
+      //    Games: GameData[], the 3 different save games
+      //    UseJS: bool, joystick support on or off
+      //    JSDat: JoyRec, Data for the joystick (not implemented)
+      //-------------------------------------------------------------------
       public class ConfigData
       {
          public bool Sound;
@@ -42,6 +49,10 @@ namespace MarioPort
          public Buffers.GameData[] Games = new Buffers.GameData[3];
          public bool UseJS;
          //public JoyRec JSDat;
+
+         //-------------------------------------------------------------------
+         // Default constructor for ConfigData, sets initial values
+         //-------------------------------------------------------------------
          public ConfigData()
          {
             this.Sound = true;
@@ -49,6 +60,10 @@ namespace MarioPort
             this.Games = new Buffers.GameData[3];
             UseJS = false; //make true after we have joystick implemented
          }
+
+         //-------------------------------------------------------------------
+         // Factory function for ConfigData to initialize an array of this class
+         //-------------------------------------------------------------------
          public static ConfigData Create()
          {
             ConfigData configData = new ConfigData();
@@ -65,7 +80,9 @@ namespace MarioPort
       public static ConfigData Config = ConfigData.Create();
 
       public static bool MENU = true;
-
+      //-------------------------------------------------------------------
+      // enumerated type for the different statuses 
+      //-------------------------------------------------------------------
       public enum Statuses
       {
          ST_NONE,
@@ -76,7 +93,9 @@ namespace MarioPort
          ST_OPTIONS,
          ST_NUMPLAYERS
       }
-
+      //-------------------------------------------------------------------
+      // Pressing up during the menu selection
+      //-------------------------------------------------------------------
       public static void Up()
       {
          if ( Selected == 1 )
@@ -87,19 +106,26 @@ namespace MarioPort
          else
             Selected--;
       }
-
+      //-------------------------------------------------------------------
+      // Pressing down during the menu selection
+      //-------------------------------------------------------------------
       public static void Down()
       {
 
       }
 
 #if (DEBUG)
+      //-------------------------------------------------------------------
+      // halt the mouse (not implemented)
+      //-------------------------------------------------------------------
       public static void MouseHalt()
       {
          //halt
       }
 #endif
-
+      //-------------------------------------------------------------------
+      // starting a new game with new data
+      //-------------------------------------------------------------------
       public static void NewData()
       {
          Buffers.data.lives = new int[] { 3, 3 };
@@ -108,7 +134,9 @@ namespace MarioPort
          Buffers.data.progress = new int[] { 0, 0 };
          Buffers.data.mode = new byte[] { Buffers.mdSmall, Buffers.mdSmall };
       }
-
+      //-------------------------------------------------------------------
+      // retrives the arguments given at the command line (not implemented)
+      //-------------------------------------------------------------------
       public static string GetConfigName(string[] args)
       {
          //byte absolute len = S;
@@ -121,6 +149,9 @@ namespace MarioPort
          return S;
       }
 
+      //-------------------------------------------------------------------
+      // Reads the commands given at the command line (not implemented)
+      //-------------------------------------------------------------------
       public static void ReadConfig(string[] args)
       {
          ConfigData F;
@@ -154,6 +185,9 @@ namespace MarioPort
          //   RunError(201); //more debugging stuff?
       }
 
+      //-------------------------------------------------------------------
+      // writes a config file out based on the data from the menu
+      //-------------------------------------------------------------------
       public static void WriteConfig()
       {
          ConfigData F;
@@ -170,6 +204,9 @@ namespace MarioPort
 #endif
       }
 
+      //-------------------------------------------------------------------
+      // calibrates the joystick (not implemented)
+      //-------------------------------------------------------------------
       public static void CalibrateJoystick()
       {
          // TODO if we implement joystick
@@ -201,6 +238,10 @@ namespace MarioPort
    
         **/
 
+      //-------------------------------------------------------------------
+      // Read the commands given at the command line
+      //    args: string[], array of command line arguments
+      //-------------------------------------------------------------------
       public static void ReadCmdLine(string[] args)
       {
          string S;
@@ -233,6 +274,9 @@ namespace MarioPort
          }
       }
 
+      //-------------------------------------------------------------------
+      // starts a demo based on the macro saved
+      //-------------------------------------------------------------------
       public static bool Demo()
       {
          NewData();
@@ -244,6 +288,10 @@ namespace MarioPort
          //Keyboard.StopMacro();
       }
 
+      //-------------------------------------------------------------------
+      // starts up mario with the menu, if a specific amount of time passes
+      // the demo will play until the user presses any key and stops the demo
+      //-------------------------------------------------------------------
       public static void Intro()
       {
          int i = 0, j = 0;
@@ -572,7 +620,9 @@ namespace MarioPort
 
          Config.Games[Config.Games.Length - 1].numPlayers = NextNumPlayers;
       }
-
+      //-------------------------------------------------------------------
+      // displays the player's name (not implemented) 
+      //-------------------------------------------------------------------
       static void ShowPlayerName(byte Player)
       {
          int iW, iH;
@@ -604,7 +654,13 @@ namespace MarioPort
          //Palettes.ClearPalette();
          //FormMarioPort.ClearVGAMem();
       }
-
+      //-------------------------------------------------------------------
+      // main function to drive the program, will determine if the game should
+      // start in the menu or start up a world. after deciding that will initialize
+      // the appropriate values 
+      // finally, when the user either dies or quits the game, it will
+      // clear all the buffers and stop the program.
+      //-------------------------------------------------------------------
       public static void main()//string[] args)
       {
          //Keyboard.InitKeyBoard();

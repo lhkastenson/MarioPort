@@ -125,11 +125,11 @@ namespace MarioPort
              {
                 if (XV > 0)
                 {
-                   //if (X + 32 * XV > Buffers.XView + Buffers.NH * W + 2 * W)
-                   //   return;
+                   if (X + 32 * XV > Buffers.XView + Buffers.NH * W + 2 * W)
+                      return;
 
-                   //else if (X + 32 * XV + 2 * W < Buffers.XView)
-                   //   return;
+                   else if (X + 32 * XV + 2 * W < Buffers.XView)
+                      return;
                 }
                   i = 1;
                 while ( Available(i) == false && i <= MaxTempObj) 
@@ -216,8 +216,8 @@ namespace MarioPort
                         {
                            TempObj[i].DelayCounter = 0;
                            TempObj[i].YVel++;
-                           //if (TempObj[i].YPos > Buffers.NV * H)
-                              //TempObj[i].Alive = false;
+                           if (TempObj[i].YPos > Buffers.NV * H)
+                              TempObj[i].Alive = false;
                         }
                         break;
                      case tpCoin:
@@ -267,7 +267,7 @@ namespace MarioPort
                    RemList[i].RemW = W;
                    RemList[i].RemH = H;
                    RemList[i].NewImage = NewImg;
-                   //RemList[i].RemCount = Succ(MAX_PAGE);
+                   RemList[i].RemCount = (MAX_PAGE) + 1;
                    RemList[i].Active = true;
                 }
              }
