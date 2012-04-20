@@ -1,4 +1,11 @@
-﻿using System;
+﻿//Author: Peter Braun
+//
+//Note:    
+//
+//File Translation Percentage: 95% translated
+//-------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +20,9 @@ using System.Text;
 
 namespace MarioPort
 {
+   //----------------------------------------------------------------
+   //Static class that handles using temporary objects in the program
+   //----------------------------------------------------------------
    public static class TmpObj
    {
 
@@ -98,6 +108,9 @@ namespace MarioPort
              //Recolor(@Part000, @Part000, Options.BrickColor);
         }
 
+        //----------------------------------------------------------------
+        //Method to read the background image
+        //----------------------------------------------------------------
         public static void ReadBackGr(int i)
         {
            //int page = FormMarioPort.formRef.CurrentPage();
@@ -107,6 +120,10 @@ namespace MarioPort
            //TempObj[i].OldY[page] = YPos;
         }
 
+        //----------------------------------------------------------------
+        //Method to determine if the object is available to be changed 
+        //or not
+        //----------------------------------------------------------------
         public static bool Available(int i)
         {
            int j;
@@ -118,6 +135,9 @@ namespace MarioPort
            return !Used;
         }
 
+        //----------------------------------------------------------------
+        //Method to create a new temporary object
+        //----------------------------------------------------------------
         public static void NewTempObj(byte NewType, int X, int Y, int XV, int YV, int Wid, int Ht)
         {
              int i, j;
@@ -154,6 +174,9 @@ namespace MarioPort
              }
         }
 
+        //----------------------------------------------------------------
+        //Method to show the temp object
+        //----------------------------------------------------------------
         public static void ShowTempObj()
         {
              int i;
@@ -186,6 +209,9 @@ namespace MarioPort
              }
         }
 
+        //----------------------------------------------------------------
+        //Method to hide the temp object
+        //----------------------------------------------------------------
         public static void HideTempObj()
         {
             int i;
@@ -201,6 +227,9 @@ namespace MarioPort
              }
         }
 
+        //----------------------------------------------------------------
+        //Method to be able to move the temp object
+        //----------------------------------------------------------------
         public static void MoveTempObj()
         {
              int i;
@@ -251,6 +280,9 @@ namespace MarioPort
              }
         }
 
+        //----------------------------------------------------------------
+        //Method to remove the temp object
+        //----------------------------------------------------------------
         public static void Remove(int X, int Y, int W, int H, int NewImg)
         {
              int i;
@@ -273,6 +305,9 @@ namespace MarioPort
              }
         }
 
+        //----------------------------------------------------------------
+        //Method that does a series of removes
+        //----------------------------------------------------------------
         public static void RunRemove()
         {
              int i;
@@ -302,6 +337,9 @@ namespace MarioPort
              }
         }
 
+        //----------------------------------------------------------------
+        //Method to handle the breaking of block objects
+        //----------------------------------------------------------------
         public static void BreakBlock(int X, int Y)
         {
            int X1, Y1, X2, Y2;
@@ -320,6 +358,9 @@ namespace MarioPort
            //Beep(110);
         }
 
+        //----------------------------------------------------------------
+        //Method to handle when a coin object is hit
+        //----------------------------------------------------------------
         public static void HitCoin(int X, int Y, bool ThrowUp)
         {
              int MapX, MapY;
@@ -344,6 +385,9 @@ namespace MarioPort
            //  }
         }
 
+        //----------------------------------------------------------------
+        //Method to handle adding a life to total lives
+        //----------------------------------------------------------------
         public static void AddLife()
         {
             //Data.Lives[Player]++;

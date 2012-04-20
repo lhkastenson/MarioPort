@@ -1,4 +1,11 @@
-﻿using System;
+﻿//Author: Peter Braun
+//
+//Note:    File mainly used asm files so was difficult to translate
+//
+//File Translation Percentage: 20% translated
+//-------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +15,9 @@ using System.Text;
 
 namespace MarioPort
 {
+   //----------------------------------------------------------------
+   //Static class that handles the stars.
+   //----------------------------------------------------------------
    public static class Stars
    {
 
@@ -21,14 +31,20 @@ namespace MarioPort
           public static int BlinkCounter; //Integer;
           public static sbyte C1, C2; //Byte;
 
-          public static void ClearStars() //procedure ClearStars;
-          {
-             //FillChar(StarBackGr*, SizeOf( StarBackGr* ), (char)0);
-             //FillChar(LastX, SizeOf( LastX ), (char)0);
-          }
+        //----------------------------------------------------------------
+        //Method that clears stars
+        //----------------------------------------------------------------
+        public static void ClearStars() //procedure ClearStars;
+        {
+           //FillChar(StarBackGr*, SizeOf( StarBackGr* ), (char)0);
+           //FillChar(LastX, SizeOf( LastX ), (char)0);
+        }
 
-          public static void InitStars() //procedure InitStars;
-          {
+        //----------------------------------------------------------------
+        //Method to initialize stars
+        //----------------------------------------------------------------
+        public static void InitStars() //procedure InitStars;
+        {
               //var
               //  int i; //: Integer;
               //begin
@@ -50,10 +66,13 @@ namespace MarioPort
               //       end;
               //  end;
               //end;
-          }
+        }
 
-          public static void ShowStars() //procedure ShowStars;
-          {
+        //----------------------------------------------------------------
+        //Asm method so not used
+        //----------------------------------------------------------------
+        public static void ShowStars() //procedure ShowStars;
+        {
               //var
               //  X: Integer;
               //  P1,
@@ -111,10 +130,13 @@ namespace MarioPort
                 //      pop     es
               //  end;
               //end;
-          }
+        }
 
-          public static void HideStars() //procedure HideStars;
-          {
+        //----------------------------------------------------------------
+        //Asm method so not used
+        //----------------------------------------------------------------
+        public static void HideStars() //procedure HideStars;
+        {
               //var
               //  X: Integer;
               //  P1,
@@ -161,7 +183,6 @@ namespace MarioPort
               //        pop     es
               //  end;
               //end;
-          }
-      //end.
+        }
    }
 }

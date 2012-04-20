@@ -1,4 +1,11 @@
-﻿using System;
+﻿//Author: Peter Braun
+//
+//Note:    
+//
+//File Translation Percentage: 95% translated
+//-------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +16,9 @@ using System.Text;
 
 namespace MarioPort
 {
+   //----------------------------------------------------------------
+   //Static class that represents Block objects in the program.
+   //----------------------------------------------------------------
    public static class Blocks
    {
 
@@ -25,12 +35,17 @@ namespace MarioPort
          public static byte BumpFillAttr;
 
 
-
+        //----------------------------------------------------------------
+        //Method that sets bumping to be false
+        //----------------------------------------------------------------
         public static void InitBlocks()
         {
              Bumping = false;
         }
 
+        //----------------------------------------------------------------
+        //Method that saves the background image
+        //----------------------------------------------------------------
         public static void SaveBumpBackGr()
         {
              //FormMarioPort.formRef.GetImage (BumpX, BumpY - BumpHeight, W, H + BumpHeight, BackGrBuffer);
@@ -38,6 +53,9 @@ namespace MarioPort
              OldBumpY = BumpY;
         }
 
+        //----------------------------------------------------------------
+        //Method to determine if two objects bumped into each other
+        //----------------------------------------------------------------
         public static void BumpBlock(int X, int Y)
         {
              if ( Bumping == true ) 
@@ -52,6 +70,9 @@ namespace MarioPort
              DelayCounter = 0;
         }
 
+        //----------------------------------------------------------------
+        //Method to erase blocks
+        //----------------------------------------------------------------
         public static void EraseBlocks()
         {
            if (Bumping == true)
@@ -60,6 +81,9 @@ namespace MarioPort
            }
         }
 
+        //----------------------------------------------------------------
+        //Method to draw the blocks
+        //----------------------------------------------------------------
         public static void DrawBlocks()
         {
              int Y; 
@@ -78,6 +102,9 @@ namespace MarioPort
              }
         }
 
+        //----------------------------------------------------------------
+        //Method to move blocks
+        //----------------------------------------------------------------
         public static void MoveBlocks()
         {
            if (Bumping == true)
