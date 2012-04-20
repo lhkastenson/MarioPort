@@ -50,13 +50,6 @@ namespace MarioPort
          return false;
       }
 
-      public static bool PipeExitHelper(char ch)
-      {
-         if ( )
-            return true;
-         return false;
-      }
-
       /** uses absolute, so these might not be needed
        * long Timer;
        *int wTimer;
