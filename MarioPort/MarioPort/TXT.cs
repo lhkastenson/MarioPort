@@ -1,4 +1,18 @@
-﻿using System;
+﻿//---------------------------------------------------------
+// Purpose: This file was intended to be a port of the 
+//			original TXT file.  
+//
+// Author: Joel Fendrick
+//
+//
+// Notes:  Little porting was done due to the 
+//			intension of just using a font imported into 
+//			c#. Empty methods were left because there 
+//			might be function calls to it in other classes.
+//		Total Translation Complete: ~40%
+//---------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,25 +27,30 @@ namespace MarioPort
       public const int shadow = 2;
       public static bool bShadow = false;
       public static bool bBold = false;
-
       public static byte Base;
 
-      public static void SetFont(int i, ushort style)
+	  //-----------------------------------------------------
+	  // Sets the font to the declared style.
+	  // Not Implemented
+	  //-----------------------------------------------------
+      public void SetFont(int i, ushort style)
       {
-         if (i == 0)
-         {
-            Base = 0;
-         }
-         else if (i == 1)
-         {
-            Base = 32;
-         }
+         //if (i == 0)
+         //{
+         //   Base = 0;
+         //}
+         //else if (i == 1)
+         //{
+         //   Base = 32;
+         //}
          //bBold := Style or Bold = Style;
          //bShadow := Style or Shadow = Style;
       }
-      // according to how this is called in WriteText it should return bitmap 
-      // of the char ar the ascii value i.
-      public static void Letter(int i)
+	  
+	  //-----------------------------------------------------
+	  // 
+	  //-----------------------------------------------------
+      public void Letter(int i)
       {
          //ushort w1, w2;
 
@@ -52,6 +71,11 @@ namespace MarioPort
          //return UIntPtr(w1, w2);
       }
 
+	  //-----------------------------------------------------
+	  // Returns the width of s.
+	  // Some asembly not implemented in this method so 
+	  //    functionality may not be correct.
+	  //-----------------------------------------------------
       public static int TextWidth(string s)
       {
          //Pointer p;
@@ -62,7 +86,7 @@ namespace MarioPort
          byte tempBold = 0;
          byte tempShadow = 0;
 
-         for (i = 0; i < s.Length; i++)
+         for (i = 1; i <= s.Length; i++)
          {
             a = (ushort)(s[i] << 1);
             a = (ushort)(a - 2 * Base);
@@ -89,7 +113,12 @@ namespace MarioPort
          return width;
       }
 
-      public static void WriteText(int x, int y, string s, byte attr)
+	  //-----------------------------------------------------
+	  // Prints text at position x,y
+	  // Not Implemented due to the plan of using c# methods
+	  //   of dealing with text.
+	  //-----------------------------------------------------
+      public void WriteText(int x, int y, string s, byte attr)
       {
          //byte i = 1;
          //char c;
@@ -111,23 +140,34 @@ namespace MarioPort
          //}
       }
 
-      public static int CenterX(string s)
+	  //-----------------------------------------------------
+	  // Centers the text.
+	  //-----------------------------------------------------
+      public int CenterX(string s)
       {
           return FormMarioPort.xView + (FormMarioPort.SCREEN_WIDTH - TextWidth(s)) >> 1;
       }
 
-      public static void CenterText(int y, string s, byte attr)
+	  //-----------------------------------------------------
+	  // Prints text centered.
+	  //-----------------------------------------------------
+      public void CenterText(int y, string s, byte attr)
       {
          WriteText(CenterX(s), y, s, attr);
       }
 
-      // creates a font type
-      public static void SwissFont()
+      //-----------------------------------------------------
+	  // Not Implemented
+	  //-----------------------------------------------------
+      public void SwissFont()
       {
 
       }
 
-      public static void Font8x8()
+	  //-----------------------------------------------------
+	  // Not Implemented
+	  //-----------------------------------------------------
+      public void Font8x8()
       {
 
       }
