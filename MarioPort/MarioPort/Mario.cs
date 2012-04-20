@@ -370,6 +370,7 @@ namespace MarioPort
                         Menu[2] = "Game #3 " + 7 + " ";
                         Menu[3] = "";
                         Menu[4] = "";
+
                         for ( i = 0; i < 3; i++)
                            if (Config.Games[i].progress[Buffers.plMario] == 0 &&
                               Config.Games[i].progress[Buffers.plLuigi] == 0)
@@ -402,6 +403,7 @@ namespace MarioPort
                   }
                   wd = 0;
                   xp = 0;
+
                   for ( i = 0; i < 5; i++)
                   {
                       j = TXT.TextWidth(Menu[i]);
@@ -557,6 +559,7 @@ namespace MarioPort
 
          if(GameNumber != -1)
             Buffers.data = Config.Games[GameNumber];
+
          Config.Games[Config.Games.Length - 1].numPlayers = NextNumPlayers;
       }
 
