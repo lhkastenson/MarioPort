@@ -22,7 +22,7 @@ namespace MarioPort
       const int YBase = 9;
       public static bool Waiting, ShowObjects, ShowScore, CountingScore;
       public static int CheatsUsed = 0;
-
+      static int[] TotalBackGrAddr = new int[FormMarioPort.MAX_PAGE];
       private static bool TextStatus, OnlyDraw = false;
 
       //-------------------------------------------------------------------
@@ -212,14 +212,14 @@ namespace MarioPort
       //-------------------------------------------------------------------
 	   public static void ShowTotalBack()
 	   {
-         //if (Passed && CountingScore)
-         //   Beep (4 * 880);
-         //TotalBackGrAddr[CurrentPage] = PushBackGr (XView + 160, 120, 120, 8);
-         //if (Passed && CoutingScore)
-         //   Beep (2 * 880);
-         //WriteTotalScore();
-         //if (Passed && CountingScore)
-         //   Beep(0);
+         if (Buffers.Passed && CountingScore)
+            Buffers.Beep(4 * 880);
+         TotalBackGrAddr[FormMarioPort.formRef.CurrentPage()] = FormMarioPort.formRef.PushBackGr(Buffers.XView + 160, 120, 120, 8);
+         if (Buffers.Passed && CountingScore)
+            Buffers.Beep(2 * 880);
+         WriteTotalScore();
+         if (Buffers.Passed && CountingScore)
+            Buffers.Beep(0);
 	   }
 
       //-------------------------------------------------------------------
