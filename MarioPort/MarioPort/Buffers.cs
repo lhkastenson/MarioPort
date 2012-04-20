@@ -1,4 +1,31 @@
-﻿using System;
+﻿//-------------------------------------------------------------------
+//Purpose: This File contains much of the global data including any
+//         buffers, constant measurements, directions, and various
+//         counters relavent to the game. Functions are related to
+//         initializing data and reading into buffers.
+//
+//Author:  Lon Kastenson
+//
+//
+//Notes:   There are some changes to the original design
+//         We no longer are using pointers, instead we are using
+//         multidimensional arrays of bytes or chars depending on the
+//         buffer.
+//
+//         The CanHoldYou and CanStandOn arrays have been changed to 
+//         functions for easier implementation in C#
+//          
+//         Some arrays were starting at values other than zero
+//         that has been changed 
+//         
+//         Beep uses Crt beeps which isn't in C#
+//
+//         Memory specific calls were removed         
+//
+//File Translation Percentage: This file is 100% completely 
+//                             translated.
+//-------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,6 +86,10 @@ namespace MarioPort
       public static long LevelScore;
       public static char[,] ImageBuffer = new char[H, W];
 
+      //-------------------------------------------------------------------
+      // Purpose: Contains the data for one instance of a mario game.
+      // Author: Lon Kastenson
+      //-------------------------------------------------------------------
       public class GameData
       {
          
@@ -68,7 +99,15 @@ namespace MarioPort
          public int[] coins;
          public long[] score;
          public byte[] mode;
-
+         //-------------------------------------------------------------------
+         // Constructor for GameData
+         //    int numPlayers, the number of players for a game (1 or 2) which is 0 and 1 for the arrays
+         //    int[] progress, the progress for each player
+         //    int[] lives, the lives counter for each player
+         //    int[] coins, the coins counter for each player
+         //    long[] score, the score counter for each player
+         //    byte[] mode, the md---- const int that the player currently is
+         //-------------------------------------------------------------------
          public GameData(int numPlayers, int[] progress, int[] lives, int[] coins, long[] score, byte[] mode)
          {
             this.numPlayers = numPlayers;
@@ -78,7 +117,11 @@ namespace MarioPort
             this.score = score;
             this.mode = mode;
          }
-         public static GameData Create() //factory function to create arrays of GameData
+         //-------------------------------------------------------------------
+         // Factory function to create GameData in an array 
+         //    returns a new GameData object
+         //-------------------------------------------------------------------
+         public static GameData Create() 
          {
                int numPlayers = 0;
                int[] progress = new int[] { 0, 0 };
@@ -90,6 +133,9 @@ namespace MarioPort
          }
 
       }
+      //-------------------------------------------------------------------
+      // struct to store all the world values needed to build a mario world
+      //-------------------------------------------------------------------
       public struct WorldOptions
       {
          public int InitX;
@@ -146,6 +192,13 @@ namespace MarioPort
       public const int dmDownOutOfPipe = 4;
       public const int dmDead = 5;
 
+      //-------------------------------------------------------------------
+      // Reads a char array mario world along with some worldoptions and stores
+      // it in a buffer.
+      //    M: char[,] the world to be read in
+      //    W: char[,] reference to the buffer to store the world
+      //    Opt: WorldOptions options with which to apply to the world
+      //-------------------------------------------------------------------
       public static void ReadWorld(char[,] M, ref char[,] W, WorldOptions Opt)
       {
          //Console.WriteLine("Reading the world");
@@ -182,7 +235,10 @@ namespace MarioPort
       	   for (int j = 0; j < (NV + EY2 + EY1); j++)
       		   W[i, j] = '@';
       }
-
+      //-------------------------------------------------------------------
+      // Will change the WorldOptions of a single world so that the world
+      // does not change.
+      //-------------------------------------------------------------------
       public static void Swap()
       {
          WorldOptions TempOptions;
@@ -198,19 +254,31 @@ namespace MarioPort
       		   SaveWorldMap[i,j] = (char)C;
       	   }
       }
-
+      //-------------------------------------------------------------------
+      // Turns on the sound and sets a flag to true
+      // currently unimplemented
+      //-------------------------------------------------------------------
       public static void BeeperOn()
       {
          BeeperSound = true;
          //NoSound();
       }
 
+      //-------------------------------------------------------------------
+      // Turns off the sound and sets a flag to false
+      // currently unimplemented
+      //-------------------------------------------------------------------
       public static void BeeperOff()
       {
          BeeperSound = false;
          //NoSound();
       }
 
+      //-------------------------------------------------------------------
+      // Preforms a Crt beep
+      //    Freq: int for the frequency
+      // currently unimplemented
+      //-------------------------------------------------------------------
       public static void Beep(int Freq)
       {
       //   if (BeeperSound)
@@ -220,21 +288,36 @@ namespace MarioPort
       //         Crt.Sound(Freq);
       }
 
+      //-------------------------------------------------------------------
+      // Initializes the level score
+      //-------------------------------------------------------------------
       public static void InitLevelScore()
 	   {
 		   LevelScore = 0;
 	   }
-	
+
+      //-------------------------------------------------------------------
+      // Adds to the player's score
+      //    N: long to add to the player's score
+      //-------------------------------------------------------------------
 	   public static void AddScore(long N)
 	   {
 		   LevelScore += N;
 	   }
+
+      //-------------------------------------------------------------------
+      // Initializes so that the buffers all have the same size.
+      //-------------------------------------------------------------------
 	   static Buffers()
 	   {
 		   Size = 2 * WorldBuffer.Length + StarBuffer.Length +
 			      Pictures.Length;
 	   }
 
+      //-------------------------------------------------------------------
+      // Main function that checks memory.
+      // currently unimplemented, probably never used.
+      //-------------------------------------------------------------------
       public static void main()
       {
          int MemAvail = 0;

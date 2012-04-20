@@ -1,4 +1,12 @@
-﻿using System;
+﻿//-------------------------------------------------------------------
+//Purpose: This File contains functions and methods portaining to
+//         running the game inside the world 
+// 
+//Author:  Lon Kastenson
+//
+//
+//-------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +15,7 @@ namespace MarioPort
 {
    public static class Play
    {
+      static int k;
       public static bool Stat = false;
       public static bool ShowRetrace = false;
 
@@ -15,6 +24,21 @@ namespace MarioPort
       public static int CheatsUsed = 0;
 
       private static bool TextStatus, OnlyDraw = false;
+
+      //-------------------------------------------------------------------
+      // Sets up and reads in a new world to the buffer. After the world 
+      // has been read, it will build and then finally start running the
+      // world.
+      //    N1: char, the first part (before the hyphen) of the world name.
+      //    N2: char, the second part (before the hyphen) of the world name.
+      //    Map1: char[,], the map to play
+      //    Opt1: WorldOptions, options for the aboveground world of Map1
+      //    Opt1b, WorldOptions, options for the underground world of Map1
+      //    Map2, char[,] the underground of the map to play
+      //    Opt2, WorldOptions, options for the abovegound world of Map2
+      //    Opt2b, WorldOptions, options for the underground world of Map2
+      //    Player, byte, the player to put in the world.
+      //-------------------------------------------------------------------
       public static bool PlayWorld(char N1, char N2, char[,] Map1, Buffers.WorldOptions Opt1, Buffers.WorldOptions Opt1b, 
 						  char[,] Map2, Buffers.WorldOptions Opt2, Buffers.WorldOptions Opt2b, byte Player)
 	   {
@@ -91,6 +115,9 @@ namespace MarioPort
          //"In Pascal there is no return statement." ...wat!?
 		}
 
+      //-------------------------------------------------------------------
+      // Scrolls the screen to move along with mario as he moves.
+      //-------------------------------------------------------------------
 		public static void MoveScreen()
 		{
          int Scroll;
@@ -115,7 +142,6 @@ namespace MarioPort
          else if (Scroll > 0)
             Enemies.StartEnemies((Buffers.XView / Buffers.W) + Buffers.NH + Enemies.StartEnemiesAt, -1);
 			
-         // Need to find out what else is in "Options"
          int i = Buffers.Options.Horizon;
          Buffers.Options.Horizon = (byte)(i + FormMarioPort.formRef.GetYOffset() - FormMarioPort.YBASE);
          BackGr.DrawBackGr(false);
@@ -138,32 +164,37 @@ namespace MarioPort
                   Figures.Redraw(j / Buffers.W - 1, i);
                }
 		}
-		
-	
+
+      //-------------------------------------------------------------------
+      // Determines if mario found the pipe exit 
+      //-------------------------------------------------------------------
 	   public static bool FindPipeExit()
 	   {
-         ////int i, j;
-         //for (int i = 0; i < Buffers.Options.XSize - 1; i++)
-         //   for (int j = 0; j < Buffers.NH; j++)
-         //      if (i != Buffers.MapX || k != Buffers.MapY)
-         //      {
-         //         if (Buffers.WorldMap[i,j] in ['a' .. 'i'] &&
-         //            Buffers.WorldMap[i + 1, j] = PipeCode [2]) //need to figure out how to do this.
-         //         {
-         //            MaxX = i;
-         //            MapY = j;
-         //            XView = Succ (i - NH / 2) * W;
-         //            if (XView > (Options.XSize - NH) * W)
-         //               XView = (Options.XSize - NH) * W
-         //            if (XView < 0)
-         //               XView = 0;
-         //            return true;
-         //         }
-         //      }
+         //int i, j;
+         for (int i = 0; i < Buffers.Options.XSize - 1; i++)
+            for (int j = 0; j < Buffers.NH; j++)
+               if (i != Players.MapX || k != Players.MapY)
+               {
+                  if (Buffers.WorldMap[i,j] >= 'a' || Buffers.WorldMap[i,j] <= 'i' &&
+                     Buffers.WorldMap[i + 1, j] == Players.PipeCode [2]) //need to figure out how to do this.
+                  {
+                     Players.MapX = i;
+                     Players.MapY = j;
+                     Buffers.XView =  ((i - Buffers.NH / 2) * Buffers.W) + 1;
+                     if (Buffers.XView > (Buffers.Options.XSize - Buffers.NH) * Buffers.W)
+                        Buffers.XView = (Buffers.Options.XSize - Buffers.NH) * Buffers.W;
+                     if (Buffers.XView < 0)
+                        Buffers.XView = 0;
+                     return true;
+                  }
+               }
          return false;
          
 	   }
-	   
+
+      //-------------------------------------------------------------------
+      // Writes the current player's score to the screen
+      //-------------------------------------------------------------------
 	   public static void WriteTotalScore()
 	   {
          //int i;
@@ -175,7 +206,10 @@ namespace MarioPort
          //      S[i] = '0';
          //CenterText (120, "TOTAL SCORE: " + S, 31);
 	   }
-	
+
+      //-------------------------------------------------------------------
+      // displays the background
+      //-------------------------------------------------------------------
 	   public static void ShowTotalBack()
 	   {
          //if (Passed && CountingScore)
@@ -187,6 +221,10 @@ namespace MarioPort
          //if (Passed && CountingScore)
          //   Beep(0);
 	   }
+
+      //-------------------------------------------------------------------
+      // Hides the background
+      //-------------------------------------------------------------------
 	   public static void HideTotalBack()
 	   {
          //int Page = CurrentPage;
@@ -195,6 +233,9 @@ namespace MarioPort
          //TotalBackGrAddr[Page] = 0;
 	   }
 
+      //-------------------------------------------------------------------
+      // Pauses the game and enables the cheat console (cheats not yet implemented)
+      //-------------------------------------------------------------------
       public static void Pause()
       {
          //   // string * StrPtr;
@@ -388,6 +429,10 @@ namespace MarioPort
          //   FadeUp(8);
          //   Key = 255;
         }
+
+      //-------------------------------------------------------------------
+      // Builds the level from the using the already initialized buffers
+      //-------------------------------------------------------------------
 		static void BuildLevel()
 		{
             Figures.InitSky(Buffers.Options.SkyType);
@@ -400,6 +445,11 @@ namespace MarioPort
             Figures.BuildWorld();
 		}
 
+      //-------------------------------------------------------------------
+      // main loop of the world to handle drawing, hiding, and showing of the
+      // resources. When mario runs out of lives the thread is killed and cleaned
+      // up. read: GAME OVER!
+      //-------------------------------------------------------------------
       static void Restart()
       {
 
