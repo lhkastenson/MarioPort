@@ -1,0 +1,8 @@
+Press P to pause game
+Press Tab while paused to activate cheat mode
+
+2305 - Next Level
+B172 - 10,000 Lives
+9C32 - Star
+F1F2 - Mushroom
+FFB5 - Flower

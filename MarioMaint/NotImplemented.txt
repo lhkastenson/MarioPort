@@ -1,0 +1,21 @@
+No hidden blocks
+no enemy to enemy collisions
+Improper damage taken animation
+no star animation
+Improper power bounce
+No super speed after last level
+No enemy falling off cliffs
+No different classes of enemies
+No Sounds
+no breaking of bricks
+no saving
+no turtle breaking/trigger blocks
+mario doesnt enter pipe
+level has "holes" in it
+Mario dies instantly on spikes
+"Donuts" don't disappear
+Lacking some collision detection on blocks
+Hole in left side of pipe; can't see
+Pipes not recolored
+poison mushroom in lvl 2 gets stuck
+NO secondary levels (blevels) implemented in code but files created
