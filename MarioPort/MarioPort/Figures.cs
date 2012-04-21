@@ -535,25 +535,31 @@ namespace MarioPort
                   }
                   else
                   {
-                     if ( Buffers.WorldMap[X, Y] >= 14 && Buffers.WorldMap[X, Y] <= 26 )
+                     if ( Buffers.WorldMap[X, Y + 8] >= 65 && Buffers.WorldMap[X, Y + 8] <= 77 )
                      {
-                        if ( Ch == 1 || Ch == (char)4 || Ch == (char)7 )
+                        if ( Ch == (char)1 || Ch == (char)4 || Ch == (char)7 )
                         {
-                           Fig = FigList[1, (int)(Buffers.WorldMap[X, Y]) - 13];
+                           Fig = FigList[1, (int)(Buffers.WorldMap[X, Y + 8]) - 64];
                            FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                         }
                      }
                      else
                      {
-                        if ( Buffers.WorldMap[X + 1, Y] >= 14 && Buffers.WorldMap[X + 1, Y] <= 26 )
+                        if ( Buffers.WorldMap[X + 2, Y + 8] >= 65 && Buffers.WorldMap[X + 2, Y + 8] <= 77 )
                         {
-                           if ( Ch == 3 || Ch == (char)6 || Ch == (char)9 )
+                           if ( Ch == (char)3 || Ch == (char)6 || Ch == (char)9 )
                            {
-                              Fig = FigList[1, (int)(Buffers.WorldMap[X + 1, Y]) - 13];
+                              Fig = FigList[1, (int)(Buffers.WorldMap[X + 2, Y + 8]) - 64];
                               FormMarioPort.formRef.PutImage(XPos, YPos, Buffers.W, Buffers.H, Fig);
                            }
                         }
                      }
+                  }
+                  Fig = FigList [1, (int)Ch];
+                  if(! (Ch == (char)1 || Ch == (char)3 || Ch == (char)4 || Ch == (char)6 || Ch == (char)7 || Ch == (char)9))
+                  {
+                     FormMarioPort.formRef.PutImage (XPos, YPos, Buffers.W, Buffers.H, Fig);
+                     Fig = null;
                   }
                   break;
                }

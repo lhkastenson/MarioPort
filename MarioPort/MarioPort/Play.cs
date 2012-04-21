@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using MarioPort;
+﻿using Resources = MarioPort.Properties.Resources;
+
 namespace MarioPort
 {
    public static class Play
@@ -444,6 +447,11 @@ namespace MarioPort
 		{
             Figures.InitSky(Buffers.Options.SkyType);
             Figures.InitWalls(Buffers.Options.WallType1, Buffers.Options.WallType2, Buffers.Options.WallType3);
+            //This loop draws the ground on the Menu screen only
+            for (int i = 0; i < Buffers.NH; i++)
+               for (int j = 0; j < Buffers.NV; j++)
+                  if (j == (Buffers.NV - 1))
+                     FormMarioPort.formRef.DrawImage(i * Buffers.W, j * Buffers.H, Buffers.W, Buffers.H, Resources.GREEN_001);
             Figures.InitPipes(Buffers.Options.PipeColor);
             BackGr.InitBackGr(Buffers.Options.BackGrType, Buffers.Options.Clouds);
             if (Buffers.Options.Stars != 0)
@@ -781,7 +789,7 @@ namespace MarioPort
 
             System.Threading.Thread.Sleep(5);
 
-            if (counter % 15 == 0)
+            if (counter % 15 == 0)//
             {
                FormMarioPort.formRef.Invalidate();
                for (int x = Buffers.XView / Buffers.W; x < Buffers.XView / Buffers.W + Buffers.NH; x++)

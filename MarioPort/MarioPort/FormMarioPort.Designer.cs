@@ -35,7 +35,7 @@
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.BackColor = System.Drawing.Color.DarkCyan;
-         this.ClientSize = new System.Drawing.Size(306, 195);
+         this.ClientSize = new System.Drawing.Size(320, 196);
          this.Name = "FormMarioPort";
          this.Text = "MarioPort";
          this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMarioPort_FormClosing);

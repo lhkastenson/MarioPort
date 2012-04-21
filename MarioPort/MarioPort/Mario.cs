@@ -345,9 +345,9 @@ namespace MarioPort
                BackGr.DrawBackGrMap(10 * Buffers.H + 6, 11 * Buffers.H - 1, 54, 0xA0);
                BackGr.DrawBackGrMap(10 * Buffers.H + 6, 11 * Buffers.H - 1, 55, 0xA1);
                BackGr.DrawBackGrMap(10 * Buffers.H + 6, 11 * Buffers.H - 1, 53, 0xA1);
-               for( i = 0; i < Buffers.NH - 1; i++)
-                  for( j = 0; j < Buffers.NV - 1; j++)
-                     if((i == 0 || i == Buffers.NH - 1) || (j == 0 || j == Buffers.NV - 1))
+               for( i = 0; i < Buffers.NH + 1; i++)
+                  for( j = 0; j < Buffers.NV + 1; j++)
+                     if((i == 0 || i == Buffers.NH - 1) || (j == 0 || j == Buffers.NV))
                         FormMarioPort.formRef.DrawImage(i * Buffers.W, j * Buffers.H, Buffers.W, Buffers.H, Resources.BLOCK_000);
                Players.DrawPlayer();
                FormMarioPort.formRef.ShowPage();
