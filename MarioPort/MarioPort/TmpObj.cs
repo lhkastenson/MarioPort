@@ -1,8 +1,8 @@
-﻿//Author: Peter Braun
+﻿// Author: Peter Braun
 //
-//Note:    
+// Note:    
 //
-//File Translation Percentage: 95% translated
+// File Translation Percentage: 50% translated
 //-------------------------------------------------------------------
 
 using System;
@@ -18,6 +18,9 @@ using System.Text;
 //using Music;
 //using Crt;
 
+using MarioPort;
+﻿using Resources = MarioPort.Properties.Resources;
+
 namespace MarioPort
 {
    //----------------------------------------------------------------
@@ -25,7 +28,6 @@ namespace MarioPort
    //----------------------------------------------------------------
    public static class TmpObj
    {
-
         public const int tpBroken = 1;
         public const int tpCoin = 2;
         public const int tpHit = 3;
@@ -40,18 +42,15 @@ namespace MarioPort
 
         public const int MaxTempObj = 20;
         public const int MaxRemove  = 10;
-        public const int MAX_PAGE = 10; //temp
-        public const int W = 1; //temp
-        public const int H = 1; //temp
 
         public class TempRec
         {
            public TempRec()
            {
-              this.Visible = new bool[MAX_PAGE];
-              this.BackGrAddr = new ushort[MAX_PAGE];
-              this.OldX = new int[MAX_PAGE];
-              this.OldY = new int[MAX_PAGE];
+              this.Visible = new bool[FormMarioPort.MAX_PAGE + 1];
+              this.BackGrAddr = new ushort[FormMarioPort.MAX_PAGE + 1];
+              this.OldX = new int[FormMarioPort.MAX_PAGE + 1];
+              this.OldY = new int[FormMarioPort.MAX_PAGE + 1];
               this.Alive = false;
               this.Tp = 0;
               this.XPos = 0;
@@ -98,7 +97,7 @@ namespace MarioPort
              for (i = 0; i < MaxTempObj; i++ )
              {
                TempObj[i].Alive = false;
-               for( j = 0; j < MAX_PAGE; j++)
+               for (j = 0; j < FormMarioPort.MAX_PAGE; j++)
                  TempObj[i].Visible[j] = false;
              }
              for (i = 0; i < MaxRemove; i++ )
@@ -113,11 +112,11 @@ namespace MarioPort
         //----------------------------------------------------------------
         public static void ReadBackGr(int i)
         {
-           //int page = FormMarioPort.formRef.CurrentPage();
+           int page = FormMarioPort.formRef.CurrentPage();
            //{ FormMarioPort.formRef.GetImage(TempObj[i].XPos, TempObj[i].YPos, TempObj[i].HSize, TempObj[i].VSize, BackGrBuffer[WorkingPage]); }
-           //TempObj[i].BackGrAddr[page] = PushBackGr(TempObj[i].XPos, TempObj[i].YPos, TempObj[i].HSize + 4, TempObj[i].VSize);
-           //TempObj[i].OldX[page] = XPos;
-           //TempObj[i].OldY[page] = YPos;
+           TempObj[i].BackGrAddr[page] = FormMarioPort.formRef.PushBackGr(TempObj[i].XPos, TempObj[i].YPos, TempObj[i].HSize + 4, TempObj[i].VSize);
+           TempObj[i].OldX[page] = TempObj[i].XPos;
+           TempObj[i].OldY[page] = TempObj[i].YPos;
         }
 
         //----------------------------------------------------------------
@@ -129,8 +128,8 @@ namespace MarioPort
            int j;
            bool Used;
            Used = TempObj[i].Alive;
-           for( j = 0; j <= MAX_PAGE; j++ )
-              Used = TempObj[i].Visible[j];
+           for (j = 0; j <= FormMarioPort.MAX_PAGE; j++)
+              Used = Used || TempObj[i].Visible[j];
 
            return !Used;
         }
@@ -140,38 +139,39 @@ namespace MarioPort
         //----------------------------------------------------------------
         public static void NewTempObj(byte NewType, int X, int Y, int XV, int YV, int Wid, int Ht)
         {
-             int i, j;
-             if (NewType == tpBroken)
-             {
-                if (XV > 0)
-                {
-                   if (X + 32 * XV > Buffers.XView + Buffers.NH * W + 2 * W)
-                      return;
+            int i, j;
+            if (NewType == tpBroken)
+            {
+               if (XV > 0)
+               {
+                  if (X + 32 * XV > Buffers.XView + Buffers.NH * Buffers.W + 2 * Buffers.W)
+                     return;
 
-                   else if (X + 32 * XV + 2 * W < Buffers.XView)
-                      return;
-                }
-                  i = 1;
-                while ( Available(i) == false && i <= MaxTempObj) 
-                   i++;
-                if( i <= MaxTempObj )
-                {
-                   TempObj[i].Alive = true;
-                   for( j = 0; j <= MAX_PAGE; j++)
-                   {
-                      TempObj[i].Visible[j] = false;
-                      TempObj[i].Tp = NewType;
-                      TempObj[i].XPos = X;
-                      TempObj[i].YPos = Y;
-                      TempObj[i].XVel = XV;
-                      TempObj[i].YVel = YV;
-                      TempObj[i].HSize = Wid;
-                      TempObj[i].VSize = Ht;
-                      ReadBackGr(i);
-                      TempObj[i].DelayCounter = 0;
-                   }
-                }
-             }
+                  else if (X + 32 * XV + 2 * Buffers.W < Buffers.XView)
+                     return;
+               }
+            }
+
+            i = 1;
+            while ( Available(i) && i <= MaxTempObj) 
+               i++;
+            if( i <= MaxTempObj )
+            {
+               TempObj[i].Alive = true;
+               for( j = 0; j <= FormMarioPort.MAX_PAGE; j++)
+               {
+                  TempObj[i].Visible[j] = false;
+                  TempObj[i].Tp = NewType;
+                  TempObj[i].XPos = X;
+                  TempObj[i].YPos = Y;
+                  TempObj[i].XVel = XV;
+                  TempObj[i].YVel = YV;
+                  TempObj[i].HSize = Wid;
+                  TempObj[i].VSize = Ht;
+                  ReadBackGr(i);
+                  TempObj[i].DelayCounter = 0;
+               }
+            }
         }
 
         //----------------------------------------------------------------
@@ -180,7 +180,7 @@ namespace MarioPort
         public static void ShowTempObj()
         {
              int i;
-             //int page = FormMarioPort.formRef.CurrentPage();
+             int page = FormMarioPort.formRef.CurrentPage();
              for( i = 0; i < MaxTempObj; i++ ) 
              {
                 if(TempObj[i].Alive == true )
@@ -189,23 +189,23 @@ namespace MarioPort
                    switch(TempObj[i].Tp)
                    {
                        case tpBroken:
-                          //FormMarioPort.formRef.DrawImage(XPos, YPos, HSize, VSize, @Part000^);
+                          FormMarioPort.formRef.DrawImage(TempObj[i].XPos, TempObj[i].YPos, TempObj[i].HSize, TempObj[i].VSize, Resources.PART_000);
                           break;
                        case tpCoin:
-                          //FormMarioPort.formRef.DrawImage(XPos, YPos, HSize, VSize, @Coin000^);
+                          FormMarioPort.formRef.DrawImage(TempObj[i].XPos, TempObj[i].YPos, TempObj[i].HSize, TempObj[i].VSize, Resources.COIN_000);
                           break;
                        case tpHit:
-                          //FormMarioPort.formRef.DrawImage(XPos, YPos, HSize, VSize, @WHHit000^);
+                          FormMarioPort.formRef.DrawImage(TempObj[i].XPos, TempObj[i].YPos, TempObj[i].HSize, TempObj[i].VSize, Resources.WHHIT_000);
                           break;
                        case tpFire:
-                          //FormMarioPort.formRef.DrawImage(XPos, YPos, HSize, VSize, @WHFire000^);
+                          FormMarioPort.formRef.DrawImage(TempObj[i].XPos, TempObj[i].YPos, TempObj[i].HSize, TempObj[i].VSize, Resources.WHFIRE_000);
                           break;
                        case tpNote:
-                          //FormMarioPort.formRef.DrawImage(XPos, YPos, HSize, VSize, @Note000^);
+                          FormMarioPort.formRef.DrawImage(TempObj[i].XPos, TempObj[i].YPos, TempObj[i].HSize, TempObj[i].VSize, Resources.NOTE_000);
                           break;
                     }
                 } 
-                //TempObj[i].Visible[page] = true;
+                TempObj[i].Visible[page] = true;
              }
         }
 
@@ -215,20 +215,19 @@ namespace MarioPort
         public static void HideTempObj()
         {
             int i;
-            //int page = FormMarioPort.formRef.CurrentPage();
+            int page = FormMarioPort.formRef.CurrentPage();
              for( i = MaxTempObj; i >= 1; i-- )
              {
-                 //if(TempObj[i].Visible[page] == true )
-                 //{
-                 // { PutImage (OldX [WorkingPage], OldY [WorkingPage], HSize, VSize, BackGrBuffer [WorkingPage]); }
-                 //  PopBackGr({OldX [WorkingPage], OldY [WorkingPage], HSize + 4, VSize,} BackGrAddr[page]);
-                 //  TempObj[i].Visible[page] = false;
-                 //}
+                 if(TempObj[i].Visible[page] == true )
+                 {
+                   //FormMarioPort.formRef.PopBackGr(BackGrAddr[page]);
+                   TempObj[i].Visible[page] = false;
+                 }
              }
         }
 
         //----------------------------------------------------------------
-        //Method to be able to move the temp object
+        // Method to be able to move the temp object
         //----------------------------------------------------------------
         public static void MoveTempObj()
         {
@@ -245,7 +244,7 @@ namespace MarioPort
                         {
                            TempObj[i].DelayCounter = 0;
                            TempObj[i].YVel++;
-                           if (TempObj[i].YPos > Buffers.NV * H)
+                           if (TempObj[i].YPos > Buffers.NV * Buffers.H)
                               TempObj[i].Alive = false;
                         }
                         break;
@@ -299,7 +298,7 @@ namespace MarioPort
                    RemList[i].RemW = W;
                    RemList[i].RemH = H;
                    RemList[i].NewImage = NewImg;
-                   RemList[i].RemCount = (MAX_PAGE) + 1;
+                   RemList[i].RemCount = (FormMarioPort.MAX_PAGE) + 1;
                    RemList[i].Active = true;
                 }
              }
@@ -318,16 +317,16 @@ namespace MarioPort
                   switch(RemList[i].NewImage)
                   {
                      case 0:
-                        //FormMarioPort.formRef.DrawBackGrBlock(RemList[i].RemX, RemList[i].RemY, RemList[i].RemW, RemList[i].RemH);
+                        BackGr.DrawBackGrBlock(RemList[i].RemX, RemList[i].RemY, RemList[i].RemW, RemList[i].RemH);
                         break;
                      case 1:
-                        //FormMarioPort.formRef.DrawImage(RemList[i].RemX, RemList[i].RemY, RemList[i].RemW, RemList[i].RemH, @Quest001^);
+                        FormMarioPort.formRef.DrawImage(RemList[i].RemX, RemList[i].RemY, RemList[i].RemW, RemList[i].RemH, Resources.QUEST_001);
                         break;
                      case 2:
-                        //FormMarioPort.formRef.DrawImage(RemList[i].RemX, RemList[i].RemY, RemList[i].RemW, RemList[i].RemH, @Quest000^);
+                        FormMarioPort.formRef.DrawImage(RemList[i].RemX, RemList[i].RemY, RemList[i].RemW, RemList[i].RemH, Resources.QUEST_000);
                         break;
                      case 5:
-                        //FormMarioPort.formRef.DrawImage(RemList[i].RemX, RemList[i].RemY, RemList[i].RemW, RemList[i].RemH, @Note000^);
+                        FormMarioPort.formRef.DrawImage(RemList[i].RemX, RemList[i].RemY, RemList[i].RemW, RemList[i].RemH, Resources.NOTE_000);
                         break;
                   }
                  RemList[i].RemCount--;
@@ -343,54 +342,55 @@ namespace MarioPort
         public static void BreakBlock(int X, int Y)
         {
            int X1, Y1, X2, Y2;
-           //WorldMap^ [X, Y] = ' ';
-           X = X * W;
-           Y = Y * H;
-           Remove (X, Y, W, H, 0);
-           X1 = X; 
-           X2 = X + W / 2;
-           Y1 = Y; 
-           Y2 = Y + H / 2;
-           NewTempObj (tpBroken, X1, Y1, -2, -6, 12, H / 2);
-           NewTempObj (tpBroken, X2, Y1,  2, -6, 12, H / 2);
-           NewTempObj (tpBroken, X1, Y2, -2, -4, 12, H / 2);
-           NewTempObj (tpBroken, X2, Y2,  2, -4, 12, H / 2);
+           Buffers.WorldMap[X, Y] = ' ';
+           X = X * Buffers.W;
+           Y = Y * Buffers.H;
+           Remove(X, Y, Buffers.W, Buffers.H, 0);
+           X1 = X;
+           X2 = X + Buffers.W / 2;
+           Y1 = Y;
+           Y2 = Y + Buffers.H / 2;
+           NewTempObj(tpBroken, X1, Y1, -2, -6, 12, Buffers.H / 2);
+           NewTempObj(tpBroken, X2, Y1, 2, -6, 12, Buffers.H / 2);
+           NewTempObj(tpBroken, X1, Y2, -2, -4, 12, Buffers.H / 2);
+           NewTempObj(tpBroken, X2, Y2, 2, -4, 12, Buffers.H / 2);
            //Beep(110);
         }
 
         //----------------------------------------------------------------
         //Method to handle when a coin object is hit
         //----------------------------------------------------------------
-        public static void HitCoin(int X, int Y, bool ThrowUp)
-        {
-             int MapX, MapY;
-             MapX = X / W;
-             MapY = Y / H;
-           //  if (WorldMap^ [MapX, MapY] = ' ' )
-           //    return;
-           //  if (ThrowUp == true )
-           //    NewTempObj(tpCoin, X, Y - H, 0, CoinSpeed, W, H)
-           //  else
-           //    WorldMap^ [MapX, MapY] = ' ';
-           //    Remove(X, Y, W, H, 0);
-           //    Glitter.CoinGlitter(X, Y);
-           //  Beep(2420);
-           //{  StartMusic(CoinMusic); }
-           //  Data.Coins[Player]++;
-           //  AddScore(50);
-           //  if (Data.Coins[Player] % 100 = 0 )
-           //  {
-           //     AddLife();
-           //     Data.Coins[Player] = 0;
-           //  }
-        }
+         public static void HitCoin(int X, int Y, bool ThrowUp)
+         {
+            int MapX, MapY;
+            MapX = X / Buffers.W;
+            MapY = Y / Buffers.H;
+            if (Buffers.WorldMap[MapX, MapY] == ' ' )
+               return;
+            if (ThrowUp)
+               NewTempObj(tpCoin, X, Y - Buffers.H, 0, CoinSpeed, Buffers.W, Buffers.H);
+            else
+            {
+               Buffers.WorldMap[MapX, MapY] = ' ';
+               Remove(X, Y, Buffers.W, Buffers.H, 0);
+               Glitter.CoinGlitter(X, Y);
+            }
+
+            Buffers.data.coins[Buffers.Player]++;
+            Buffers.AddScore(50);
+            if (Buffers.data.coins[Buffers.Player] % 100 == 0 )
+            {
+               AddLife();
+               Buffers.data.coins[Buffers.Player] = 0;
+            }
+         }
 
         //----------------------------------------------------------------
         //Method to handle adding a life to total lives
         //----------------------------------------------------------------
         public static void AddLife()
         {
-            //Data.Lives[Player]++;
+            Buffers.data.lives[Buffers.Player]++;
             //StartMusic(LifeMusic);
         }
    }

@@ -460,7 +460,7 @@ namespace MarioPort
       public static char[,] Level_2a()
       {
          string levelInfo =
-            @"AAAAAAAAAAAAA" +
+            @"AA           " +
             @"AA           " +
             @"AA           " +
             @"AA           " +

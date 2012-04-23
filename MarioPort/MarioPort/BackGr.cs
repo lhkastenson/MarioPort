@@ -150,8 +150,8 @@ namespace MarioPort
             WindowPalette(i);
       }
 
-	  //-------------------------------------------------------------
-      //Loads pixels into the ColorMap.
+	   //-------------------------------------------------------------
+      // Loads pixels into the ColorMap.
       //-------------------------------------------------------------
       public static void ReadColorMap()
       {
@@ -161,9 +161,9 @@ namespace MarioPort
          }
       }
 
-	  //-------------------------------------------------------------
-      //Draws a brick at the given location with the given 
-	  //   dimensions.
+	   //-------------------------------------------------------------
+      // Draws a brick at the given location with the given 
+	   //   dimensions.
       //-------------------------------------------------------------
       public static void DrawBricks(int X, int Y, int W, int H)
       {

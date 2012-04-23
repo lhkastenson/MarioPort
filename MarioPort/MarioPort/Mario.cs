@@ -822,6 +822,7 @@ namespace MarioPort
                            }
                         }
                   }
+                  FormMarioPort.formRef.Invalidate();
                } while (!(EndGame || Buffers.QuitGame || (Buffers.data.lives[Buffers.plMario] +
                   Buffers.data.lives[Buffers.plLuigi] == 0)));
 

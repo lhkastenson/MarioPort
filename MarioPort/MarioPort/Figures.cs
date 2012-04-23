@@ -180,10 +180,10 @@ namespace MarioPort
       //----------------------------------------------------
       public static void InitWalls(byte W1, byte W2, byte W3)
       {
-         Bricks[0] = Resources.BRICK0_000;
-         Bricks[1] = Resources.BRICK0_001;
-         Bricks[2] = Resources.BRICK0_002;
-         Bricks[3] = Resources.BRICK0_002;
+         //Bricks[0] = Resources.BRICK0_000;
+         //Bricks[1] = Resources.BRICK0_001;
+         //Bricks[2] = Resources.BRICK0_002;
+         //Bricks[3] = Resources.BRICK0_002;
 
          InitWall(1, W1);
          InitWall(2, W2);
@@ -232,7 +232,7 @@ namespace MarioPort
                FigList[N,  2]  = Resources.GREEN_001;
                FigList[N,  4]  = Resources.GREEN_002;
                FigList[N,  5]  = Resources.GREEN_003;
-               FigList[N, 10] = Resources.GREEN_004;
+               FigList[N,  10] = Resources.GREEN_004;
                break;
             }
             case 3:
@@ -427,44 +427,62 @@ namespace MarioPort
       //----------------------------------------------------
       private static void DrawSky(int X, int Y, int W, int H)
       {
-//      const
-//        Y1 = 0;
-//        Y2 = Y1 + 96;
-//        YStep = (Y2 - Y1) div 16;  { = 6 }
-//      var
-//        i, j, k: Integer;
-//        Mix: Word;
-//      {
-//        if Buffers.Options.BackGrType = 0 )
-//          Fill (X, Y, Buffers.W, Buffers.H, $E0)
-//        else
-//        case Sky of
-//          0, 1, 3, 4:
-//            {
-//              i = Buffers.Options.Horizon;
-//              j = i - Y;
-//              if (i < Y) )
-//                Fill (X, Y, Buffers.W, Buffers.H, $F0)
-//              else
-//                if (i > Y + Buffers.H - 1) )
-//                  Fill (X, Y, Buffers.W, Buffers.H, $E0)
-//                else
-//                {
-//                  Fill (X, Y, Buffers.W, j, $E0);
-//                  Fill (X, i, Buffers.W, Buffers.H - j, $F0);
-//                }
-//            }
-//          2, 5, 9, 10, 11, 12:
-//            SmoothFill (X, Y, Buffers.W, Buffers.H);
-//          6, 7, 8:
-//            case Buffers.Options.BackGrType of
-//              4: DrawBricks (X, Y, Buffers.W, Buffers.H);
-//              5: LargeBricks (X, Y, Buffers.W, Buffers.H);
-//              6: Pillar (X, Y, Buffers.W, Buffers.H);
-//              7: Windows (X, Y, Buffers.W, Buffers.H);
-//            }
-//        }
-//      }
+
+         int Y1 = 0;
+         int Y2 = Y1 + 96;
+         int YStep = (Y2 - Y1) / 16; // { = 6 }
+
+         int i, j, k;// Integer;
+         ushort Mix;//: Word;
+
+         if (Buffers.Options.BackGrType == 0)
+            FormMarioPort.formRef.Fill(X, Y, Buffers.W, Buffers.H, 0xE0);
+         else
+         {
+            switch (Sky)
+            {
+               case 0:
+               case 1:
+               case 3:
+               case 4:
+               {
+                  i = Buffers.Options.Horizon;
+                  j = i - Y;
+                  if (i < Y)
+                     FormMarioPort.formRef.Fill (X, Y, Buffers.W, Buffers.H, 0xF0);
+                  else
+                     if (i > Y + Buffers.H - 1)
+                        FormMarioPort.formRef.Fill (X, Y, Buffers.W, Buffers.H, 0xE0);
+                     else
+                     {
+                        FormMarioPort.formRef.Fill (X, Y, Buffers.W, j, 0xE0);
+                        FormMarioPort.formRef.Fill (X, i, Buffers.W, Buffers.H - j, 0xF0);
+                     }
+                  break;
+               }
+               case 2:
+               case 5:
+               case 9:
+               case 10:
+               case 11:
+               case 12:
+                  BackGr.SmoothFill (X, Y, Buffers.W, Buffers.H);
+                  break;
+               case 6:
+               case 7:
+               case 8:
+               {
+                  switch (Buffers.Options.BackGrType)
+                  {
+                     case 4: BackGr.DrawBricks(X, Y, Buffers.W, Buffers.H); break;
+                     case 5: BackGr.LargeBricks(X, Y, Buffers.W, Buffers.H); break;
+                     case 6: BackGr.Pillar(X, Y, Buffers.W, Buffers.H); break;
+                     case 7: BackGr.Windows(X, Y, Buffers.W, Buffers.H); break;
+                  }
+                  break;
+               }
+            }
+      }
       }
 
       //----------------------------------------------------
@@ -596,7 +614,6 @@ namespace MarioPort
                   }
                   break;
                }
-
 
                case 'I': 
                   Fig = Resources.BLOCK_000;

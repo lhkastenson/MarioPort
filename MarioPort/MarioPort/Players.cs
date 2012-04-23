@@ -272,8 +272,8 @@ namespace MarioPort
             }
             else
                if (Enemies.Star || Growing)
-                  FormMarioPort.formRef.RecolorImage(X, Y, Buffers.W, 2 * Buffers.H, Buffers.Pictures[Buffers.Player, Buffers.data.mode[Buffers.Player], Walkingmode, Direction], Convert.ToByte(((GrowCounter + StarCounter) /*&& 1*/) * 16 -
-                        Convert.ToByte((GrowCounter + StarCounter) /*& 0xF*/ < 8)));
+                  ;//FormMarioPort.formRef.RecolorImage(X, Y, Buffers.W, 2 * Buffers.H, Buffers.Pictures[Buffers.Player, Buffers.data.mode[Buffers.Player], Walkingmode, Direction],
+                   //   Convert.ToByte( ( (GrowCounter + StarCounter) & 1) << 16 - Convert.ToByte((GrowCounter + StarCounter) & 0xF) < 8));
                else
                   FormMarioPort.formRef.DrawImage(X, Y, Buffers.W, 2 * Buffers.H, Buffers.Pictures[Buffers.Player, Buffers.data.mode[Buffers.Player], Walkingmode, Direction]);
             
@@ -526,6 +526,12 @@ namespace MarioPort
             NewY = (Y + 1 + (4) + (Buffers.H - 1 - (4)) * Convert.ToByte(Small) + YVel + HSafe) / Buffers.H - Safe;
          else
             NewY = (Y + 1 + 2 * Buffers.H + YVel + HSafe) / Buffers.H - Safe;
+
+         if (NewY < 0)
+         {
+            NewY = 12;
+            Y = 12;
+         }
 
          NewCh1 = (char)Buffers.WorldMap[NewX1, NewY];
          NewCh2 = (char)Buffers.WorldMap[NewX2, NewY];

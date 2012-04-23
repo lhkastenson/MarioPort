@@ -120,6 +120,7 @@ namespace MarioPort
          //Palettes.ClearPalette();
          FormMarioPort.formRef.ClearVGAMem();
          //Music.StopMusic();
+         
          return false;
          //http://en.wikipedia.org/wiki/Return_statement#Syntax
          //"In Pascal there is no return statement." ...wat!?
@@ -467,6 +468,7 @@ namespace MarioPort
       //-------------------------------------------------------------------
       static void Restart()
       {
+         
          FormMarioPort.formRef.ResetStack();
 
          TextStatus = false;
@@ -539,6 +541,9 @@ namespace MarioPort
          uint counter = 0;
          do //until gamedone
          {
+            try
+            {
+
             //Console.WriteLine("Restart Loop");
 
             //if (!Keyboard.PlayingMacro)
@@ -687,6 +692,7 @@ namespace MarioPort
                      if (Buffers.TextCounter > 100)
                         Buffers.GameDone = true;
             }
+
             TmpObj.MoveTempObj();
             Blocks.MoveBlocks();
 
@@ -785,6 +791,12 @@ namespace MarioPort
                else
                   if (Players.PipeCode[1] == 'á')
                      BuildLevel();
+            }
+
+            }
+            catch (Exception e)
+            {
+               Console.WriteLine("error" + e);
             }
 
             System.Threading.Thread.Sleep(5);
