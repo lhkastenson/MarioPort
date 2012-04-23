@@ -358,7 +358,8 @@ namespace MarioPort
                      if((i == 0 || i == Buffers.NH - 1) || (j == 0 || j == Buffers.NV))
                         FormMarioPort.formRef.DrawImage(i * Buffers.W, j * Buffers.H, Buffers.W, Buffers.H, Resources.BLOCK_000);
                Players.DrawPlayer();
-               FormMarioPort.formRef.ShowPage();
+
+               FormMarioPort.formRef.PaintForm();
             }
             //UnlockPal();
             //Keyboard.Key = 0;
@@ -669,9 +670,8 @@ namespace MarioPort
                      //TXT.WriteText(i + 8, j, Menu[k], l);
                   }
                }
-               FormMarioPort.formRef.ShowPage();
+               // ShowPage
                //Palettes.BlinkPalette();
-               FormMarioPort.formRef.ResetStack();
 
                System.Threading.Thread.Sleep(10);
                Counter++;
@@ -729,56 +729,19 @@ namespace MarioPort
       // finally, when the user either dies or quits the game, it will
       // clear all the buffers and stop the program.
       //-------------------------------------------------------------------
-      public static void main()//string[] args)
+      public static void main()
       {
          try
          {
             int level = -1;
 
-            //Keyboard.InitKeyBoard();
             Buffers.data.numPlayers = 1;
             //ReadConfig(args);
-            //ReadCmdLine(args);
-
-            //jr = Config.JSDat;
-            //jsEnabled = jsDetected() && Config.UseJS();
-
-#if DEBUG//asm stuff :(
-            /**
-{$IFDEF DEBUG}
-   MouseHaltAddr := @MouseHalt;
-   asm
-      xor   ax, ax
-      int   33h
-      inc   ax
-      jnz   @End
-      mov   al, 0Ch
-      mov   cx, 0Ah
-      les   dx, MouseHaltAddr
-      int   33h
-      @End:
-   end;
-{$ENDIF}
-**/
-#endif
-
-            if (!FormMarioPort.formRef.DetectVGA())
-            {
-               Console.Write("VGA graphics adapter required");
-               //   //halt (1);
-            }
-
-            //Keyboard.ResetKeyBoard();
-
-            if (!FormMarioPort.formRef.InGraphicsMode)
-               FormMarioPort.formRef.InitializeVGA();
 
 #if DEBUG
             do
             {
 #endif
-               FormMarioPort.formRef.ClearVGAMem();
-
                Players.InitPlayerFigures();
                Enemies.InitEnemyFigures();
 
@@ -890,6 +853,7 @@ namespace MarioPort
                            }
                         }
                   }
+                  //FormMarioPort.formRef.Invalidate();
                } while (!(EndGame || Buffers.QuitGame || (Buffers.data.lives[Buffers.plMario] +
                   Buffers.data.lives[Buffers.plLuigi] == 0)));
 

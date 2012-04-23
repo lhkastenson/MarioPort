@@ -6,14 +6,14 @@
 //
 // Author: Joel Fendrick, Tom Schroeder 
 //
-//
 // Notes:  Anything that is commented out, or does not have
 //			a body means that there was reason to believe 
 //			this was not needed because of additional 
-//			functionality of c#. Empty methods were kept
+//			functionality of C#. Empty methods were kept
 //			because there may be a function call to it
 //			from another class.
-//		Total Translation Complete: ~50%, most of what is 
+//
+// Total Translation Complete: ~50%, most of what is 
 //							not translated is asembly
 //---------------------------------------------------------
 
@@ -34,8 +34,8 @@ namespace MarioPort
       public static FormMarioPort formRef = null;
 
       private Graphics graphics;
+      private Bitmap screenBmp;
 
-      //const VGA_SEGMENT = $A000;  do not think we will need this
       public const int windowHeight = 13 * 14;
       public const int windowWidth = 16 * 20;
       public const int SCREEN_WIDTH = 320;
@@ -44,21 +44,10 @@ namespace MarioPort
       public const int virScreenHeight = 182;
       public const int bytesPerLine = virScreenWidth / 4;
 
-      /*MISC_OUTPUT         = $03C2;
-      SC_INDEX            = $03C4;
-      GC_INDEX            = $03CE;
-      CRTC_INDEX          = $03D4;
-      VERT_RESCAN         = $03DA;*/
-
       const int mapMask = 2;
       const int memoryMode = 4;
       const int vert_retraceMask = 8;
       const int maxScanLine = 9;
-
-      byte START_ADDRESS_HIGH = 11;
-      byte START_ADDRESS_LOW = 12;
-      byte UNDERLINE = 20;
-      byte MODE_CONTROL = 23;
 
       const int readMap = 4;
       public int graphicsMode = 5;
@@ -80,21 +69,13 @@ namespace MarioPort
       int yOffset = 0;
       const int safe = 34 * bytesPerLine;
 
-      /*Stack: array[0..MAX_PAGE] of Word =
-      (PAGE_0 + PAGE_SIZE + SAFE,
-      PAGE_1 + PAGE_SIZE + SAFE);*/
-      //?????????????????????????????????????????
-      //Stack<ushort> array = new Stack<ushort>(MAX_PAGE);
-
-      //Var
-      byte OldScreenMode;
-      //OldExitProc: Pointer;
-
       Thread thread;
 
       public FormMarioPort()
       {
          //this.DoubleBuffered = true;
+
+         screenBmp = new Bitmap(SCREEN_WIDTH, SCREEN_HEIGHT);
 
          SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
          SetStyle(ControlStyles.ResizeRedraw, true);
@@ -104,128 +85,38 @@ namespace MarioPort
          InitializeComponent();
          formRef = this;
          graphics = CreateGraphics();
-         //Buffers.data = Buffers.GameData.Create();
+
          thread = new Thread(new ThreadStart(Mario.main));
          thread.Start();
-         //Mario.main(new string[0]);
       }
 
       //-----------------------------------------------------
-      // Draws an image to the screen at XPos,YPos with size
-      // of width and height.
-      //-----------------------------------------------------
+	   // Draws an image to the screen at XPos,YPos with size
+	   // of width and height.
+	   //-----------------------------------------------------
       public void PutImage(int XPos, int YPos, int Width, int Height, Bitmap bitmap)
       {
          if (bitmap == null)
             return;
-         graphics.DrawImage(bitmap, XPos - xView, YPos, Width, Height);
+
+         Superimpose(bitmap, XPos, YPos);
       }
 
-      //-----------------------------------------------------
-      // Draws an image to the screen at XPos,YPos with size
-      // of width and height.
-      //-----------------------------------------------------
+	  //-----------------------------------------------------
+	  // Draws an image to the screen at XPos,YPos with size
+	  // of width and height.
+	  //-----------------------------------------------------
       public void DrawImage(int XPos, int YPos, int Width, int Height, Bitmap bitmap)
       {
          if (bitmap == null)
             return;
 
-         graphics.DrawImage(bitmap, XPos - xView, YPos, Width, Height);
+         Superimpose(bitmap, XPos, YPos);
       }
 
       //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public void newExitProc()
-      {
-         /*OldMode;
-         ExitProc := OldExitProc;*/
-      }
-
-      //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public void setWidth(ushort newWidth)
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public bool DetectVGA()
-      {
-         return true;
-      }
-      //-----------------------------------------------------
-      // Start graphics mode 320x200 256 colors 
-      //-----------------------------------------------------
-      public void InitializeVGA()
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // Return to the original screenmode 
-      //-----------------------------------------------------
-      public void OldMode()
-      {
-         if (InGraphicsMode)
-         {
-            ClearVGAMem();
-            ClearPalette();
-            ShowPage();
-         }
-
-         SetMode(OldScreenMode);
-         InGraphicsMode = false;
-         //ExitProc = OldExitProc();
-      }
-
-
-      //-----------------------------------------------------
-      // Returns the current graphicsMode
-      //-----------------------------------------------------
-      public byte GetMode()
-      {
-         return (byte)graphicsMode;
-      }
-
-      //-----------------------------------------------------
-      // Sets the current graphicsMode to newMode
-      //-----------------------------------------------------
-      public void SetMode(byte newMode)
-      {
-         graphicsMode = newMode;
-      }
-
-      //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public void ClearVGAMem()
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public void WaitDisplay()
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // NotImplemented
-      //-----------------------------------------------------
-      public void WaitRetrace()
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // Sets the view to x,y coordinates
-      //-----------------------------------------------------
+	  // Sets the view to x,y coordinates
+	  //-----------------------------------------------------
       public void SetView(int x, int y)
       {
          xView = x;
@@ -233,107 +124,33 @@ namespace MarioPort
       }
 
       //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public void SetViewport(int X, int Y, byte PageNr)
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // swaps between page0 and page1
-      //-----------------------------------------------------
-      public void SwapPages()
-      {
-         if (page == 0)
-         {
-            page = 1;
-            pageOffset = (ushort)(page1 + yOffset * bytesPerLine);
-         }
-         else if (page == 1)
-         {
-            page = 0;
-            pageOffset = (ushort)(page0 + yOffset * bytesPerLine);
-         }
-      }
-
-      //-----------------------------------------------------
-      // shows the page current page
-      //-----------------------------------------------------
-      public void ShowPage()
-      {
-         SetViewport(xView, yView, (byte)(page));
-         SwapPages();
-      }
-
-      //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public void Border(byte Attr)
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public void SetYStart(int yStart)
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public void SetYEnd(int yEnd)
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // sets the offset of y to newYOffset
-      //-----------------------------------------------------
-      public void SetYOffset(int newYOffset)
-      {
-         yOffset = newYOffset;
-      }
-
-      //-----------------------------------------------------
-      // returns the offset of y
-      //-----------------------------------------------------
-      public int GetYOffset()
-      {
-         return yOffset;
-      }
-
-      //-----------------------------------------------------
       // Draw a single pixel at (X, Y) with color Attr 
-      //-----------------------------------------------------
+	   //-----------------------------------------------------
       public void PutPixel(int x, int y, byte attr)
       {
-         // just call bitmap.setPixel() to set a pixel
-         //Color color = Color.FromArgb(attr);
-         //Pen pen = new Pen(color, 1);
-         //graphics.DrawLine(pen, x, y, x, y);
+          // just call bitmap.setPixel() to set a pixel
+		  //Color color = Color.FromArgb(attr);
+		  //Pen pen = new Pen(color, 1);
+		  //graphics.DrawLine(pen, x, y, x, y);
       }
 
       //-----------------------------------------------------
       // Get color of pixel at (X, Y) 
-      //-----------------------------------------------------
+	   //-----------------------------------------------------
       public byte GetPixel(int x, int y)
       {
          //just call bitmap.getPixel(), this returns a Color.
-         return 1;
+		 return 1;
       }
 
       //-----------------------------------------------------
-      // changes the color of the image by diff.
-      //	One line of code commented out causes error.
-      //-----------------------------------------------------
+	   // changes the color of the image by diff.
+	   //	One line of code commented out causes error.
+	   //-----------------------------------------------------
       public void RecolorImage(int xPos, int yPos, int width, int height, Bitmap var, byte diff)
       {
-         System.Drawing.Imaging.ColorPalette tempCP;
-         Color[] tempColor;
+		 System.Drawing.Imaging.ColorPalette tempCP;
+         Color [] tempColor;
          tempCP = var.Palette;
          tempColor = tempCP.Entries;
 
@@ -347,94 +164,63 @@ namespace MarioPort
       }
 
       //-----------------------------------------------------
-      // draws a the portion of a bitmap between y1 and y2 
-      // to position xPos, yPos
-      //-----------------------------------------------------
+	  // draws a the portion of a bitmap between y1 and y2 
+	  // to position xPos, yPos
+	  //-----------------------------------------------------
       public void DrawPart(int xPos, int yPos, int width, int height, int y1, int y2, Bitmap var)
       {
-         Rectangle tempRec = new Rectangle(xPos, y1, width, y2);    		   // makes rectangle the size of the horizontal slice between y1 and y2.
-         graphics.DrawImage(var, xPos - xView, yPos, tempRec, GraphicsUnit.Pixel);    //draws portion of image specified from tempRec at xPos, yPos
+          Rectangle tempRec = new Rectangle(xPos, y1, width, y2);    		   // makes rectangle the size of the horizontal slice between y1 and y2.
+          //graphics.DrawImage(var, xPos - xView, yPos, tempRec, GraphicsUnit.Pixel);    //draws portion of image specified from tempRec at xPos, yPos
+          Superimpose(var, xPos, yPos);
       }
 
       //-----------------------------------------------------
-      // Flips given image upsidedown
-      //-----------------------------------------------------
+	  // Flips given image upsidedown
+	  //-----------------------------------------------------
       public void UpSideDown(int xPos, int yPos, int width, int height, Bitmap var)
       {
-         var.RotateFlip(RotateFlipType.RotateNoneFlipX);
+          if (var != null)
+            var.RotateFlip(RotateFlipType.RotateNoneFlipX);
       }
 
       //-----------------------------------------------------
-      //
-      //-----------------------------------------------------
+	  //
+	  //-----------------------------------------------------
       public void GetImage(int xPos, int yPos, int width, int height, Bitmap var)
       {
 
       }
 
       //-----------------------------------------------------
-      // Fills an area on the screen with Attr 
-      //-----------------------------------------------------
+	  // Fills an area on the screen with Attr 
+	  //-----------------------------------------------------
       public void Fill(int x, int y, int width, int height, int attr)
       {
-         Color color = Color.FromArgb(attr);
-         SolidBrush br = new SolidBrush(color);
-         graphics.FillRectangle(br, x, y, width, height);
+          Color color = Color.FromArgb(attr);
+          SolidBrush br = new SolidBrush(color);
+          graphics.FillRectangle(br, x, y, width, height);
 
       }
 
       //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public void setPalete(byte color, byte red, byte green, byte blue)
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // Not Implemeented
-      //-----------------------------------------------------
-      public void ReadPalette(/*NewPallete var*/)
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // Not Implemented
-      //-----------------------------------------------------
-      public void ClearPalette()
-      {
-
-      }
-
-      //-----------------------------------------------------
-      // returns the current page
-      //-----------------------------------------------------
+	   // returns the current page
+	   //-----------------------------------------------------
       public int CurrentPage()
       {
          return page;
       }
 
       //-----------------------------------------------------
-      // returns the offset of the page
-      //-----------------------------------------------------
+	  // returns the offset of the page
+	  //-----------------------------------------------------
       public ushort GetPageOffset()
       {
          return pageOffset;
       }
 
       //-----------------------------------------------------
-      // resets the stack back to original values
-      //-----------------------------------------------------
-      public void ResetStack()
-      {
-         //Stack[0] = PAGE_0 + PAGE_SIZE + SAFE;
-         //Stack[1] = PAGE_1 + PAGE_SIZE + SAFE;
-      }
-
-      //-----------------------------------------------------
-      // Mostly not Implemented due to mostly asembly.
-      //-----------------------------------------------------
+	   //  Not Implemented due to asembly.
+	   //-----------------------------------------------------
       public ushort PushBackGr(int x, int y, int w, int h)
       {
          Stack<ushort> StackPointer = new Stack<ushort>();
@@ -442,197 +228,35 @@ namespace MarioPort
             return 0;
 
          StackPointer.Push((ushort)page);
-         /*asm
-             mov     bx, PageOffset
-             mov     di, StackPointer
-             push    ds
-             push    es
-
-             mov     ax, VGA_SEGMENT
-             mov     ds, ax
-             mov     es, ax
-
-             cld
-             mov     dx, SC_INDEX
-             mov     ax, 0100h + MAP_MASK
-             out     dx, ax
-             mov     ax, X
-             mov     [di], ax
-             mov     ax, 0200h + MAP_MASK
-             out     dx, ax
-             mov     ax, Y
-             mov     [di], ax
-             mov     ax, 0400h + MAP_MASK
-             out     dx, ax
-             mov     ax, W
-             mov     [di], ax
-             mov     ax, 0800h + MAP_MASK
-             out     dx, ax
-             mov     ax, H
-             stosw
-             mov     al, 'M'
-             stosb
-
-             mov     dx, GC_INDEX
-             mov     al, GRAPHICS_MODE
-             out     dx, al
-             inc     dx
-             in      al, dx
-             push    ax
-             mov     al, 41h
-             out     dx, al
-
-             mov     dx, SC_INDEX
-             mov     ax, 0F00h + MAP_MASK
-             out     dx, ax
-
-             mov     ax, READ_MAP
-             mov     dx, GC_INDEX
-             out     dx, ax
-
-             mov     dx, Y
-             mov     ax, BYTES_PER_LINE
-             mul     dx
-             mov     si, X
-             shr     si, 1
-             shr     si, 1
-             add     si, ax
-             add     si, bx
-
-             mov     cx, W
-             shr     cx, 1
-             shr     cx, 1
-
-             mov     bx, H
-
-       @1:   push    cx
-             rep
-             movsb                   { copy 4 pixels }
-             pop     cx
-             add     si, BYTES_PER_LINE
-             sub     si, cx
-             dec     bx
-             jnz     @1
-
-             mov     dx, GC_INDEX
-             pop     ax
-             mov     ah, al
-             mov     al, GRAPHICS_MODE
-             out     dx, ax
-
-             pop     es
-             pop     ds
-         end;
+         
+         // asm
+         /*
          PushBackGr := Stack [Page];
          Inc (Stack [Page], W * H + 8);
-       end;*/
+         */
+
          return 1;
       }
 
       //-----------------------------------------------------
-      // Mostly not Implemented due to mostly asembly.
-      //-----------------------------------------------------
+	   // Not Implemented due to asembly.
+	   //-----------------------------------------------------
       public void PopBackGr(ushort Address)
       {
          int x, y, w, h;
 
          if (Address == 0)
             return;
-         /*asm
-             mov     bx, PageOffset
-             mov     si, Address
-
-             push    ds
-             push    es
-
-             mov     ax, VGA_SEGMENT
-             mov     ds, ax
-             mov     es, ax
-
-             cld
-             mov     dx, GC_INDEX
-             mov     ax, 0000h + READ_MAP
-             out     dx, ax
-             mov     ax, [si]
-             mov     X, ax
-             mov     ax, 0100h + READ_MAP
-             out     dx, ax
-             mov     ax, [si]
-             mov     Y, ax
-             mov     ax, 0200h + READ_MAP
-             out     dx, ax
-             mov     ax, [si]
-             mov     W, ax
-             mov     ax, 0300h + READ_MAP
-             out     dx, ax
-             lodsw
-             mov     H, ax
-             lodsb
-             cmp     al, 'M'
-             jz      @@1
-     {$IFDEF DEBUG}
-             int     3
-     {$ENDIF}
-             jmp     @End
-         @@1:
-             mov     dx, GC_INDEX
-             mov     al, GRAPHICS_MODE
-             out     dx, al
-             inc     dx
-             in      al, dx
-             push    ax
-             mov     al, 41h
-             out     dx, al
-
-             mov     dx, SC_INDEX
-             mov     ax, 0F00h + MAP_MASK
-             out     dx, ax
-
-             mov     ax, READ_MAP
-             mov     dx, GC_INDEX
-             out     dx, ax
-
-             mov     dx, Y
-             mov     ax, BYTES_PER_LINE
-             mul     dx
-             mov     di, X
-             shr     di, 1
-             shr     di, 1
-             add     di, ax
-             add     di, bx
-
-             mov     cx, W
-             shr     cx, 1
-             shr     cx, 1
-
-             mov     bx, H
-
-       @1:   push    cx
-             rep
-             movsb                   { copy 4 pixels }
-             pop     cx
-             add     di, BYTES_PER_LINE
-             sub     di, cx
-             dec     bx
-             jnz     @1
-
-             mov     dx, GC_INDEX
-             pop     ax
-             mov     ah, al
-             mov     al, GRAPHICS_MODE
-             out     dx, ax
-
-       @end: pop     es
-             pop     ds
-         end;*/
+         
+         // asm 
       }
 
       //-----------------------------------------------------
-      // Draws a bitmap, var, at x,y
-      //-----------------------------------------------------
+	  // Draws a bitmap, var, at x,y
+	  //-----------------------------------------------------
       public void DrawBitmap(int x, int y, Bitmap var, byte attr)
       {
-         //graphics.DrawImage(var, x, y);
+         Superimpose(var, x, y);
       }
 
       private void FormMarioPort_Load(object sender, EventArgs e)
@@ -742,29 +366,49 @@ namespace MarioPort
 
       private void FormMarioPort_Paint(object sender, PaintEventArgs e)
       {
-         //for (int x = Buffers.XView / Buffers.W; x < Buffers.XView / Buffers.W + Buffers.NH; x++)
-         //   for (int y = 0; y <= Buffers.NV; y++)
-         //      Figures.Redraw(x, y);
-         //Enemies.ShowEnemies();
+
       }
 
+      //-----------------------------------------------------
+      // Draw the current scene to the form, then cycle
+      // through all game elements to update image
+      //-----------------------------------------------------
+      public void PaintForm()
+      {
+         graphics.DrawImage(screenBmp, 0, 0, screenBmp.Width * 2, screenBmp.Height * 2);
 
-   }
-   public class TransparentLabel : Label
-   {
-      public TransparentLabel()
-      {
-         this.SetStyle(ControlStyles.Opaque, true);
-         this.SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
+         Graphics g = Graphics.FromImage(screenBmp);
+         g.Clear(Color.LightBlue);
+
+         Figures.DrawSky (Buffers.XView, 0, Buffers.NH * Buffers.W, Buffers.NV * Buffers.H);
+
+         //BackGr.StartClouds();
+
+         for (int x = Buffers.XView / Buffers.W; x < Buffers.XView / Buffers.W + Buffers.NH; x++)
+            for (int y = 0; y < 24; y++)
+               Figures.Redraw(x, y);
+
+         BackGr.DrawBackGr(true);
+         //ReadColorMap();
+
+         if (Buffers.Options.Stars != 0)
+            Stars.ShowStars();
+
+         Enemies.ShowEnemies();
+
+         if (!Play.OnlyDraw)
+            Players.DrawPlayer();
+
+         // ShowPage
       }
-      protected override CreateParams CreateParams
+
+      //-----------------------------------------------------
+      // Superimpose bmp at x, y on screenBmp
+      //-----------------------------------------------------
+      public void Superimpose(Bitmap bmp, int x, int y)
       {
-         get
-         {
-            CreateParams parms = base.CreateParams;
-            parms.ExStyle |= 0x20;  // Turn on WS_EX_TRANSPARENT
-            return parms;
-         }
+         Graphics g = Graphics.FromImage(screenBmp);
+         g.DrawImage(bmp, x - xView, y, bmp.Width, bmp.Height );
       }
    }
 }

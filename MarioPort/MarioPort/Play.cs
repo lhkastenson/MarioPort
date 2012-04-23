@@ -25,8 +25,8 @@ namespace MarioPort
       const int YBase = 9;
       public static bool Waiting, ShowObjects, ShowScore, CountingScore;
       public static int CheatsUsed = 0;
-      static int[] TotalBackGrAddr = new int[FormMarioPort.MAX_PAGE];
-      private static bool TextStatus, OnlyDraw = false;
+      static int[] TotalBackGrAddr = new int[FormMarioPort.MAX_PAGE + 1];
+      public static bool TextStatus, OnlyDraw = false;
 
       //-------------------------------------------------------------------
       // Sets up and reads in a new world to the buffer. After the world 
@@ -51,13 +51,9 @@ namespace MarioPort
          //PlayWorld = false;
          //Keyboard.Key = 0;
 
-         FormMarioPort.formRef.SetYOffset(YBase);//FormMarioPort.formRef.Y);
-         FormMarioPort.formRef.SetYStart (18);
-         FormMarioPort.formRef.SetYEnd (125);
-
+         
          //Palettes.ClearPalette();
          //Palettes.LockPal();
-         FormMarioPort.formRef.ClearVGAMem();
 
          Buffers.TextCounter = 0;
 
@@ -105,21 +101,21 @@ namespace MarioPort
          BuildLevel();
          try
          {
-            Restart();
+            if (Restart())
+               return true;
          }
          catch (Exception e)
          {
             Console.WriteLine("Exception: ", e);
          }
 
-         FormMarioPort.formRef.SetYOffset(YBase);
 
          Enemies.ClearEnemies();
          //ClearGlitter();
          //Palettes.FadeDown(64);
          //Palettes.ClearPalette();
-         FormMarioPort.formRef.ClearVGAMem();
          //Music.StopMusic();
+         
          return false;
          //http://en.wikipedia.org/wiki/Return_statement#Syntax
          //"In Pascal there is no return statement." ...wat!?
@@ -153,7 +149,6 @@ namespace MarioPort
             Enemies.StartEnemies((Buffers.XView / Buffers.W) + Buffers.NH + Enemies.StartEnemiesAt, -1);
 			
          int i = Buffers.Options.Horizon;
-         Buffers.Options.Horizon = (byte)(i + FormMarioPort.formRef.GetYOffset() - FormMarioPort.YBASE);
          BackGr.DrawBackGr(false);
          Buffers.Options.Horizon = (byte)i;
 			
@@ -465,10 +460,9 @@ namespace MarioPort
       // resources. When mario runs out of lives the thread is killed and cleaned
       // up. read: GAME OVER!
       //-------------------------------------------------------------------
-      static void Restart()
+      static bool Restart()
       {
-         FormMarioPort.formRef.ResetStack();
-
+         bool PlayWorld = false;
          TextStatus = false;
          //InitStatus();
 
@@ -477,7 +471,7 @@ namespace MarioPort
          Glitter.ClearGlitter();
          Enemies.ClearEnemies();
 
-         FormMarioPort.formRef.ShowPage();
+         // ShowPage
 
          Buffers.GameDone = false;
          Buffers.Passed = false;
@@ -490,7 +484,7 @@ namespace MarioPort
 
          //   SetYOffset (YBase);
 
-         for (int i = 0; i < FormMarioPort.MAX_PAGE; i++)
+         /*for (int i = 0; i < FormMarioPort.MAX_PAGE; i++)
          {
             //      DrawSky (XView, 0, NH * W, NV * H);
 
@@ -512,6 +506,7 @@ namespace MarioPort
 
             FormMarioPort.formRef.ShowPage();
          }
+         */
 
          Buffers.Demo = Buffers.dmNoDemo;
          Waiting = false;
@@ -528,7 +523,7 @@ namespace MarioPort
          //Palettes.InitGrass();
 
          if (OnlyDraw)
-            return;
+            return false;
 
          //   Palettes.UnLockPal();
          //   FadeUp (64);
@@ -536,9 +531,12 @@ namespace MarioPort
 
          TextStatus = Stat;// && !KeyBoard.PlayingMacro());
 
-         uint counter = 0;
+         //uint counter = 0;
          do //until gamedone
          {
+            try
+            {
+
             //Console.WriteLine("Restart Loop");
 
             //if (!Keyboard.PlayingMacro)
@@ -600,14 +598,15 @@ namespace MarioPort
             Buffers.LavaCounter++;
 
             if (!Waiting)
+            {
                if (Buffers.Demo == Buffers.dmNoDemo)
                {
                   Enemies.MoveEnemies();
-
                   Players.MovePlayer();
                }
                else
                   Players.DoDemo();
+            }
 
 
 
@@ -687,6 +686,7 @@ namespace MarioPort
                      if (Buffers.TextCounter > 100)
                         Buffers.GameDone = true;
             }
+
             TmpObj.MoveTempObj();
             Blocks.MoveBlocks();
 
@@ -732,7 +732,7 @@ namespace MarioPort
             //if (ShowRetrace)
             //   SetPalette(0, 0, 0, 0);
 
-            FormMarioPort.formRef.ShowPage();
+            // ShowPage
 
             //if (ShowRetrace)
             //   SetPalette( 0, 63, 63, 63);
@@ -752,7 +752,6 @@ namespace MarioPort
                Enemies.StopEnemies();
                Glitter.ClearGlitter();
                //FadeDown(64);
-               FormMarioPort.formRef.ClearPalette();
                //FormMarioPort.formRef.LockPal();
                //FormMarioPort.formRef.ClearVGAMem();
 
@@ -768,14 +767,13 @@ namespace MarioPort
                      break;
                   case 'ç':
                      Buffers.GameDone = true;
-                     //PlayWorld = true;
+                     PlayWorld = true;
                      break;
                }
 
                Players.InitPlayer(Players.MapX * Buffers.W + Buffers.W / 2, (Players.MapY - 1) * Buffers.H, Buffers.Player);
 
                FormMarioPort.formRef.SetView(Buffers.XView, Buffers.YView);
-               FormMarioPort.formRef.SetYOffset(YBase);
 
                for (int i = 0; i < FormMarioPort.MAX_PAGE; i++)
                   Buffers.LastXView[i] = Buffers.XView;
@@ -787,21 +785,17 @@ namespace MarioPort
                      BuildLevel();
             }
 
-            System.Threading.Thread.Sleep(5);
-
-            if (counter % 15 == 0)//
+            }
+            catch (Exception e)
             {
-               FormMarioPort.formRef.Invalidate();
-               for (int x = Buffers.XView / Buffers.W; x < Buffers.XView / Buffers.W + Buffers.NH; x++)
-                  for (int y = 0; y <= Buffers.NV; y++)
-                     Figures.Redraw(x, y);
+               Console.WriteLine("error" + e);
             }
 
-            counter++;
-            counter %= 100;
-
+            FormMarioPort.formRef.PaintForm();
+            System.Threading.Thread.Sleep(1 / 60 * 1000);
 
          } while (!Buffers.GameDone && !Buffers.QuitGame);
+         return PlayWorld;
       }
 
    }
