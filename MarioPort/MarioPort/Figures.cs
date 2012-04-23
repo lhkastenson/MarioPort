@@ -47,94 +47,6 @@ namespace MarioPort
       {
 
       }
-      
-//      private static void ReColor (P1, P2: Pointer; C: Byte)
-//      {
-//      {
-//        asm
-//              push    ds
-//              push    es
-//              lds     si, P1
-//              les     di, P2
-//              cld
-//              mov     cx, Buffers.H
-//      1:     push    cx
-//              mov     cx, Buffers.W
-//      2:     lodsb
-//              cmp     al, $10
-//              jbe     3
-//              &&     al, 07h
-//              add     al, C
-//
-//      3:     stosb
-//              loop    2
-//              pop     cx
-//              loop    1
-//              pop     es
-//              pop     ds
-//        }
-//      }
-//      }
-      
-//      private static void ReColor2 (P1, P2: Pointer; C1, C2: Byte)
-//      {
-//      {
-//        asm
-//              push    ds
-//              push    es
-//              lds     si, P1
-//              les     di, P2
-//              cld
-//              mov     cx, Buffers.H
-//      1:     push    cx
-//              mov     cx, Buffers.W
-//      2:     lodsb
-//              cmp     al, $10
-//              jbe     3
-//              &&     al, 0Fh
-//              cmp     al, 8
-//              jb      UseC1
-//              &&     al, 7
-//              add     al, C2
-//              jmp     3
-//      UseC1:
-//              add     al, C1
-//
-//      3:     stosb
-//              loop    2
-//              pop     cx
-//              loop    1
-//              pop     es
-//              pop     ds
-//        }
-//      }
-//      }
-      
-//      private static void Replace(P1, P2: Pointer; N1, N2: Byte)
-//      {
-//      {
-//        asm
-//              push    ds
-//              push    es
-//              lds     si, P1
-//              les     di, P2
-//              cld
-//              mov     cx, Buffers.H
-//      1:     push    cx
-//              mov     cx, Buffers.W
-//      2:     lodsb
-//              cmp     al, N1
-//              jnz     3
-//              mov     al, N2
-//      3:     stosb
-//              loop    2
-//              pop     cx
-//              loop    1
-//              pop     es
-//              pop     ds
-//        }
-//      }
-//      }
 
       //----------------------------------------------------
       // Mirror the image
@@ -425,7 +337,7 @@ namespace MarioPort
       //----------------------------------------------------
       // Draw the sky
       //----------------------------------------------------
-      private static void DrawSky(int X, int Y, int W, int H)
+      public static void DrawSky(int X, int Y, int W, int H)
       {
 
          int Y1 = 0;

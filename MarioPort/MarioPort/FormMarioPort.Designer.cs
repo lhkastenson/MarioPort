@@ -34,12 +34,8 @@
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-<<<<<<< HEAD
-         this.BackColor = System.Drawing.Color.DarkCyan;
-=======
-         this.BackColor = System.Drawing.Color.Black;
->>>>>>> More updates.  Fixed Peter's neglected code. Deleted base directory files.
-         this.ClientSize = new System.Drawing.Size(320, 196);
+         this.BackColor = System.Drawing.Color.LightBlue;
+         this.ClientSize = new System.Drawing.Size(638, 391);
          this.Name = "FormMarioPort";
          this.Text = "MarioPort";
          this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMarioPort_FormClosing);

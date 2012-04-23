@@ -614,10 +614,10 @@ namespace MarioPort
                   FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[8 + 2 * EnemyList[i].SubTp + 1 - System.Convert.ToByte(EnemyList[i].DirCounter % 16 <= 8), System.Convert.ToByte(EnemyList[i].DirCounter % 32 <= 16)]);
                   break;
                case EnemyType.tpSleepingKoopa:
-                  FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[8 + 2 * EnemyList[i].SubTp, 0]);
+                  FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[8 + 2 * EnemyList[i].SubTp - 1, 0]);
                   break;
                case EnemyType.tpDeadKoopa:
-                  FormMarioPort.formRef.UpSideDown(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[8 + 2 * EnemyList[i].SubTp, System.Convert.ToByte(EnemyList[i].DirCounter % 16 <= 8)]);
+                  FormMarioPort.formRef.UpSideDown(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[8 + 2 * EnemyList[i].SubTp - 1, System.Convert.ToByte(EnemyList[i].DirCounter % 16 < 8)]);
                   break;
                case EnemyType.tpBlockLift:
                   FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, Resources.LIFT1_000);
@@ -1464,28 +1464,28 @@ namespace MarioPort
                      case EnemyType.tpSleepingKoopa:
                      case EnemyType.tpWakingKoopa:
                      case EnemyType.tpRunningKoopa:
+                     {
+                        if (((EnemyList[j].XVel > 0) && (EnemyList[j].XPos + EnemyList[j].XVel + Buffers.W / 2 <= X)) ||
+                              ((EnemyList[j].XVel < 0) && (EnemyList[j].XPos + EnemyList[j].XVel + Buffers.W / 2 >= X)))
                         {
-                           if (((EnemyList[j].XVel > 0) && (EnemyList[j].XPos + EnemyList[j].XVel + Buffers.W / 2 <= X)) ||
-                                 ((EnemyList[j].XVel < 0) && (EnemyList[j].XPos + EnemyList[j].XVel + Buffers.W / 2 >= X)))
+                           EnemyList[j].XVel *= -1;
+                           EnemyList[j].YVel = -7;
+                           EnemyList[j].Status = Falling;
+                           if (EnemyList[j].Tp == EnemyType.tpKoopa || EnemyList[j].Tp == EnemyType.tpSleepingKoopa ||
+                                 EnemyList[j].Tp == EnemyType.tpWakingKoopa)
                            {
-                              EnemyList[j].XVel *= -1;
-                              EnemyList[j].YVel = -7;
-                              EnemyList[j].Status = Falling;
-                              if (EnemyList[j].Tp == EnemyType.tpKoopa || EnemyList[j].Tp == EnemyType.tpSleepingKoopa ||
-                                    EnemyList[j].Tp == EnemyType.tpWakingKoopa)
-                              {
-                                 EnemyList[j].Tp = EnemyType.tpSleepingKoopa;
-                                 EnemyList[j].XVel = 0;
-                              }
+                              EnemyList[j].Tp = EnemyType.tpSleepingKoopa;
+                              EnemyList[j].XVel = 0;
                            }
-                           break;
                         }
+                        break;
+                     }
                      case EnemyType.tpChibibo:
                      case EnemyType.tpRed:
-                        {
-                           Kill(j);
-                           break;
-                        }
+                     {
+                        Kill(j);
+                        break;
+                     }
                   }
                }
             }
