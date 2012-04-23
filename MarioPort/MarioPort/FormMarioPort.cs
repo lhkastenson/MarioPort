@@ -34,9 +34,6 @@ namespace MarioPort
       public static FormMarioPort formRef = null;
 
       private Graphics graphics;
-
-      private const int SCREENSIZEX = 400;
-      private const int SCREENSIZEY = 200;
       private Bitmap screenBmp;
 
       public const int windowHeight = 13 * 14;
@@ -78,7 +75,7 @@ namespace MarioPort
       {
          //this.DoubleBuffered = true;
 
-         screenBmp = new Bitmap(SCREENSIZEX, SCREENSIZEY);
+         screenBmp = new Bitmap(SCREEN_WIDTH, SCREEN_HEIGHT);
 
          SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
          SetStyle(ControlStyles.ResizeRedraw, true);
