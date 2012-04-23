@@ -490,17 +490,14 @@ namespace MarioPort
             Y2 = (Y + HSafe + Buffers.H) / Buffers.H - Safe;
             Y3 = (Y + HSafe + 2 * Buffers.H - 1) / Buffers.H - Safe;
 
-            try
-            {
-               NewCh1 = (char)Buffers.WorldMap[NewX2, Y1];
-               NewCh2 = (char)Buffers.WorldMap[NewX2, Y2];
-               NewCh3 = (char)Buffers.WorldMap[NewX2, Y3];
-            }
-            catch (Exception)
-            {
-               
-               throw;
-            }
+            // Hack to fix negative Y
+            Y1 = Y1 < 0 ? 1 : Y1;
+            Y2 = Y2 < 0 ? 1 : Y2;
+            Y3 = Y3 < 0 ? 1 : Y3;
+
+            NewCh1 = (char)Buffers.WorldMap[NewX2, Y1];
+            NewCh2 = (char)Buffers.WorldMap[NewX2, Y2];
+            NewCh3 = (char)Buffers.WorldMap[NewX2, Y3];
 
             if ( NewCh3 == '*' )
                TmpObj.HitCoin(NewX2 * Buffers.W, Y3 * Buffers.H, false);

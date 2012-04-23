@@ -614,7 +614,7 @@ namespace MarioPort
                   FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[8 + 2 * EnemyList[i].SubTp + 1 - System.Convert.ToByte(EnemyList[i].DirCounter % 16 <= 8), System.Convert.ToByte(EnemyList[i].DirCounter % 32 <= 16)]);
                   break;
                case EnemyType.tpSleepingKoopa:
-                  FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[8 + 2 * EnemyList[i].SubTp - 1, 0]);
+                  FormMarioPort.formRef.DrawImage(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[8/* + 2 * EnemyList[i].SubTp - 1*/, 0]);
                   break;
                case EnemyType.tpDeadKoopa:
                   FormMarioPort.formRef.UpSideDown(EnemyList[i].XPos, EnemyList[i].YPos, Buffers.W, Buffers.H, EnemyPictures[8 + 2 * EnemyList[i].SubTp - 1, System.Convert.ToByte(EnemyList[i].DirCounter % 16 < 8)]);
@@ -772,6 +772,11 @@ namespace MarioPort
             {
                Y1 = (EnemyList[i].YPos + HSafe) / Buffers.H - Safe;
                Y2 = (EnemyList[i].YPos + HSafe + Buffers.H - 1) / Buffers.H - Safe;
+
+               // Hack to fix negative Y
+               Y1 = Y1 < 0 ? 1 : Y1;
+               Y2 = Y2 < 0 ? 1 : Y2;
+
                NewCh1 = Buffers.WorldMap[NewX, Y1];
                NewCh2 = Buffers.WorldMap[NewX, Y2];
                Hold1 = (Buffers.CanHoldYou(NewCh1));
