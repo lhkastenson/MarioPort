@@ -792,7 +792,7 @@ namespace MarioPort
             }
 
             FormMarioPort.formRef.PaintForm();
-            System.Threading.Thread.Sleep(1 / 20 * 1000);
+            System.Threading.Thread.Sleep(1 / 60 * 1000);
 
          } while (!Buffers.GameDone && !Buffers.QuitGame);
          return PlayWorld;
