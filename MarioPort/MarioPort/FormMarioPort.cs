@@ -111,9 +111,9 @@ namespace MarioPort
       }
 
       //-----------------------------------------------------
-	  // Draws an image to the screen at XPos,YPos with size
-	  // of width and height.
-	  //-----------------------------------------------------
+      // Draws an image to the screen at XPos,YPos with size
+      // of width and height.
+      //-----------------------------------------------------
       public void PutImage(int XPos, int YPos, int Width, int Height, Bitmap bitmap)
       {
          if (bitmap == null)
@@ -121,10 +121,10 @@ namespace MarioPort
          graphics.DrawImage(bitmap, XPos - xView, YPos, Width, Height);
       }
 
-	  //-----------------------------------------------------
-	  // Draws an image to the screen at XPos,YPos with size
-	  // of width and height.
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
+      // Draws an image to the screen at XPos,YPos with size
+      // of width and height.
+      //-----------------------------------------------------
       public void DrawImage(int XPos, int YPos, int Width, int Height, Bitmap bitmap)
       {
          if (bitmap == null)
@@ -134,40 +134,40 @@ namespace MarioPort
       }
 
       //-----------------------------------------------------
-	  // Not Implemented
-	  //-----------------------------------------------------
+      // Not Implemented
+      //-----------------------------------------------------
       public void newExitProc()
       {
          /*OldMode;
          ExitProc := OldExitProc;*/
       }
-	  
-	  //-----------------------------------------------------
+
+      //-----------------------------------------------------
       // Not Implemented
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public void setWidth(ushort newWidth)
       {
-	  
+
       }
 
       //-----------------------------------------------------
-	  // Not Implemented
-	  //-----------------------------------------------------
+      // Not Implemented
+      //-----------------------------------------------------
       public bool DetectVGA()
       {
          return true;
       }
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       // Start graphics mode 320x200 256 colors 
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public void InitializeVGA()
       {
 
       }
 
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       // Return to the original screenmode 
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public void OldMode()
       {
          if (InGraphicsMode)
@@ -183,49 +183,49 @@ namespace MarioPort
       }
 
 
-	  //-----------------------------------------------------
-	  // Returns the current graphicsMode
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
+      // Returns the current graphicsMode
+      //-----------------------------------------------------
       public byte GetMode()
       {
          return (byte)graphicsMode;
       }
 
       //-----------------------------------------------------
-	  // Sets the current graphicsMode to newMode
-	  //-----------------------------------------------------
+      // Sets the current graphicsMode to newMode
+      //-----------------------------------------------------
       public void SetMode(byte newMode)
       {
-          graphicsMode = newMode;
+         graphicsMode = newMode;
       }
 
       //-----------------------------------------------------
-	  // Not Implemented
-	  //-----------------------------------------------------
+      // Not Implemented
+      //-----------------------------------------------------
       public void ClearVGAMem()
       {
 
       }
 
       //-----------------------------------------------------
-	  // Not Implemented
-	  //-----------------------------------------------------
+      // Not Implemented
+      //-----------------------------------------------------
       public void WaitDisplay()
       {
 
       }
 
       //-----------------------------------------------------
-	  // NotImplemented
-	  //-----------------------------------------------------
+      // NotImplemented
+      //-----------------------------------------------------
       public void WaitRetrace()
       {
 
       }
 
       //-----------------------------------------------------
-	  // Sets the view to x,y coordinates
-	  //-----------------------------------------------------
+      // Sets the view to x,y coordinates
+      //-----------------------------------------------------
       public void SetView(int x, int y)
       {
          xView = x;
@@ -234,15 +234,15 @@ namespace MarioPort
 
       //-----------------------------------------------------
       // Not Implemented
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public void SetViewport(int X, int Y, byte PageNr)
       {
-          
+
       }
 
       //-----------------------------------------------------
-	  // swaps between page0 and page1
-	  //-----------------------------------------------------
+      // swaps between page0 and page1
+      //-----------------------------------------------------
       public void SwapPages()
       {
          if (page == 0)
@@ -258,8 +258,8 @@ namespace MarioPort
       }
 
       //-----------------------------------------------------
-	  // shows the page current page
-	  //-----------------------------------------------------
+      // shows the page current page
+      //-----------------------------------------------------
       public void ShowPage()
       {
          SetViewport(xView, yView, (byte)(page));
@@ -268,15 +268,15 @@ namespace MarioPort
 
       //-----------------------------------------------------
       // Not Implemented
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public void Border(byte Attr)
       {
 
       }
 
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       // Not Implemented
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public void SetYStart(int yStart)
       {
 
@@ -284,7 +284,7 @@ namespace MarioPort
 
       //-----------------------------------------------------
       // Not Implemented
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public void SetYEnd(int yEnd)
       {
 
@@ -292,7 +292,7 @@ namespace MarioPort
 
       //-----------------------------------------------------
       // sets the offset of y to newYOffset
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public void SetYOffset(int newYOffset)
       {
          yOffset = newYOffset;
@@ -300,7 +300,7 @@ namespace MarioPort
 
       //-----------------------------------------------------
       // returns the offset of y
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public int GetYOffset()
       {
          return yOffset;
@@ -308,32 +308,32 @@ namespace MarioPort
 
       //-----------------------------------------------------
       // Draw a single pixel at (X, Y) with color Attr 
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public void PutPixel(int x, int y, byte attr)
       {
-          // just call bitmap.setPixel() to set a pixel
-		  //Color color = Color.FromArgb(attr);
-		  //Pen pen = new Pen(color, 1);
-		  //graphics.DrawLine(pen, x, y, x, y);
+         // just call bitmap.setPixel() to set a pixel
+         //Color color = Color.FromArgb(attr);
+         //Pen pen = new Pen(color, 1);
+         //graphics.DrawLine(pen, x, y, x, y);
       }
 
       //-----------------------------------------------------
       // Get color of pixel at (X, Y) 
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public byte GetPixel(int x, int y)
       {
          //just call bitmap.getPixel(), this returns a Color.
-		 return 1;
+         return 1;
       }
 
       //-----------------------------------------------------
-	  // changes the color of the image by diff.
-	  //	One line of code commented out causes error.
-	  //-----------------------------------------------------
+      // changes the color of the image by diff.
+      //	One line of code commented out causes error.
+      //-----------------------------------------------------
       public void RecolorImage(int xPos, int yPos, int width, int height, Bitmap var, byte diff)
       {
-		 System.Drawing.Imaging.ColorPalette tempCP;
-         Color [] tempColor;
+         System.Drawing.Imaging.ColorPalette tempCP;
+         Color[] tempColor;
          tempCP = var.Palette;
          tempColor = tempCP.Entries;
 
@@ -347,85 +347,85 @@ namespace MarioPort
       }
 
       //-----------------------------------------------------
-	  // draws a the portion of a bitmap between y1 and y2 
-	  // to position xPos, yPos
-	  //-----------------------------------------------------
+      // draws a the portion of a bitmap between y1 and y2 
+      // to position xPos, yPos
+      //-----------------------------------------------------
       public void DrawPart(int xPos, int yPos, int width, int height, int y1, int y2, Bitmap var)
       {
-          Rectangle tempRec = new Rectangle(xPos, y1, width, y2);    		   // makes rectangle the size of the horizontal slice between y1 and y2.
-          graphics.DrawImage(var, xPos - xView, yPos, tempRec, GraphicsUnit.Pixel);    //draws portion of image specified from tempRec at xPos, yPos
+         Rectangle tempRec = new Rectangle(xPos, y1, width, y2);    		   // makes rectangle the size of the horizontal slice between y1 and y2.
+         graphics.DrawImage(var, xPos - xView, yPos, tempRec, GraphicsUnit.Pixel);    //draws portion of image specified from tempRec at xPos, yPos
       }
 
       //-----------------------------------------------------
-	  // Flips given image upsidedown
-	  //-----------------------------------------------------
+      // Flips given image upsidedown
+      //-----------------------------------------------------
       public void UpSideDown(int xPos, int yPos, int width, int height, Bitmap var)
       {
-          var.RotateFlip(RotateFlipType.RotateNoneFlipX);
+         var.RotateFlip(RotateFlipType.RotateNoneFlipX);
       }
 
       //-----------------------------------------------------
-	  //
-	  //-----------------------------------------------------
+      //
+      //-----------------------------------------------------
       public void GetImage(int xPos, int yPos, int width, int height, Bitmap var)
       {
 
       }
 
       //-----------------------------------------------------
-	  // Fills an area on the screen with Attr 
-	  //-----------------------------------------------------
+      // Fills an area on the screen with Attr 
+      //-----------------------------------------------------
       public void Fill(int x, int y, int width, int height, int attr)
       {
-          Color color = Color.FromArgb(attr);
-          SolidBrush br = new SolidBrush(color);
-          graphics.FillRectangle(br, x, y, width, height);
+         Color color = Color.FromArgb(attr);
+         SolidBrush br = new SolidBrush(color);
+         graphics.FillRectangle(br, x, y, width, height);
 
       }
 
       //-----------------------------------------------------
-	  // Not Implemented
-	  //-----------------------------------------------------
+      // Not Implemented
+      //-----------------------------------------------------
       public void setPalete(byte color, byte red, byte green, byte blue)
       {
-          
+
       }
 
       //-----------------------------------------------------
       // Not Implemeented
-	  //-----------------------------------------------------
+      //-----------------------------------------------------
       public void ReadPalette(/*NewPallete var*/)
       {
 
       }
 
       //-----------------------------------------------------
-	  // Not Implemented
-	  //-----------------------------------------------------
+      // Not Implemented
+      //-----------------------------------------------------
       public void ClearPalette()
       {
 
       }
 
       //-----------------------------------------------------
-	  // returns the current page
-	  //-----------------------------------------------------
+      // returns the current page
+      //-----------------------------------------------------
       public int CurrentPage()
       {
          return page;
       }
 
       //-----------------------------------------------------
-	  // returns the offset of the page
-	  //-----------------------------------------------------
+      // returns the offset of the page
+      //-----------------------------------------------------
       public ushort GetPageOffset()
       {
          return pageOffset;
       }
 
       //-----------------------------------------------------
-	  // resets the stack back to original values
-	  //-----------------------------------------------------
+      // resets the stack back to original values
+      //-----------------------------------------------------
       public void ResetStack()
       {
          //Stack[0] = PAGE_0 + PAGE_SIZE + SAFE;
@@ -433,8 +433,8 @@ namespace MarioPort
       }
 
       //-----------------------------------------------------
-	  // Mostly not Implemented due to mostly asembly.
-	  //-----------------------------------------------------
+      // Mostly not Implemented due to mostly asembly.
+      //-----------------------------------------------------
       public ushort PushBackGr(int x, int y, int w, int h)
       {
          Stack<ushort> StackPointer = new Stack<ushort>();
@@ -530,8 +530,8 @@ namespace MarioPort
       }
 
       //-----------------------------------------------------
-	  // Mostly not Implemented due to mostly asembly.
-	  //-----------------------------------------------------
+      // Mostly not Implemented due to mostly asembly.
+      //-----------------------------------------------------
       public void PopBackGr(ushort Address)
       {
          int x, y, w, h;
@@ -628,11 +628,11 @@ namespace MarioPort
       }
 
       //-----------------------------------------------------
-	  // Draws a bitmap, var, at x,y
-	  //-----------------------------------------------------
+      // Draws a bitmap, var, at x,y
+      //-----------------------------------------------------
       public void DrawBitmap(int x, int y, Bitmap var, byte attr)
       {
-           //graphics.DrawImage(var, x, y);
+         //graphics.DrawImage(var, x, y);
       }
 
       private void FormMarioPort_Load(object sender, EventArgs e)
@@ -746,6 +746,25 @@ namespace MarioPort
          //   for (int y = 0; y <= Buffers.NV; y++)
          //      Figures.Redraw(x, y);
          //Enemies.ShowEnemies();
+      }
+
+
+   }
+   public class TransparentLabel : Label
+   {
+      public TransparentLabel()
+      {
+         this.SetStyle(ControlStyles.Opaque, true);
+         this.SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
+      }
+      protected override CreateParams CreateParams
+      {
+         get
+         {
+            CreateParams parms = base.CreateParams;
+            parms.ExStyle |= 0x20;  // Turn on WS_EX_TRANSPARENT
+            return parms;
+         }
       }
    }
 }
