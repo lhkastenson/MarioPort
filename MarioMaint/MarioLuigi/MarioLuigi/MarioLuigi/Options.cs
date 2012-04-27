@@ -83,5 +83,15 @@ namespace MarioLuigi
          set { players = value; }
       }
       static int players = 1;
+
+      /// <summary>
+      /// How many players there are
+      /// </summary>
+      static public int Time
+      {
+         get { return Time; }
+         set { time = value; }
+      }
+      static int time = 0;
    }
 }

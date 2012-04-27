@@ -50,6 +50,7 @@ namespace MarioLuigi
       public bool IsAlive
       {
          get { return isAlive; }
+         set { isAlive = value; }
       }
       bool isAlive;
 

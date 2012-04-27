@@ -111,15 +111,7 @@ namespace MarioPort
       //-------------------------------------------------------------------
       public static void Down()
       {
-         if (Selected == NumOptions)
-         {
-            if (Status == Statuses.ST_MENU)
-               Selected = 1;
-            else
-               ;// MacroKey = Keyboard.kbEsc;
-         }
-         else
-            Selected++;
+
       }
 
 #if (DEBUG)
@@ -389,16 +381,6 @@ namespace MarioPort
                   switch (Status)
                   {
                      case Statuses.ST_MENU:
-                        //FormMarioPort.formRef.lblMenuOp0.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp1.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp2.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp3.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp4.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp0.Text = "START";
-                        //FormMarioPort.formRef.lblMenuOp1.Text = "OPTIONS";
-                        //FormMarioPort.formRef.lblMenuOp2.Text = "END";
-                        //FormMarioPort.formRef.lblMenuOp3.Text = "";
-                        //FormMarioPort.formRef.lblMenuOp4.Text = "";
                         Menu[0] = "START";
                         Menu[1] = "OPTIONS";
                         Menu[2] = "END";
@@ -408,34 +390,14 @@ namespace MarioPort
                         LastStatus = Statuses.ST_MENU;
                         break;
                      case Statuses.ST_OPTIONS:
-                        //FormMarioPort.formRef.lblMenuOp0.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp1.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp2.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp3.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp4.Visible = false;
                         if (Buffers.BeeperSound)
-                        {
-                           //FormMarioPort.formRef.lblMenuOp0.Text = "SOUND ON";
                            Menu[0] = "SOUND ON ";
-                        }
                         else
-                        {
-                           //FormMarioPort.formRef.lblMenuOp1.Text = "SOUND OFF";
                            Menu[0] = "SOUND OFF";
-                        }
                         if (Play.Stat)
-                        {
-                           //FormMarioPort.formRef.lblMenuOp1.Text = "STATUSLINE OFF";
                            Menu[1] = "STATUSLINE OFF";
-                        }
                         else
-                        {
-                           //FormMarioPort.formRef.lblMenuOp1.Text = "STATUSLINE ON";
                            Menu[1] = "STATUSLINE OFF";
-                        }
-                        //FormMarioPort.formRef.lblMenuOp2.Text = "";
-                        //FormMarioPort.formRef.lblMenuOp3.Text = "";
-                        //FormMarioPort.formRef.lblMenuOp4.Text = "";
                         Menu[2] = "";
                         Menu[3] = "";
                         Menu[4] = "";
@@ -443,59 +405,29 @@ namespace MarioPort
                         LastStatus = Statuses.ST_MENU;
                         break;
                      case Statuses.ST_START:
-                        //FormMarioPort.formRef.lblMenuOp0.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp1.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp2.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp3.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp4.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp0.Text = "NO SAVE";
                         Menu[0] = "NO SAVE";
-                        //FormMarioPort.formRef.lblMenuOp1.Text = "GAME SELECT";
                         Menu[1] = "GAME SELECT";
-                        //FormMarioPort.formRef.lblMenuOp2.Text = "ERASE";
                         Menu[2] = "ERASE";
-                        //FormMarioPort.formRef.lblMenuOp3.Text = "";
                         Menu[3] = "";
-                        //FormMarioPort.formRef.lblMenuOp4.Text = "";
                         Menu[4] = "";
                         NumOptions = 3;
                         LastStatus = Statuses.ST_MENU;
                         break;
                      case Statuses.ST_NUMPLAYERS:
-                        //FormMarioPort.formRef.lblMenuOp0.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp1.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp2.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp3.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp4.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp0.Text = "ONE PLAYER";
                         Menu[0] = "ONE PLAYER";
-                        //FormMarioPort.formRef.lblMenuOp0.Text = "TWO PLAYERS";
                         Menu[1] = "TWO PLAYERS";
-                        //FormMarioPort.formRef.lblMenuOp0.Text = "";
                         Menu[2] = "";
-                        //FormMarioPort.formRef.lblMenuOp0.Text = "";
                         Menu[3] = "";
-                        //FormMarioPort.formRef.lblMenuOp0.Text = "";
                         Menu[4] = "";
                         NumOptions = 3;
                         LastStatus = Statuses.ST_MENU;
                         break;
                      case Statuses.ST_LOAD:
                      case Statuses.ST_ERASE:
-                        //FormMarioPort.formRef.lblMenuOp0.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp1.Visible = true;
-                        //FormMarioPort.formRef.lblMenuOp2.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp3.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp4.Visible = false;
-                        //FormMarioPort.formRef.lblMenuOp0.Text = "GAME #1 " + 7 + " ";
                         Menu[0] = "GAME #1 " + 7 + " ";
-                        //FormMarioPort.formRef.lblMenuOp0.Text = "GAME #2 " + 7 + " ";
                         Menu[1] = "Game #2 " + 7 + " ";
-                        //FormMarioPort.formRef.lblMenuOp0.Text = "GAME #3 " + 7 + " ";
                         Menu[2] = "Game #3 " + 7 + " ";
-                        //FormMarioPort.formRef.lblMenuOp0.Text = " ";
                         Menu[3] = "";
-                        //FormMarioPort.formRef.lblMenuOp0.Text = " ";
                         Menu[4] = "";
 
                         for ( i = 0; i < 3; i++)
