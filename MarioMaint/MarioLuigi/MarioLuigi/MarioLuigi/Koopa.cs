@@ -49,10 +49,15 @@ namespace MarioLuigi
             }
          }
 
+         if (state == State.Held && !(Level.Player.Direction == SpriteEffects.FlipHorizontally))
+            Position = new Vector2(Level.Player.BoundingRectangle.X - ((Level.Player.BoundingRectangle.Width / 8)), Level.Player.BoundingRectangle.Y + (3*(Level.Player.BoundingRectangle.Height / 4)));
+         else if (state == State.Held)
+            Position = new Vector2(Level.Player.BoundingRectangle.X + (6*(Level.Player.BoundingRectangle.Width)/5), Level.Player.BoundingRectangle.Y + (3 * (Level.Player.BoundingRectangle.Height / 4)));
+
          if (wasHit)
          {
             hitTimer += elapsed;
-            if (hitTimer > HIT_TIMER)
+            if (hitTimer > HIT_TIMER && !Level.Player.IsHolding)
             {
                wasHit = false;
                hitTimer = 0;
@@ -63,9 +68,29 @@ namespace MarioLuigi
 
       public override void OnCollision(Player collideWith)
       {
-
-         if (state == State.Dying && !wasHit)
+         if(state == State.Dying && Level.Player.IsRunning && !Level.Player.IsHolding) //pickup shell
          {
+            Console.WriteLine("Running: " + Level.Player.IsRunning);
+            state = State.Held;
+            wasHit = true;
+            Level.Player.IsHolding = true;
+            if (!(Level.Player.Direction == SpriteEffects.FlipHorizontally))
+               Position = new Vector2(Level.Player.BoundingRectangle.X - (Level.Player.BoundingRectangle.Width / 8), Level.Player.BoundingRectangle.Y + (3 * (Level.Player.BoundingRectangle.Height / 4)));
+            else
+               Position = new Vector2(Level.Player.BoundingRectangle.X + (6*(Level.Player.BoundingRectangle.Width)/5), Level.Player.BoundingRectangle.Y + (3 * (Level.Player.BoundingRectangle.Height / 4)));
+         }
+         else if (state == State.Dying && !wasHit
+                  || state == State.Held && !Level.Player.IsRunning)
+         {
+            if (state == State.Held)
+            {
+               Level.Player.IsHolding = false;
+               velocity = 0;
+               if (!(Level.Player.Direction == SpriteEffects.FlipHorizontally))
+                  Position = new Vector2(Level.Player.BoundingRectangle.X + 2 * Level.Player.BoundingRectangle.Width, Level.Player.BoundingRectangle.Y + Level.Player.BoundingRectangle.Height);
+               else
+                  Position = new Vector2(Level.Player.BoundingRectangle.X - 2 * Level.Player.BoundingRectangle.Width, Level.Player.BoundingRectangle.Y + Level.Player.BoundingRectangle.Height);
+            }
             collideWith.Velocity += Vector2.Multiply(new Vector2(0, -1500f), 0.0167f);
             state = State.Spinning;
             velocity = MoveSpeed * 5f;
@@ -73,10 +98,10 @@ namespace MarioLuigi
             collideWith.BounceJump = true;
             collideWith.FirstBounce = true;
          }
-         else if ((collideWith.BoundingRectangle.Bottom < this.BoundingRectangle.Center.Y 
-            && state == State.Dying && !wasHit) 
+         else if((collideWith.BoundingRectangle.Bottom < this.BoundingRectangle.Center.Y
+            && state == State.Dying && !wasHit)
             || (collideWith.BoundingRectangle.Bottom < this.BoundingRectangle.Center.Y
-            && state == State.Alive && !wasHit) 
+            && state == State.Alive && !wasHit)
             || (collideWith.BoundingRectangle.Bottom < this.BoundingRectangle.Center.Y
             && state == State.Spinning && !wasHit))
          {
@@ -88,14 +113,14 @@ namespace MarioLuigi
             collideWith.BounceJump = true;
             collideWith.FirstBounce = true;
          }
-         else if (state == State.Alive || state == State.Spinning)
+         else if(state == State.Alive || state == State.Spinning)
          {
-            if (collideWith.Invinsible)
+            if(collideWith.Invinsible)
                state = State.Dead;
-            else if (!collideWith.Invinsible && !collideWith.WasHit)
+            else if(!collideWith.Invinsible && !collideWith.WasHit)
             {
                collideWith.Size--;
-               if (collideWith.Size >= 0)
+               if(collideWith.Size >= 0)
                {
                   collideWith.LoadContent();
                   collideWith.WasHit = true;

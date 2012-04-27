@@ -19,6 +19,7 @@ namespace MarioLuigi
       Dying,
       Spinning,
       Dead,
+      Held,
    }
 
    /// <summary>
