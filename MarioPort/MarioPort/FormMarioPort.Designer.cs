@@ -28,11 +28,11 @@
       /// </summary>
       private void InitializeComponent()
       {
-         this.lblMenuOp0 = new MarioPort.TransparentLabel();
-         this.lblMenuOp2 = new MarioPort.TransparentLabel();
-         this.lblMenuOp3 = new MarioPort.TransparentLabel();
-         this.lblMenuOp4 = new MarioPort.TransparentLabel();
-         this.lblMenuOp1 = new MarioPort.TransparentLabel();
+         //this.lblMenuOp0 = new MarioPort.TransparentLabel();
+         //this.lblMenuOp2 = new MarioPort.TransparentLabel();
+         //this.lblMenuOp3 = new MarioPort.TransparentLabel();
+         //this.lblMenuOp4 = new MarioPort.TransparentLabel();
+         //this.lblMenuOp1 = new MarioPort.TransparentLabel();
          this.SuspendLayout();
          // 
          // FormMarioPort
