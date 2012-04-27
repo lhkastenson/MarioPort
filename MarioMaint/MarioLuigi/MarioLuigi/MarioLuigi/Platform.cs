@@ -84,7 +84,12 @@ namespace MarioLuigi
       protected override void Update(GameTime gameTime)
       {
          if (ExitGame || Options.Lives == 0)
-            this.Exit();
+         {
+            //this.Exit();
+            Options.Level = 0;
+            Options.Lives = 3;
+            LoadNextLevel(Options.Level);
+         }
 
          if (!level.Player.IsAlive)
          {

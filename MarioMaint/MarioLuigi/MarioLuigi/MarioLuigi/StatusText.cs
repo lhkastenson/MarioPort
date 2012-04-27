@@ -47,19 +47,23 @@ namespace MarioLuigi
          {
             spriteBatch.Begin();
             // lives
-            spriteBatch.DrawString(spriteFont, "MARIOx  " + Options.Lives, new Vector2(IMAGE_WIDTH / 2f,
+            spriteBatch.DrawString(spriteFont, "MARIO x " + Options.Lives, new Vector2(IMAGE_WIDTH / 2f,
                IMAGE_HEIGHT / HEIGHT_SCALE), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             // score
-            spriteBatch.DrawString(spriteFont, Options.Score.ToString("0000000"), new Vector2(IMAGE_WIDTH * 5f,
+            spriteBatch.DrawString(spriteFont, Options.Score.ToString("0000000"), new Vector2(IMAGE_WIDTH * 4f,
                IMAGE_HEIGHT / HEIGHT_SCALE), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             // coin texture
-            sprite.Draw(gameTime, spriteBatch, new Vector2(IMAGE_WIDTH * 9.5f, IMAGE_HEIGHT * 1.20f), SpriteEffects.None, false);
+            sprite.Draw(gameTime, spriteBatch, new Vector2(IMAGE_WIDTH * 7.5f, IMAGE_HEIGHT * 1.20f), SpriteEffects.None, false);
             // number of coins
-            spriteBatch.DrawString(spriteFont, "x  " + Options.Coins, new Vector2(IMAGE_WIDTH * 10f,
+            spriteBatch.DrawString(spriteFont, "x " + Options.Coins, new Vector2(IMAGE_WIDTH * 8f,
                IMAGE_HEIGHT / HEIGHT_SCALE), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             // current level number
-            spriteBatch.DrawString(spriteFont, "LEVEL  " + Options.Level, new Vector2(IMAGE_WIDTH * 13f,
+            spriteBatch.DrawString(spriteFont, "LEVEL " + Options.Level, new Vector2(IMAGE_WIDTH * 10f,
                IMAGE_HEIGHT / HEIGHT_SCALE), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            //Timer
+            spriteBatch.DrawString(spriteFont, "TIME: " + Level.Time().ToString(), new Vector2(IMAGE_WIDTH * 13f,
+               IMAGE_HEIGHT / HEIGHT_SCALE), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
             spriteBatch.End();
          }
       }

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using System.IO;
-
+using System.Diagnostics;
 namespace MarioLuigi
 {
    /// <summary>
@@ -33,6 +33,15 @@ namespace MarioLuigi
          get { return player; }
       }
       Player player;
+
+      public static Stopwatch stopwatch = new Stopwatch();
+      public static int timeOffset = 0;
+      public const int LEVELTIME = 302;
+      public static int Time()
+      {
+         int time = LEVELTIME - Level.stopwatch.Elapsed.Seconds + timeOffset;
+         return time > 0 ? time : 0;
+      }
 
       private List<Collectable> collectables = new List<Collectable>();
       private List<Enemy> enemies = new List<Enemy>();
@@ -71,6 +80,9 @@ namespace MarioLuigi
       }
       ContentManager content;
 
+      private int timeRemaining;
+      private bool calculateTimeScore;
+
       #region Loading
 
       /// <summary>
@@ -84,6 +96,9 @@ namespace MarioLuigi
       /// </param>
       public Level(IServiceProvider serviceProvider, string[] layers, int levelNumber, Platform main)
       {
+         timeRemaining = LEVELTIME;
+         calculateTimeScore = false;
+
          // Create a new content manager to load content used just by this level.
          content = new ContentManager(serviceProvider, "Content");
 
@@ -688,6 +703,15 @@ namespace MarioLuigi
       /// </summary>
       public void Update(GameTime gameTime)
       {
+         if (calculateTimeScore && timeRemaining > 0)
+         {
+            player.Score += 20;
+            timeRemaining -= 2;
+            timeOffset -= 2;
+            //System.Threading.Thread.Sleep(5);
+            return;
+         }
+
          // Get the keys currently and previosly being pressed
          prevKeyState = curKeyState;
          curKeyState = Keyboard.GetState();
@@ -718,6 +742,12 @@ namespace MarioLuigi
                menu.Update(gameTime, ref reachedExit);
             else
             {
+               if (Time() <= 0)
+               {
+                  Player.Lives--;
+                  Player.IsAlive = false;
+               }
+
                Player.Update(gameTime);
 
                UpdateCollectables(gameTime);
@@ -749,6 +779,9 @@ namespace MarioLuigi
 
       private void LoadNewLevel()
       {
+         stopwatch.Restart();
+         timeOffset = 0;
+
          switch (LevelNumber)
          {
             case -1:
@@ -903,6 +936,10 @@ namespace MarioLuigi
       private void OnExitReached()
       {
          Player.OnReachedExit();
+
+         timeRemaining = Time();
+         calculateTimeScore = true;
+
          reachedExit = true;
       }
 
@@ -911,6 +948,9 @@ namespace MarioLuigi
       /// </summary>
       public void StartNewLife()
       {
+         stopwatch.Restart();
+         timeOffset = 0;
+
          Player.Reset(start);
       }
 
