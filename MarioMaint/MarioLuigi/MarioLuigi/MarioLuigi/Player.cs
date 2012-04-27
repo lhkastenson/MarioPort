@@ -22,6 +22,9 @@ namespace MarioLuigi
       //private Animation dieAnimation;
       private SpriteEffects flip = SpriteEffects.FlipHorizontally;
       private AnimationPlayer sprite = new AnimationPlayer();
+   //{
+   //   get { return 
+   //}
       private List<Projectile> fireballs = new List<Projectile>();
       // Let other objects see the players projectiles
       public List<Projectile> FireBalls
@@ -186,8 +189,19 @@ namespace MarioLuigi
       /// </summary>
       private float movement;
 
-      private bool isRunning;
+      public bool IsRunning
+      {
+         get { return isRunning; }
+         set { isRunning = value; }
+      }
+      bool isRunning = false;
 
+      public bool IsHolding
+      {
+         get { return isHolding; }
+         set { isHolding = value; }
+      }
+      bool isHolding = false;
       // Jumping state
       private bool isJumping;
       private bool wasJumping;
@@ -329,7 +343,7 @@ namespace MarioLuigi
          isJumping = false;
          bounceJump = false;
          noteBounce = false;
-         isRunning = false;
+         //isRunning = false;
       }
 
       /// <summary>
@@ -369,6 +383,7 @@ namespace MarioLuigi
          isJumping = curKeyState.IsKeyDown(Keys.LeftAlt);
          // See if the player wants to run
          isRunning = curKeyState.IsKeyDown(Keys.LeftControl);
+         Console.WriteLine("Running: " + isRunning);
          // Check if player wants to shoot a fireball
          if(curKeyState.IsKeyDown(Keys.Space) && !prevKeyState.IsKeyDown(Keys.Space) && Size == 2 && fireballs.Count < 2)
             fireballs.Add(new Projectile(this));
