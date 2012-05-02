@@ -87,16 +87,30 @@ namespace MarioLuigi
                Level.Player.IsHolding = false;
                velocity = 0;
                if (!(Level.Player.Direction == SpriteEffects.FlipHorizontally))
+               {
                   Position = new Vector2(Level.Player.BoundingRectangle.X + 2 * Level.Player.BoundingRectangle.Width, Level.Player.BoundingRectangle.Y + Level.Player.BoundingRectangle.Height);
+                  collideWith.Velocity += Vector2.Multiply(new Vector2(0, -1500f), 0.0167f);
+               }
                else
+               {
                   Position = new Vector2(Level.Player.BoundingRectangle.X - 2 * Level.Player.BoundingRectangle.Width, Level.Player.BoundingRectangle.Y + Level.Player.BoundingRectangle.Height);
+                  collideWith.Velocity -= Vector2.Multiply(new Vector2(0, -1500f), 0.0167f);
+               }
+               state = State.Spinning;
+               velocity = MoveSpeed * 5f;
+               wasHit = true;
+               collideWith.BounceJump = true;
+               collideWith.FirstBounce = true;
             }
-            collideWith.Velocity += Vector2.Multiply(new Vector2(0, -1500f), 0.0167f);
-            state = State.Spinning;
-            velocity = MoveSpeed * 5f;
-            wasHit = true;
-            collideWith.BounceJump = true;
-            collideWith.FirstBounce = true;
+            else
+            {
+               collideWith.Velocity += Vector2.Multiply(new Vector2(0, -1500f), 0.0167f);
+               state = State.Spinning;
+               velocity = MoveSpeed * 5f;
+               wasHit = true;
+               collideWith.BounceJump = true;
+               collideWith.FirstBounce = true;
+            }
          }
          else if((collideWith.BoundingRectangle.Bottom < this.BoundingRectangle.Center.Y
             && state == State.Dying && !wasHit)
