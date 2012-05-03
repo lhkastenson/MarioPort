@@ -187,6 +187,11 @@ namespace MarioLuigi
       /// <summary>
       /// Current user movement input.
       /// </summary>
+      public float Movement
+      {
+         get { return movement; }
+         set { movement = value; }
+      }
       private float movement;
 
       public bool IsRunning

@@ -88,16 +88,23 @@ namespace MarioLuigi
                velocity = 0;
                if (!(Level.Player.Direction == SpriteEffects.FlipHorizontally))
                {
-                  Position = new Vector2(Level.Player.BoundingRectangle.X + 2 * Level.Player.BoundingRectangle.Width, Level.Player.BoundingRectangle.Y + Level.Player.BoundingRectangle.Height);
-                  collideWith.Velocity += Vector2.Multiply(new Vector2(0, -1500f), 0.0167f);
+                  Position = new Vector2(Level.Player.BoundingRectangle.X - Level.Player.BoundingRectangle.Width, Level.Player.BoundingRectangle.Y + Level.Player.BoundingRectangle.Height);
+                  collideWith.Velocity -= Vector2.Multiply(new Vector2(0, -1500f), 0.0167f);
+                 // Direction = FaceDirection.Right;
                }
                else
                {
-                  Position = new Vector2(Level.Player.BoundingRectangle.X - 2 * Level.Player.BoundingRectangle.Width, Level.Player.BoundingRectangle.Y + Level.Player.BoundingRectangle.Height);
-                  collideWith.Velocity -= Vector2.Multiply(new Vector2(0, -1500f), 0.0167f);
+                  Position = new Vector2(Level.Player.BoundingRectangle.X + 2 * Level.Player.BoundingRectangle.Width, Level.Player.BoundingRectangle.Y + Level.Player.BoundingRectangle.Height);
+                  collideWith.Velocity += Vector2.Multiply(new Vector2(0, -1500f), 0.0167f);
+                 /// Direction = FaceDirection.Left;
                }
+               
                state = State.Spinning;
                velocity = MoveSpeed * 5f;
+               if (!(Level.Player.Direction == SpriteEffects.FlipHorizontally))
+                  Direction = FaceDirection.Left;
+               else
+                  Direction = FaceDirection.Right;
                wasHit = true;
                collideWith.BounceJump = true;
                collideWith.FirstBounce = true;
@@ -151,6 +158,15 @@ namespace MarioLuigi
          base.OnCollision(collideWith);
       }
 
+      public override void OnCollision(Enemy collideWith)
+      {
+         if (state == State.Spinning || state == State.DeadSpinning)
+         {
+            Level.Player.Score += ENEMY_VALUE;
+            collideWith.State = State.Dead;
+            state = State.DeadSpinning;
+         }
+      }
       public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
       {
          if (state == State.Alive)

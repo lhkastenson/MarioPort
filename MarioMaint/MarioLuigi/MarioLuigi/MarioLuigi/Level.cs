@@ -885,6 +885,11 @@ namespace MarioLuigi
                if (fireball.BoundingRectangle.Intersects(enemy.BoundingRectangle))
                   fireball.OnCollision(enemy);
 
+            foreach (Enemy e in enemies)
+               if (enemy.BoundingRectangle.Intersects(e.BoundingRectangle) &&
+                   enemy != e)
+                  enemy.OnCollision(e);
+
             if (enemy.State == State.Dead)
                enemies.RemoveAt(i--);
 

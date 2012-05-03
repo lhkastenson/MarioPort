@@ -20,6 +20,7 @@ namespace MarioLuigi
       Spinning,
       Dead,
       Held,
+      DeadSpinning,
    }
 
    /// <summary>
@@ -69,8 +70,12 @@ namespace MarioLuigi
       /// <summary>
       /// The direction this enemy is facing and moving along the X axis.
       /// </summary>
+      public FaceDirection Direction
+      {
+         get {return direction;}
+         set { direction = value;}
+      }
       protected FaceDirection direction = FaceDirection.Left;
-
       /// <summary>
       /// The current state of the enemy in the game world
       /// </summary>
@@ -132,6 +137,7 @@ namespace MarioLuigi
       }
 
       public virtual void OnCollision(Player collideWith) { }
+      public virtual void OnCollision(Enemy collideWith) { }
 
       /// <summary>
       /// Paces back and forth along a platform, waiting at either end.
@@ -145,23 +151,28 @@ namespace MarioLuigi
          int tileX = (int)Math.Floor(posX / Tile.Width) - (int)direction;
          int tileY = (int)Math.Floor(Position.Y / Tile.Height);
 
-         if (waitTime > 0)
-         {
-            // Wait for some amount of time.
-            waitTime = Math.Max(0.0f, waitTime - (float)gameTime.ElapsedGameTime.TotalSeconds);
-            if (waitTime <= 0.0f)
-            {
-               // Then turn around.
-               direction = (FaceDirection)(-(int)direction);
-            }
-         }
-         else
-         {
+         //if (waitTime > 0)
+         //{
+         //   // Wait for some amount of time.
+         //   waitTime = Math.Max(0.0f, waitTime - (float)gameTime.ElapsedGameTime.TotalSeconds);
+         //   if (waitTime <= 0.0f)
+         //   {
+         //      // Then turn around.
+         //      direction = (FaceDirection)(-(int)direction);
+         //   }
+         //}
+         //else
+         //{
             // If we are about to run into a wall or off a cliff, start waiting.
             if (Level.GetCollision(tileX + (int)direction, tileY - 1) == TileCollision.Impassable ||
                Level.GetCollision(tileX + (int)direction, tileY) == TileCollision.Passable)
             {
-               waitTime = MaxWaitTime;
+               if (state == State.DeadSpinning)
+                  state = State.Dead;
+               else if (direction == FaceDirection.Left)
+                  direction = FaceDirection.Right;
+               else
+                  direction = FaceDirection.Left;
             }
             else
             {
@@ -169,7 +180,7 @@ namespace MarioLuigi
                Vector2 Velocity = new Vector2((int)direction * velocity * elapsed, 0.0f);
                position += Velocity;
             }
-         }
+         //}
       }
 
       /// <summary>
